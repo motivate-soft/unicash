@@ -7,16 +7,24 @@ import {
   CHeaderNavItem,
   CHeaderNavLink,
   CImg,
-  CButton
+  CButton,
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { useHistory } from 'react-router-dom';
 
 const TheHeader = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
+
   const darkMode = useSelector(state => state.darkMode)
   const sidebarShow = useSelector(state => state.sidebarShow)
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)
+  const currPath = history.location.pathname
 
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
@@ -41,7 +49,7 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
 
-      <CHeaderNav className="d-md-down-none mr-auto" show={!isAdmin && !isLogin}>
+      <CHeaderNav className={isAdmin ? 'd-none' : 'd-md-down-none mr-auto'}>
         <CHeaderNavItem className="px-3" >
           <CHeaderNavLink to="/home">
             <CImg
@@ -68,18 +76,28 @@ const TheHeader = () => {
         <TheHeaderDropdownMssg/>
         <TheHeaderDropdown/> */}
 
-        <CHeaderNavLink to="/signup">
-            <CButton block className="button-sign">
+        <CHeaderNavLink to="/signup" className={isLogin ? 'd-none' : undefined}>
+            <CButton block className={currPath == '/signup' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign up</strong>
             </CButton>
         </CHeaderNavLink>
 
-        <CHeaderNavLink to="/signin">
-            <CButton block className="button-sign">
+        <CHeaderNavLink to="/signin" className={isLogin ? 'd-none' : undefined}>
+            <CButton block className={currPath == '/signin' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign in</strong>
             </CButton>
         </CHeaderNavLink>
         
+        <CDropdown className="m-0 pt-0" variant="btn-group" className={isLogin ? undefined : 'd-none'}>
+            <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success">
+                Account
+            </CDropdownToggle>
+            <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
+                <CDropdownItem className="dropdown-toggle-menuitem">Payment method</CDropdownItem>
+                <CDropdownItem className="dropdown-toggle-menuitem">Settings</CDropdownItem>
+                <CDropdownItem className="dropdown-toggle-menuitem">Log out</CDropdownItem>
+            </CDropdownMenu>
+        </CDropdown>
       </CHeaderNav>
 
     </CHeader>

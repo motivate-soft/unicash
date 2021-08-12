@@ -48,9 +48,11 @@
     font-size: 18px;
   }
 
-.button-sign:hover {
+.button-sign:hover, .button-sign-active {
     background-color: red;
     color: white;
+    border: none;
+    font-size: 18px;
 }
 
 .card-exchange {
@@ -89,12 +91,7 @@
       background-color: rgb(94, 255, 0);
       color: white;
   }
-  .dropdown-toggle-exchange {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    font-size: 25px;
-    margin-bottom: 0px !important;
-  }
+
   .dropdown-toggle-currency {
     font-size: 30px;
     margin-top: -10px !important;
@@ -144,6 +141,13 @@
   .header-title {
     font-size: 20px;
   }
+}
+
+.dropdown-toggle-exchange {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  font-size: 25px;
+  margin-bottom: 0px !important;
 }
 
 /*
