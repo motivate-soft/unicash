@@ -56,6 +56,17 @@
   }
 }
 
+// Textfield material ui
+.MuiTextField-root > label {
+  color: gray;
+  font-size: 16px;
+}
+
+.MuiTextField-root > .MuiFormLabel-root.Mui-focused {
+  color: gray;
+  font-size: 16px;
+}
+
 .ml-20 {
   margin-left: 20px;
 }
@@ -105,10 +116,7 @@
   border-radius: 8px;
   box-shadow: 20px 20px 60px #232b33;
   color: black;
-
-  @media (max-width: 768px) {
-    min-width: auto;
-  }
+  padding: 30px;
 
   .button-exchange {
     background-color: red;
@@ -123,28 +131,40 @@
   }
 
   .card-exchange-rate {
-    margin: 8px 0;
-    color: gray;
+    margin: 12px 0;
+    color: #181c1f;
     display: inline-block;
     vertical-align: middle;
     margin-left: 10px;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
   }
 
-  .dropdown-toggle-currency {
-    margin-top: -10px !important;
-  }
-  .dropdown-toggle-menu {
-    background-color: rgb(241, 240, 240) !important;
-    color: rgb(46, 45, 45) !important;
-  }
-  .dropdown-toggle-menuitem {
-    background-color: rgb(241, 240, 240) !important;
-    color: rgb(46, 45, 45) !important;
-  }
-  .dropdown-toggle-menuitem:hover {
-    color: rgb(245, 11, 11) !important;
+  .button-currency {
+    color: black;
+    width: 110px;
+    padding-left: 8px;
+
+    .small-full-currency {
+      font-size: 13px;
+      line-height: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #b4b4b4;
+      text-align: left;
+    }
+    .currency-name {
+      text-align: left;
+      font-weight: 700;
+      line-height: 28px;
+      font-size: 20px;
+      color: #394247;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-icon {
+      padding-top: 15px;
+    }
   }
 }
 
@@ -160,7 +180,7 @@
   // Intro
   .intro-title {
     margin: 0;
-    font-size: 52px;
+    font-size: 50px;
     line-height: 60px;
     max-width: 550px;
     zoom: 1;
@@ -176,7 +196,7 @@
     margin: 16px 0 0;
     padding: 0;
     line-height: 24px;
-    font-size: 16px;
+    font-size: 18px;
   }
   .img-mobile-store {
     border-radius: 0px !important;

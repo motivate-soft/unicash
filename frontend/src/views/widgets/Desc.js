@@ -67,15 +67,15 @@ const Desc = () => {
               </div>
           </CCol>
           <CCol sm="12" lg="12" className="pl-0 pt-0">
-              <div class="d-flex">
-                <div class="pl-0">
+              <div className="d-flex">
+                <div className="pl-0">
                   <CImg
                       src={'img/Union-Bank.png'}
                       alt="Union Bank"
                       height="110"
                     />
                 </div>
-                <div class="pl-2 flex-grow-1 pt-3">
+                <div className="pl-2 flex-grow-1 pt-3">
                     <div className="align-self-start">
                       <CImg
                         src={'img/GCash-Logo-Transparent-PNG-1.png'}
@@ -88,7 +88,7 @@ const Desc = () => {
                       <small className="ml-3 mt-1 font-weight-bold unicash-url" color="secondary">unicash.ph</small>
                     </div>
                 </div>
-                <div class="pl-2 align-self-end pb-3">
+                <div className="pl-2 align-self-end pb-3">
                     <CButton className="ml-5 mt-1 float-right" color="secondary">
                       <CIcon name="cil-circle" alt="online status" color="success" className="online-status"></CIcon> &nbsp; Chat with us
                     </CButton>
