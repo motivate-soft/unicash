@@ -8,6 +8,8 @@ import {
   TheHeader
 } from './index'
 
+const AuthDialog = React.lazy(() => import('../views/auth/AuthDialog'));
+
 const TheLayout = () => {
   const darkMode = useSelector(state => state.darkMode)
   const classes = classNames(
@@ -25,6 +27,7 @@ const TheLayout = () => {
         </div>
         <TheFooter/>
       </div>
+      <AuthDialog />
     </div>
   )
 }

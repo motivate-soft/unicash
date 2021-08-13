@@ -5,7 +5,9 @@ const initialState = {
   asideShow: false,
   darkMode: true,
   isAdmin: false,
-  isLogin: false
+  isLogin: false,
+  openSignup: false,
+  openSignin: false,
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {

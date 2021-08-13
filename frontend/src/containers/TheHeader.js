@@ -14,6 +14,7 @@ import {
   CDropdownToggle,
 } from '@coreui/react'
 import { useHistory } from 'react-router-dom';
+// import CIcon from '@coreui/icons-react';
 
 const TheHeader = () => {
   const dispatch = useDispatch()
@@ -24,6 +25,14 @@ const TheHeader = () => {
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)
   const currPath = history.location.pathname
+
+  const handleSignupClickOpen = () => {
+    dispatch({type: 'set', openSignup: true})
+  };
+
+  const handleSigninClickOpen = () => {
+    dispatch({type: 'set', openSignin: true})
+  };
 
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
@@ -36,6 +45,7 @@ const TheHeader = () => {
   }
 
   return (
+    <>
     <CHeader colorScheme="dark" className="header">
       <CToggler
         inHeader
@@ -75,14 +85,14 @@ const TheHeader = () => {
         <TheHeaderDropdownMssg/>
         <TheHeaderDropdown/> */}
 
-        <CHeaderNavLink to="/signup" className={isLogin ? 'd-none' : undefined}>
-            <CButton block className={currPath === '/signup' ? 'button-sign-active' : 'button-sign'}>
+        <CHeaderNavLink className={isLogin ? 'd-none' : undefined}>
+            <CButton block onClick={handleSignupClickOpen} className={currPath === '/signup' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign up</strong>
             </CButton>
         </CHeaderNavLink>
 
-        <CHeaderNavLink to="/signin" className={isLogin ? 'd-none' : undefined}>
-            <CButton block className={currPath === '/signin' ? 'button-sign-active' : 'button-sign'}>
+        <CHeaderNavLink className={isLogin ? 'd-none' : undefined}>
+            <CButton block onClick={handleSigninClickOpen} className={currPath === '/signin' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign in</strong>
             </CButton>
         </CHeaderNavLink>
@@ -101,6 +111,7 @@ const TheHeader = () => {
       
       <div className="header-border"></div>
     </CHeader>
+    </>
   )
 }
 

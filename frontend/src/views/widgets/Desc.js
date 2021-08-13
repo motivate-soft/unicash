@@ -88,7 +88,7 @@ const Desc = () => {
                       <small className="ml-3 mt-1 font-weight-bold unicash-url" color="secondary">unicash.ph</small>
                     </div>
                 </div>
-                <div className="pl-2 align-self-end pb-3">
+                <div className="pl-2 align-self-end pb-0">
                     <CButton className="ml-5 mt-1 float-right" color="secondary">
                       <CIcon name="cil-circle" alt="online status" color="success" className="online-status"></CIcon> &nbsp; Chat with us
                     </CButton>

@@ -70,7 +70,7 @@ const WidgetsExchange = () => {
                             </div>
                             <div className="mr-auto">
                                 <CButton className="d-box-shadow1 mr-0 pr-0">
-                                    <div className="d-flex mt-2 button-currency">
+                                    <div className="d-flex mt-0 button-currency">
                                         <div className="flex-grow-1">
                                             <div className="align-self-start small-full-currency">
                                                 <span>Bitcoin</span>
@@ -106,7 +106,7 @@ const WidgetsExchange = () => {
                             </div>
                             <div className="mr-auto">
                                 <CButton className="d-box-shadow1 mr-0 pr-0">
-                                    <div className="d-flex mt-2 button-currency">
+                                    <div className="d-flex mt-0 button-currency">
                                         <div className="flex-grow-1">
                                             <div className="align-self-start small-full-currency">
                                                 <span>Cash</span>

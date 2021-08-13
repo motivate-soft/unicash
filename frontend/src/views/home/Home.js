@@ -23,7 +23,7 @@ const Home = () => {
 
       <CRow>
         <CCol>
-          <CCard color="transparent" className="transaction-table d-box-shadow1 d-border">
+          <CCard color="transparent" className="transaction-table d-box-shadow1 d-border mt-0">
             <CCardHeader color="transparent d-border pl-0" className="header-title">
               Live Transaction
             </CCardHeader>

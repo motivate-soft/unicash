@@ -53,13 +53,14 @@ const initialValues = {
 }
 
 const Signin = () => {
-  const history = useHistory();
+  const history = useHistory()
   const dispatch = useDispatch()
-  dispatch({type: 'set', darkMode: false})
 
   const onSubmit = (values, { setSubmitting, setErrors }) => {
     setTimeout(() => {
       // alert(JSON.stringify(values, null, 2))
+      dispatch({type: 'set', openSignin: false})
+      dispatch({type: 'set', openSignup: false})
       dispatch({type: 'set', isLogin: true})
       // dispatch({type: 'set', isAdmin: true})
       history.push(`/dashboard`);
@@ -70,6 +71,7 @@ const Signin = () => {
   return (
     <>
       <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
+        <h3 className="text-center mb-2">Welcome to Unicash<span className="text-success">.</span></h3>
         <Formik
             initialValues={initialValues}
             validate={validate(validationSchema)}
