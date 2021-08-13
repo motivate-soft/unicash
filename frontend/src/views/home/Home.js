@@ -116,42 +116,38 @@ const Home = () => {
 
       <CRow>
         <CCol>
-          <CCard color="transparent" className="transaction-table d-box-shadow1 d-border">
+          <CCard color="transparent" className="widget-feedbacks d-box-shadow1 d-border">
             <CCardHeader color="transparent pl-0" className="header-title d-border">
               Trusted by million users
             </CCardHeader>
             <CCardBody className="p-0" color="default">
               <CRow color="transparent d-border">
                 <CCol sm="12" md="12" lg="6">
-                  <CWidgetSimple>
-                    <CRow>
-                      <CCol sm="2" lg="2">
-                        <CImg src={'img/icons8-male-user-50.png'} height={40}></CImg>
-                      </CCol>
-                      <CCol sm="10" lg="10">
-                          <div className="text-left">kicka***</div>
-                          <div className="small text-muted text-left">
+                  <CWidgetSimple className="widget-feedback p-0">
+                    <div className="d-flex p-0">
+                      <div><CImg src={'img/icons8-male-user-50.png'} height={64} width={64}></CImg></div>
+                      <div className="feedback">
+                        <div className="align-items-start text-left feedback-auth">kicka***</div>
+                        <div className="align-items-end small text-muted text-left feedback-content">
                             It was a pure pleasure to use this service, Also.
                             I want to pay attention to the greatest support team ever
-                          </div>
-                      </CCol>
-                    </CRow>
+                        </div>
+                      </div>
+                    </div>
                   </CWidgetSimple>
                 </CCol>
                 <CCol sm="12" md="12" lg="6">
-                  <CWidgetSimple>
-                    <CRow color="transparent d-border">
-                      <CCol sm="2" lg="2">
-                        <CImg src={'img/icons8-male-user-50.png'} height={40}></CImg>
-                      </CCol>
-                      <CCol sm="10" lg="10">
-                          <div className="text-left">loyd***</div>
-                          <div className="small text-muted text-left">
+                  <CWidgetSimple className="widget-feedback p-0">
+                    <div className="d-flex p-0">
+                      <div><CImg src={'img/icons8-male-user-50.png'} height={64} width={64}></CImg></div>
+                      <div className="feedback">
+                        <div className="align-items-start text-left feedback-auth">Loyd***</div>
+                        <div className="align-items-end small text-muted text-left feedback-content">
                             It was a pure pleasure to use this service, Also.
                             I want to pay attention to the greatest support team ever
-                          </div>
-                      </CCol>
-                    </CRow>
+                        </div>
+                      </div>
+                    </div>
                   </CWidgetSimple>
                 </CCol>
               </CRow>

@@ -62,7 +62,7 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <CToggler
+        {/* <CToggler
           inHeader
           className="ml-3 d-md-down-none"
           onClick={() => dispatch({type: 'set', darkMode: !darkMode})}
@@ -70,7 +70,7 @@ const TheHeader = () => {
         >
           <CIcon name="cil-moon" className="c-d-dark-none" alt="CoreUI Icons Moon" />
           <CIcon name="cil-sun" className="c-d-default-none" alt="CoreUI Icons Sun" />
-        </CToggler>
+        </CToggler> */}
         {/* <TheHeaderDropdownNotif/>
         <TheHeaderDropdownTasks/>
         <TheHeaderDropdownMssg/>

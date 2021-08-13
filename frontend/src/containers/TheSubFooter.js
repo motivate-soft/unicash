@@ -19,7 +19,7 @@ const TheSubFooter = () => {
           <span className="ml-0">Supported currencies</span>
         </CCol>
         <CCol sm="12" lg="6">
-          <span className="float-lg-right float-sm-center float-xs-center">
+          <span className="float-lg-right d-sm-down-none">
               <CImg src={'img/icons8-telegram-app-50.png'} alt="Telegram" height={20}></CImg>
               <CImg src={'img/icons8-twitter-50.png'} alt="Twitter" height={20} className="ml-2"></CImg>
               <CImg src={'img/icons8-facebook-50.png'} alt="Facebook" height={20} className="ml-2"></CImg>

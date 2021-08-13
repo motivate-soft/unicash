@@ -9,45 +9,41 @@ import {
 const WidgetsAdvantage = () => {
   // render
   return (
-    <CRow>
+    <CRow style={{ padding: "56px 0" }}>
         <CCol sm="6" lg="3">
-            <CWidgetSimple header="" text="" className="p-0">
+            <CWidgetSimple header="" text="" className="widget-advantage">
                 <CImg
                     src={'img/icons8-star-80.png'}
                     alt="Best exchange"
-                    height="40"
                 />
-                <p className="font-20 mt-1">Best exchange</p>
+                <p>Best exchange</p>
             </CWidgetSimple>
         </CCol>
         <CCol sm="6" lg="3">
-            <CWidgetSimple header="" text="" className="p-0">
+            <CWidgetSimple header="" text="" className="widget-advantage">
                 <CImg
                     src={'img/icons8-flash-on-50.png'}
                     alt="Fast transaction"
-                    height="40"
                 />
-                <p className="font-20 mt-1">Fast transaction</p>
+                <p>Fast transaction</p>
             </CWidgetSimple>
         </CCol>
         <CCol sm="6" lg="3">
-            <CWidgetSimple header="" text="" className="p-0">
+            <CWidgetSimple header="" text="" className="widget-advantage">
                 <CImg
                     src={'img/icons8-peso-symbol-50.png'}
                     alt="Lowest fees"
-                    height="40"
                 />
-                <p className="font-20 mt-1">Lowest fees</p>
+                <p>Lowest fees</p>
             </CWidgetSimple>
         </CCol>
         <CCol sm="6" lg="3">
-            <CWidgetSimple header="" text="" className="p-0">
+            <CWidgetSimple header="" text="" className="widget-advantage">
                 <CImg
                     src={'img/icons8-bank-building-64.png'}
                     alt="Regulated by SEC"
-                    height="40"
                 />
-                <p className="font-20 mt-1">Regulated by SEC</p>
+                <p>Regulated by SEC</p>
             </CWidgetSimple>
         </CCol>
     </CRow>
