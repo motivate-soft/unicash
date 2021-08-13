@@ -13,14 +13,13 @@ import {
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { useHistory } from 'react-router-dom';
 
 const TheHeader = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const darkMode = useSelector(state => state.darkMode)
+  // const darkMode = useSelector(state => state.darkMode)
   const sidebarShow = useSelector(state => state.sidebarShow)
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)

@@ -1,8 +1,5 @@
 import React from 'react'
 import { 
-    CNav,
-    CNavItem,
-    CNavLink,
     CImg,
     CRow,
     CCol

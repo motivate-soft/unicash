@@ -3,8 +3,6 @@ import {
   CRow,
   CCol,
   CImg,
-  CNav,
-  CNavLink,
   CButton,
   CCard,
   CCardBody
