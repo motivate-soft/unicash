@@ -10,9 +10,8 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const Desc = () => {
-  // render
   return (
-    <CRow color="transparent" className="pt-5 pl-5 card-desc">
+    <CRow color="transparent" className="p-4 card-desc">
         <CCol sm="12" lg="12" className="pb-3">
             <p className="h1 intro-title">Fast and secure crypto exchange.</p>
             <p className="h6 intro-desc">Instant exchange to local currency.</p>

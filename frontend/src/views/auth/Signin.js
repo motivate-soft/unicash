@@ -61,15 +61,15 @@ const Signin = () => {
     setTimeout(() => {
       // alert(JSON.stringify(values, null, 2))
       dispatch({type: 'set', isLogin: true})
-      history.push(`/dashboard`);
       // dispatch({type: 'set', isAdmin: true})
+      history.push(`/dashboard`);
       setSubmitting(false)
     }, 2000)
   }
 
   return (
     <>
-      <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0">
+      <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
         <Formik
             initialValues={initialValues}
             validate={validate(validationSchema)}

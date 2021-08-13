@@ -49,7 +49,7 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
 
-      <CHeaderNav className={isAdmin ? 'd-none' : 'd-md-down-none mr-auto'}>
+      <CHeaderNav className={isAdmin ? 'invisible' : 'd-md-down-none mr-auto invisible'}>
         <CHeaderNavItem className="px-3" >
           <CHeaderNavLink to="/home">
             <CImg
@@ -77,18 +77,18 @@ const TheHeader = () => {
         <TheHeaderDropdown/> */}
 
         <CHeaderNavLink to="/signup" className={isLogin ? 'd-none' : undefined}>
-            <CButton block className={currPath == '/signup' ? 'button-sign-active' : 'button-sign'}>
+            <CButton block className={currPath === '/signup' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign up</strong>
             </CButton>
         </CHeaderNavLink>
 
         <CHeaderNavLink to="/signin" className={isLogin ? 'd-none' : undefined}>
-            <CButton block className={currPath == '/signin' ? 'button-sign-active' : 'button-sign'}>
+            <CButton block className={currPath === '/signin' ? 'button-sign-active' : 'button-sign'}>
               <strong>Sign in</strong>
             </CButton>
         </CHeaderNavLink>
         
-        <CDropdown className="m-0 pt-0" variant="btn-group" className={isLogin ? undefined : 'd-none'}>
+        <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'}>
             <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success">
                 Account
             </CDropdownToggle>
@@ -99,7 +99,8 @@ const TheHeader = () => {
             </CDropdownMenu>
         </CDropdown>
       </CHeaderNav>
-
+      
+      <div className="header-border"></div>
     </CHeader>
   )
 }

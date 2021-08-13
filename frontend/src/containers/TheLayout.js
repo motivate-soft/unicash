@@ -17,9 +17,9 @@ const TheLayout = () => {
 
   return (
     <div className={classes}>
-      <TheSidebar/>
+      <TheHeader/>
       <div className="c-wrapper">
-        <TheHeader/>
+        <TheSidebar/>
         <div className="c-body">
           <TheContent/>
         </div>

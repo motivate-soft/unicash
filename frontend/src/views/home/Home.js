@@ -29,7 +29,7 @@ const Home = () => {
             </CCardHeader>
             <CCardBody className="p-0" color="default">
               
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <table className="table table-hover table-outline mb-0">
                 <thead className="thead-light">
                   <tr>
                     <th>Username</th>
@@ -123,7 +123,7 @@ const Home = () => {
             <CCardBody className="p-0" color="default">
               <CRow color="transparent d-border">
                 <CCol sm="12" md="12" lg="6">
-                  <CWidgetSimple style={{maxWidth: "600px"}}>
+                  <CWidgetSimple>
                     <CRow>
                       <CCol sm="2" lg="2">
                         <CImg src={'img/icons8-male-user-50.png'} height={40}></CImg>
@@ -139,7 +139,7 @@ const Home = () => {
                   </CWidgetSimple>
                 </CCol>
                 <CCol sm="12" md="12" lg="6">
-                  <CWidgetSimple style={{maxWidth: "600px"}} className="float-right">
+                  <CWidgetSimple>
                     <CRow color="transparent d-border">
                       <CCol sm="2" lg="2">
                         <CImg src={'img/icons8-male-user-50.png'} height={40}></CImg>

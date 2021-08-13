@@ -26,7 +26,7 @@ const TheSidebar = () => {
       unfoldable
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
-      <CSidebarBrand className="d-md-down-none" to="/">
+      <CSidebarBrand className="d-md-down-none invisible" to="/">
         <CImg
             src={'img/logo.png'}
             alt="Company Logo"

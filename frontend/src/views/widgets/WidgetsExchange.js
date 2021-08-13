@@ -18,9 +18,9 @@ const WidgetsExchange = () => {
   // render
   return (
     <CRow color="transparent" className="d-box-shadow1">
-        <CCol sm="12" lg="6" className="p-2 d-box-shadow1 d-border">
+        <CCol sm="12" lg="5" className="d-box-shadow1 d-border">
             <CCard color="transparent" className="d-box-shadow1 d-border">
-                <CCardBody className="card-exchange ml-20 mr-20">
+                <CCardBody className="card-exchange">
                     <CRow>
                         <CCol sm="8" lg="8">
                             <p className="card-exchange-title">you send</p>
@@ -73,7 +73,7 @@ const WidgetsExchange = () => {
                 </CCardBody>
             </CCard>
         </CCol>
-        <CCol sm="12" lg="6" className="p-20 mt-10">
+        <CCol sm="12" lg="7">
             <Desc />
         </CCol>
     </CRow>
