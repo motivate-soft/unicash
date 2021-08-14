@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { lazy, useState } from 'react'
 import {
   CRow,
   CCol,
@@ -46,6 +46,16 @@ function RedditTextField(props) {
     return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
   }
 const WidgetsExchange = () => {
+    const [inputSend, setInputSend] = useState(0.11);
+
+ const onChangeTextfield = e => {
+    const inputValue = e.target.value;
+    if (!Number(inputValue)) {
+        //return false;
+    }
+    // return true;
+    
+  };
   // render
   return (
     <>
@@ -59,13 +69,14 @@ const WidgetsExchange = () => {
                                     id="you-send"
                                     label="You send"
                                     placeholder="You send"
-                                    defaultValue="0.1"
+                                    value={inputSend}
                                     fullWidth
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
                                     variant="filled"
                                     style={{borderRight: "1px solid lightgray"}}
+                                    onChange={onChangeTextfield}
                                     />
                             </div>
                             <div className="mr-auto">
@@ -102,6 +113,7 @@ const WidgetsExchange = () => {
                                     }}
                                     variant="filled"
                                     style={{borderRight: "1px solid lightgray"}}
+                                    onChange={onChangeTextfield}
                                     />
                             </div>
                             <div className="mr-auto">
