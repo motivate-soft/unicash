@@ -50,11 +50,9 @@ const WidgetsExchange = () => {
 
  const onChangeTextfield = e => {
     const inputValue = e.target.value;
-    if (!Number(inputValue)) {
-        //return false;
+    if (Number(inputValue)) {
+        setInputSend(inputValue)
     }
-    // return true;
-    
   };
   // render
   return (
