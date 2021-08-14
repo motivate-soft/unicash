@@ -70,9 +70,9 @@ const Desc = () => {
               <div className="d-flex">
                 <div className="pl-0">
                   <CImg
-                      src={'img/Union-Bank.png'}
+                      src={'img/Unicash logo red.png'}
                       alt="Union Bank"
-                      height="110"
+                      height="80"
                     />
                 </div>
                 <div className="pl-2 flex-grow-1 pt-3">

@@ -58,11 +58,11 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
 
-      <CHeaderNav className={isAdmin ? 'invisible' : 'd-md-down-none mr-auto invisible'}>
+      <CHeaderNav className={isAdmin ? '' : ' mr-auto'}>
         <CHeaderNavItem className="px-3" >
           <CHeaderNavLink to="/home">
             <CImg
-              src={'img/logo.png'}
+              src={'img/Unicash.png'}
               alt="Company Logo"
               height="40"
             />
