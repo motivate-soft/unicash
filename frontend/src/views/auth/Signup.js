@@ -10,9 +10,9 @@ import {
   CInput,
   CRow
 } from '@coreui/react'
-import { useDispatch } from 'react-redux'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
+import { useDispatch } from 'react-redux';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { userService } from '../../controllers/_services/user.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 

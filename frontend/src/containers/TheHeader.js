@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
@@ -14,7 +14,7 @@ import {
   CDropdownToggle,
 } from '@coreui/react'
 import { useHistory } from 'react-router-dom';
-// import CIcon from '@coreui/icons-react';
+import { userService } from '../controllers/_services/user.service';
 
 const TheHeader = () => {
   const dispatch = useDispatch()
@@ -25,6 +25,33 @@ const TheHeader = () => {
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)
   const currPath = history.location.pathname
+
+  const [fullName, setFullName] = useState('')
+
+  const localUser = localStorage.getItem('user')
+  
+  if (localUser && JSON.parse(localUser).id) {
+    userService.getById(JSON.parse(localUser).id)
+      .then(
+        user => {
+          if (user.id && user.id === JSON.parse(localUser).id) {
+            dispatch({type: 'set', isLogin: true})
+            dispatch({type: 'set', user: user})
+            setFullName(user.fullName);
+          }
+        },
+        error => {
+          logout()
+        }
+      )
+  }
+
+  const logout = () => {
+    userService.logout();
+    dispatch({type: 'set', isLogin: false})
+    dispatch({type: 'set', isAdmin: false})
+    history.replace('/home')
+  }
 
   const handleSignupClickOpen = () => {
     dispatch({type: 'set', openSignup: true})
@@ -99,12 +126,12 @@ const TheHeader = () => {
         
         <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'}>
             <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success">
-                Account
+                {fullName}
             </CDropdownToggle>
             <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
                 <CDropdownItem className="dropdown-toggle-menuitem">Payment method</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem">Settings</CDropdownItem>
-                <CDropdownItem className="dropdown-toggle-menuitem">Log out</CDropdownItem>
+                <CDropdownItem className="dropdown-toggle-menuitem" onClick={logout}>Log out</CDropdownItem>
             </CDropdownMenu>
         </CDropdown>
       </CHeaderNav>

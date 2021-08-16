@@ -9,13 +9,20 @@ import {
   CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom';
 
 const WidgetsExchange = lazy(() => import('../widgets/WidgetsExchange.js'))
 const WidgetsAdvantage = lazy(() => import('../widgets/WidgetsAdvantage.js'))
 
 const Home = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
+  
   dispatch({type: 'set', darkMode: true})
+
+  if (localStorage.getItem('user')) {
+    history.replace('/dashboard')
+  }
 
   return (
     <>

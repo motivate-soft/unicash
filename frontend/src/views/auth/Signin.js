@@ -57,11 +57,12 @@ const initialValues = {
 const Signin = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-
+  
   const onSubmit = (values, { setSubmitting, setErrors }) => {
     userService.login(values.email, values.password)
       .then(
-          user => { 
+          user => {
+            dispatch({type: 'set', user: user})
             dispatch({type: 'set', openSignin: false})
             dispatch({type: 'set', openSignup: false})
             dispatch({type: 'set', isLogin: true})
