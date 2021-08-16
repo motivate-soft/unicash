@@ -46,12 +46,19 @@ function RedditTextField(props) {
     return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
   }
 const WidgetsExchange = () => {
-    const [inputSend, setInputSend] = useState(0.11);
+    const [inputSend, setInputSend] = useState(0.1);
+    const [inputReceive, setInputReceive] = useState(3000.98);
 
- const onChangeTextfield = e => {
+ const onChangeOnSend = e => {
     const inputValue = e.target.value;
-    if (Number(inputValue)) {
+    if (inputValue === '' || inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
         setInputSend(inputValue)
+    }
+  };
+  const onChangeOnReceive = e => {
+    const inputValue = e.target.value;
+    if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
+        setInputReceive(inputValue)
     }
   };
   // render
@@ -74,7 +81,7 @@ const WidgetsExchange = () => {
                                     }}
                                     variant="filled"
                                     style={{borderRight: "1px solid lightgray"}}
-                                    onChange={onChangeTextfield}
+                                    onChange={onChangeOnSend}
                                     />
                             </div>
                             <div className="mr-auto">
@@ -104,14 +111,14 @@ const WidgetsExchange = () => {
                                     id="you-receive"
                                     label="You receive"
                                     placeholder="You receive"
-                                    defaultValue="3000.98"
+                                    value={inputReceive}
                                     fullWidth
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
                                     variant="filled"
                                     style={{borderRight: "1px solid lightgray"}}
-                                    onChange={onChangeTextfield}
+                                    onChange={onChangeOnReceive}
                                     />
                             </div>
                             <div className="mr-auto">

@@ -13,6 +13,7 @@ import {
 import { useDispatch } from 'react-redux'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { userActions } from '../../controllers/_actions';
 
 const validationSchema = function (values) {
   return Yup.object().shape({
@@ -66,7 +67,10 @@ const Signup = () => {
 
   const onSubmit = (values, { setSubmitting, setErrors }) => {
     setTimeout(() => {
-      // alert(JSON.stringify(values, null, 2))
+      alert(JSON.stringify(values, null, 2))
+
+      dispatch(userActions.register(JSON.stringify(values)));
+
       dispatch({type: 'set', openSignin: false})
       dispatch({type: 'set', openSignup: false})
       dispatch({type: 'set', isLogin: true})
