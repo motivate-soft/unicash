@@ -21,7 +21,7 @@
   margin: 0 auto;
   box-shadow: none !important;
   font-family: 'PoppinsR' !important;
-  padding: 1px calc(50% - 584px);
+  padding: 1px calc(50% - 614px) !important;
   background-color: #181924 !important;
   @media (min-width: 1168px) {
     padding: 1px auto;
@@ -31,8 +31,9 @@
     background-color: #3f4252;
     width: 100%;
     margin: 0 auto;
-    @media (min-width: 768px) {
-      width: calc(100% - 30px);
+    padding: 1px calc(50% - 614px) !important;
+    @media (min-width: 1168px) {
+      padding: 1px auto;
     }
   }
 }
@@ -47,7 +48,7 @@
   font-family: 'PoppinsM' !important;
   font-size: 14px;
   @media (min-width: 1168px) {
-    padding: 1px auto;
+    padding: 1px 30px;
   }
   @media (min-width: 768px) {
     padding-right: 30px;
@@ -69,6 +70,9 @@
   //   padding-right: 30px;
   //   padding-left: 30px;
   // }
+}
+.container-fluid {
+  padding: 0px !important;
 }
 
 // Textfield material ui
