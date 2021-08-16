@@ -304,8 +304,18 @@
 * **************** Sign In ***************
 */
 .signin-widget {
-  width: 400px;
-  margin: auto;
+  margin: 0;
+  // background-color: white !important;
+  // color: #181924;
+  padding: 5px 15px !important;
+
+  // input {
+  //   color: #181924 !important;
+  //   border-color: #3f42529f !important;
+  // }
+  button {
+    background-color: red !important;
+  }
 }
 
 .signin-button {

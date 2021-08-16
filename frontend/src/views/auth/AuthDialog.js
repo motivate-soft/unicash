@@ -3,20 +3,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 
-// import {
-//     CButton,
-//     CCard,
-//     CCardBody,
-//     CCardHeader,
-//     CCol,
-//     CModal,
-//     CModalBody
-//   } from '@coreui/react'
+import {
+    CButton,
+    CCard,
+    CCardBody,
+    CCardHeader,
+    CCol,
+    CModal,
+    CModalBody
+  } from '@coreui/react'
 
 const Signup = React.lazy(() => import('./Signup'));
 const Signin = React.lazy(() => import('./Signin'));
 
-const TheHeader = () => {
+const AuthDialog = () => {
   const dispatch = useDispatch()
 
   const openSignup = useSelector(state => state.openSignup)
@@ -28,25 +28,24 @@ const TheHeader = () => {
   };
 
   return (
-    <>
-        <Dialog open={openSignup || openSignin} onClose={handleClose} aria-labelledby="signup-form-dialog" className="p-0 ">
-            <DialogContent className="p-0 m-0">
-                {openSignin ? <Signin /> : <Signup />} 
-            </DialogContent>
-        </Dialog>
-    </>
-
-    // <CModal 
-    //     color="transparent"
-    //     show={openSignup || openSignin} 
-    //     onClose={handleClose}
-    //     className="p-0 m-0 auth-modal d-box-shadow1 d-border"
-    //     >
-    //     <CModalBody color="transparent" className="p-0 m-0">
+    // <Dialog transitionDuration={0} open={openSignup || openSignin} onClose={handleClose} aria-labelledby="signup-form-dialog" className="p-0 ">
+    //     <DialogContent className="p-0 m-0">
     //         {openSignin ? <Signin /> : <Signup />} 
-    //     </CModalBody>
-    // </CModal>
+    //     </DialogContent>
+    // </Dialog>
+
+    <CModal 
+        show={openSignup || openSignin} 
+        onClose={handleClose}
+        className="p-0 auth-modal"
+        centered
+        size="sm"
+        >
+        <CModalBody className="p-0">
+            {openSignin ? <Signin /> : <Signup />} 
+        </CModalBody>
+    </CModal>
   )
 }
 
-export default TheHeader
+export default AuthDialog
