@@ -13,7 +13,8 @@ import {
 import { useDispatch } from 'react-redux'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { userActions } from '../../controllers/_actions';
+import { userService } from '../../controllers/_services/user.service';
+import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const validationSchema = function (values) {
   return Yup.object().shape({
@@ -65,18 +66,23 @@ const initialValues = {
 const Signup = () => {
   const dispatch = useDispatch()
 
-  const onSubmit = (values, { setSubmitting, setErrors }) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2))
-
-      dispatch(userActions.register(JSON.stringify(values)));
-
-      dispatch({type: 'set', openSignin: false})
-      dispatch({type: 'set', openSignup: false})
-      dispatch({type: 'set', isLogin: true})
-      // dispatch({type: 'set', isAdmin: true})
-      setSubmitting(false)
-    }, 2000)
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    userService.register(values)
+        .then(
+            user => { 
+              if (user && user.status) {
+                successNotification(user.message, 3000);
+                dispatch({type: 'set', openSignup: false})
+                dispatch({type: 'set', openSignin: true})
+              }
+              setSubmitting(false)
+            },
+            error => {
+                console.log("error: ", error)
+                warningNotification(error, 3000);
+                setSubmitting(false)
+            }
+        );    
   }
 
   return (

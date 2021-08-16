@@ -13,7 +13,9 @@ import {
 import { useDispatch } from 'react-redux'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { userService } from '../../controllers/_services/user.service';
+import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const validationSchema = function (values) {
   return Yup.object().shape({
@@ -57,15 +59,22 @@ const Signin = () => {
   const dispatch = useDispatch()
 
   const onSubmit = (values, { setSubmitting, setErrors }) => {
-    setTimeout(() => {
-      // alert(JSON.stringify(values, null, 2))
-      dispatch({type: 'set', openSignin: false})
-      dispatch({type: 'set', openSignup: false})
-      dispatch({type: 'set', isLogin: true})
-      // dispatch({type: 'set', isAdmin: true})
-      history.push(`/dashboard`);
-      setSubmitting(false)
-    }, 2000)
+    userService.login(values.email, values.password)
+      .then(
+          user => { 
+            dispatch({type: 'set', openSignin: false})
+            dispatch({type: 'set', openSignup: false})
+            dispatch({type: 'set', isLogin: true})
+            // dispatch({type: 'set', isAdmin: true})
+            history.push(`/dashboard`);
+            successNotification('Welcome to Unicach.', 3000)
+            setSubmitting(false)
+          },
+          error => {
+            warningNotification(error, 3000)
+            setSubmitting(false)
+          }
+      );
   }
 
   return (
