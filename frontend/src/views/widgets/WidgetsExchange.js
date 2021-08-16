@@ -7,7 +7,6 @@ import {
   CCardBody
 } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
-
 import {
     alpha,
     makeStyles,
@@ -45,9 +44,10 @@ function RedditTextField(props) {
   
     return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
   }
+
 const WidgetsExchange = () => {
-    const [inputSend, setInputSend] = useState(0.1);
-    const [inputReceive, setInputReceive] = useState(3000.98);
+ const [inputSend, setInputSend] = useState(0.1);
+ const [inputReceive, setInputReceive] = useState(3000.98);
 
  const onChangeOnSend = e => {
     const inputValue = e.target.value;
