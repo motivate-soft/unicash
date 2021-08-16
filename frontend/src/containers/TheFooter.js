@@ -7,7 +7,7 @@ const TheFooter = () => {
   return (
     <>
       <TheSubFooter />
-      <CFooter>
+      <CFooter colorScheme="dark" className="footer">
         <CRow className="subfooter">
           <CCol sm="12" lg="6" className="ml-0 pl-0 text-lg-left text-sm-center">
             <span className="ml-0">Operated by ifastbit Foreign Exchange Services</span>

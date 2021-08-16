@@ -20,8 +20,8 @@ const TheLayout = () => {
   return (
     <div className={classes}>
       <TheHeader/>
+      <TheSidebar/>
       <div className="c-wrapper">
-        <TheSidebar/>
         <div className="c-body">
           <TheContent/>
         </div>

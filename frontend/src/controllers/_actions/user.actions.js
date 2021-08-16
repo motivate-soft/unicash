@@ -2,14 +2,9 @@
 import { userService } from '../_services/user.service';
 
 export const userActions = {
-    logout,
     getAll,
     delete: _delete
 };
-
-function logout() {
-    userService.logout();
-}
 
 function getAll() {
     return dispatch => {

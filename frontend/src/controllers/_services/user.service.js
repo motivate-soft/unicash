@@ -1,5 +1,6 @@
 import { authHeader } from '../_helpers';
-const serverURL = 'http://localhost:4000'
+
+const serverURL = 'http://localhost:4000';
 
 export const userService = {
     login,
