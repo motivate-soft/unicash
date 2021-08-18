@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
+const nodeMailer = require('nodemailer');
 
 module.exports = {
     authenticate,
@@ -42,8 +43,53 @@ async function create(params) {
         params.password = await bcrypt.hash(params.password, 10);
     }
 
-    // save user
-    await db.User.create(params);
+    // Sending the email to verify the account
+    let verificationCode = generateVerificationCode();
+
+    params['verifyCode'] = verificationCode;
+    params['emailVerified'] = false;
+
+    let transporter = nodeMailer.createTransport({
+        host: config.mail.host, // mail.infomaniak.com
+        port: config.mail.port,
+        secure: config.mail.secure,
+        auth: {
+            user: config.mail.user,
+            pass: config.mail.password
+        }
+      });
+      let mailOptions = {
+          from: config.mail.from, // sender address
+          to: params.email, // list of receivers
+          subject: 'Welcome to Unicash', // Subject line
+          text: 'Verify your account',
+          html: '<html>'
+					+ '<head>'
+					+ '<title></title>'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '<link href="https://svc.webspellchecker.net/spellcheck31/lf/scayt3/ckscayt/css/wsc.css" rel="stylesheet" type="text/css" />'
+					+ '</head>'
+					+ '<body aria-readonly="false"><span style="font-family:tahoma,geneva,sans-serif">Hello, ' + params.fullName + ',<br />'
+					+ '<br />'
+					+ '<h3>Welcome to Unicash</h3><br />'
+					+ '<br />'
+					+ 'Please input the following URL to confirm your account.<br />'
+					+ 'http://localhost:4000/verify?email=' + params.email + '&verifyCode=' + verificationCode +'<br />'
+					+ 'Unicash support</span><br />'
+					+ '&nbsp;'
+					+ '<hr />'
+					+ '</body>'
+					+ '</html>' // html body
+      };
+      
+      await transporter.sendMail(mailOptions);
+
+      await db.User.create(params);
 }
 
 async function update(id, params) {
@@ -84,3 +130,13 @@ function omitHash(user) {
     const { password, ...userWithoutHash } = user;
     return userWithoutHash;
 }
+
+function generateVerificationCode() {
+    var length = 8;
+    var charset = "0123456789ABCDEF";
+    var retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }

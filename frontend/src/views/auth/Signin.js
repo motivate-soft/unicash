@@ -60,6 +60,7 @@ const Signin = () => {
     userService.login(values.email, values.password)
       .then(
           user => {
+            console.log(user)
             dispatch({type: 'set', user: user})
             dispatch({type: 'set', openSignin: false})
             dispatch({type: 'set', openSignup: false})

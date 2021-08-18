@@ -6,5 +6,13 @@
         "password": "",
         "database": "db_unicash"
     },
-    "secret": "Database for Unicash"
+    "secret": "Database for Unicash",
+    "mail": {
+        "host": "mail.infomaniak.com",
+        "port": 587,
+        "secure": false,
+        "user": "",
+        "password": "",
+        "from": "support@unicash.com"
+    }
 }

@@ -6,7 +6,9 @@ function model(sequelize) {
     const attributes = {
         fullName: { type: DataTypes.STRING, allowNull: false },
         email: { type: DataTypes.STRING, allowNull: false },
-        password: { type: DataTypes.STRING, allowNull: false }
+        password: { type: DataTypes.STRING, allowNull: false },
+        emailVerified: { type: DataTypes.BOOLEAN, default: false },
+        verifyCode: { type: DataTypes.STRING, allowNull: true }
     };
 
     const options = {

@@ -35,13 +35,17 @@ const useStyles = makeStyles((theme) => ({
 const DropdownCurrency = () => {
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
+  
   return (
     <CDropdown
       className="c-header-nav-item mx-0 px-0"
       toggle={toggle}
+      onFocus={() => setToggle(!toggle)}
+      onBlur={() => setToggle(!toggle)}
+      tabIndex="0"
     >
       <CDropdownToggle className="d-box-shadow1 mx-0 px-0" caret={false}>
-        <CButton className="d-box-shadow1 mr-0 pr-0"onClick={()=>setToggle(!toggle)}>
+        <CButton className="d-box-shadow1 mr-0 pr-0">
             <div className="d-flex mt-0 button-currency">
                 <div className="flex-grow-1">
                     <div className="align-self-start small-full-currency">
