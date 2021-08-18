@@ -8,6 +8,7 @@ module.exports = {
     authenticate,
     getAll,
     getById,
+    getByEmail,
     create,
     update,
     delete: _delete
@@ -31,6 +32,10 @@ async function getAll() {
 
 async function getById(id) {
     return await getUser(id);
+}
+
+async function getByEmail(email) {
+    return await getUserByEmail(email);
 }
 
 async function create(params) {
@@ -124,6 +129,12 @@ async function _delete(id) {
 
 async function getUser(id) {
     const user = await db.User.findByPk(id);
+    if (!user) throw 'User not found';
+    return user;
+}
+
+async function getUserByEmail(mail) {
+    const user = await db.User.findOne({ where: { email: mail }});
     if (!user) throw 'User not found';
     return user;
 }

@@ -8,6 +8,7 @@ const userService = require('./user.service');
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
+router.get('/verify', getVerify);
 router.get('/', authorize(), getAll);
 router.get('/current', authorize(), getCurrent);
 router.get('/:id', authorize(), getById);
@@ -43,6 +44,20 @@ function register(req, res, next) {
     userService.create(req.body)
         .then(() => res.json({ status: true, message: 'Registration successful' }))
         .catch(next);
+}
+
+function getVerify(req, res, next) {
+    if (req.query.email && req.query.verifyCode) {
+        userService.getByEmail(req.query.email)
+        .then(user => {
+            if (user && user.verifyCode == req.query.verifyCode) {
+                user.emailVerified = true;
+                user.save();
+                res.redirect('http://localhost:3000')
+            }
+        })
+        .catch(next);
+    }
 }
 
 function getAll(req, res, next) {
