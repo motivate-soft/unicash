@@ -18,7 +18,8 @@ async function authenticate({ email, password }) {
 
     if (!user || !(await bcrypt.compare(password, user.password)))
         throw 'Email or password is incorrect';
-
+    if (user.emailVerified == 0)
+        throw 'Please check your email to verify your account.';
     // authentication successful
     const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
     return { ...omitHash(user.get()), token };
@@ -47,7 +48,8 @@ async function create(params) {
     let verificationCode = generateVerificationCode();
 
     params['verifyCode'] = verificationCode;
-    params['emailVerified'] = false;
+    params['emailVerified'] = 0;
+    params['role'] = 0;
 
     let transporter = nodeMailer.createTransport({
         host: config.mail.host, // mail.infomaniak.com

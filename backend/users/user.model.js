@@ -8,6 +8,7 @@ function model(sequelize) {
         email: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },
         emailVerified: { type: DataTypes.BOOLEAN, default: false },
+        role: { type: DataTypes.INTEGER, default: 0, allowNull: false },
         verifyCode: { type: DataTypes.STRING, allowNull: true }
     };
 
