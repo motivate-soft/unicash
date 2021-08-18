@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { lazy, useState } from 'react'
 import {
   CRow,
   CCol,
@@ -11,7 +11,8 @@ import {
     alpha,
     makeStyles,
   } from '@material-ui/core/styles';
-import CIcon from '@coreui/icons-react';
+  
+const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
 
   const useStylesReddit = makeStyles((theme) => ({
     root: {
@@ -49,7 +50,7 @@ const WidgetsDashboard = () => {
 
  const [bankAccountName, setBankAccountName] = useState('Juan Luna')
  const [bankAccountNo, setBankAccountNo] = useState('02132654689898')
- const [bankName, setBankName] = useState('BPI')
+ const [bankName] = useState('BPI')
  const [mobileNo, setMobileNo] = useState('0965235641')
 
  const onChangeOnSend = e => {
@@ -87,21 +88,7 @@ const WidgetsDashboard = () => {
                                 />
                         </div>
                         <div className="mr-auto">
-                            <CButton className="d-box-shadow1 mr-0 pr-0">
-                                <div className="d-flex mt-0 button-currency">
-                                    <div className="flex-grow-1">
-                                        <div className="align-self-start small-full-currency">
-                                            <span>Bitcoin</span>
-                                        </div>
-                                        <div className="align-self-end currency-name">
-                                            <span>BTC</span>
-                                        </div>
-                                    </div>
-                                    <div className="status-icon">
-                                        <CIcon name="cil-chevron-bottom" alt="" />
-                                    </div>
-                                </div>
-                            </CButton>
+                            <DropdownCurrency />
                         </div>
                     </div>
                     <div className="d-flex mt-2">
@@ -124,21 +111,7 @@ const WidgetsDashboard = () => {
                                 />
                         </div>
                         <div className="mr-auto">
-                            <CButton className="d-box-shadow1 mr-0 pr-0">
-                                <div className="d-flex mt-0 button-currency">
-                                    <div className="flex-grow-1">
-                                        <div className="align-self-start small-full-currency">
-                                            <span>Bank</span>
-                                        </div>
-                                        <div className="align-self-end currency-name">
-                                            <span>BPI</span>
-                                        </div>
-                                    </div>
-                                    <div className="status-icon">
-                                        <CIcon name="cil-chevron-bottom" alt="" />
-                                    </div>
-                                </div>
-                            </CButton>
+                            <DropdownCurrency />
                         </div>
                     </div>
                     <div className="d-flex mt-0 float-right">

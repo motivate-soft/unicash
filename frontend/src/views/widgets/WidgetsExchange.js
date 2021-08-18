@@ -11,9 +11,11 @@ import {
     alpha,
     makeStyles,
   } from '@material-ui/core/styles';
-import CIcon from '@coreui/icons-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const Desc = lazy(() => import('./Desc'))
+const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
 
 const useStylesReddit = makeStyles((theme) => ({
     root: {
@@ -46,113 +48,96 @@ function RedditTextField(props) {
   }
 
 const WidgetsExchange = () => {
- const [inputSend, setInputSend] = useState(0.1);
- const [inputReceive, setInputReceive] = useState(3000.98);
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const isLogin = useSelector(state => state.isLogin)
 
- const onChangeOnSend = e => {
-    const inputValue = e.target.value;
-    if (inputValue === '' || inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
-        setInputSend(inputValue)
+    const [inputSend, setInputSend] = useState(0.1);
+    const [inputReceive, setInputReceive] = useState(3000.98);
+
+    const onChangeOnSend = e => {
+        const inputValue = e.target.value;
+        if (inputValue === '' || inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
+            setInputSend(inputValue)
+        }
+    };
+    const onChangeOnReceive = e => {
+        const inputValue = e.target.value;
+        if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
+            setInputReceive(inputValue)
+        }
+    };
+    const onClickExchangeNow = () => {
+        if (isLogin) {
+            history.replace('dashboard')
+        } else {
+            dispatch({type: 'set', openSignin: true})
+        }
     }
-  };
-  const onChangeOnReceive = e => {
-    const inputValue = e.target.value;
-    if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
-        setInputReceive(inputValue)
-    }
-  };
-  // render
-  return (
-    <>
-        <CRow>
-            <CCol sm="12" lg="5">
-                <CCard color="transparent">
-                    <CCardBody className="card-exchange">
-                        <div className="d-flex mt-2">
-                            <div className="flex-grow-1">
-                                <RedditTextField
-                                    id="you-send"
-                                    label="You send"
-                                    placeholder="You send"
-                                    value={inputSend}
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="filled"
-                                    style={{borderRight: "1px solid lightgray"}}
-                                    onChange={onChangeOnSend}
-                                    />
+    // render
+    return (
+        <>
+            <CRow>
+                <CCol sm="12" lg="5">
+                    <CCard color="transparent">
+                        <CCardBody className="card-exchange">
+                            <div className="d-flex mt-2">
+                                <div className="flex-grow-1">
+                                    <RedditTextField
+                                        id="you-send"
+                                        label="You send"
+                                        placeholder="You send"
+                                        value={inputSend}
+                                        fullWidth
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="filled"
+                                        style={{borderRight: "1px solid lightgray"}}
+                                        onChange={onChangeOnSend}
+                                        />
+                                </div>
+                                <div className="mr-auto">
+                                    <DropdownCurrency />
+                                </div>
                             </div>
-                            <div className="mr-auto">
-                                <CButton className="d-box-shadow1 mr-0 pr-0">
-                                    <div className="d-flex mt-0 button-currency">
-                                        <div className="flex-grow-1">
-                                            <div className="align-self-start small-full-currency">
-                                                <span>Bitcoin</span>
-                                            </div>
-                                            <div className="align-self-end currency-name">
-                                                <span>BTC</span>
-                                            </div>
-                                        </div>
-                                        <div className="status-icon">
-                                            <CIcon name="cil-chevron-bottom" alt="" />
-                                        </div>
-                                    </div>
+                            <div className="d-flex mt-2">
+                                <div><p className="card-exchange-rate">1BTC = $ 30,000 USDT</p></div>
+                            </div>
+                            <div className="d-flex mt-2">
+                                <div className="flex-grow-1">
+                                    <RedditTextField
+                                        id="you-receive"
+                                        label="You receive"
+                                        placeholder="You receive"
+                                        value={inputReceive}
+                                        fullWidth
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="filled"
+                                        style={{borderRight: "1px solid lightgray"}}
+                                        onChange={onChangeOnReceive}
+                                        />
+                                </div>
+                                <div className="mr-auto">
+                                    <DropdownCurrency />
+                                </div>
+                            </div>
+                            <div className="d-flex mt-3">
+                                <CButton block className="button-exchange" onClick={onClickExchangeNow}>
+                                    Exchange now
                                 </CButton>
                             </div>
-                        </div>
-                        <div className="d-flex mt-2">
-                            <div><p className="card-exchange-rate">1BTC = $ 30,000 USDT</p></div>
-                        </div>
-                        <div className="d-flex mt-2">
-                            <div className="flex-grow-1">
-                                <RedditTextField
-                                    id="you-receive"
-                                    label="You receive"
-                                    placeholder="You receive"
-                                    value={inputReceive}
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="filled"
-                                    style={{borderRight: "1px solid lightgray"}}
-                                    onChange={onChangeOnReceive}
-                                    />
-                            </div>
-                            <div className="mr-auto">
-                                <CButton className="d-box-shadow1 mr-0 pr-0">
-                                    <div className="d-flex mt-0 button-currency">
-                                        <div className="flex-grow-1">
-                                            <div className="align-self-start small-full-currency">
-                                                <span>Cash</span>
-                                            </div>
-                                            <div className="align-self-end currency-name">
-                                                <span>GCash</span>
-                                            </div>
-                                        </div>
-                                        <div className="status-icon">
-                                            <CIcon name="cil-chevron-bottom" alt="" />
-                                        </div>
-                                    </div>
-                                </CButton>
-                            </div>
-                        </div>
-                        <div className="d-flex mt-3">
-                            <CButton block className="button-exchange">
-                                Exchange now
-                            </CButton>
-                        </div>
-                    </CCardBody>
-                </CCard>
-            </CCol>
-            <CCol sm="12" lg="7">
-                <Desc />
-            </CCol>
-        </CRow>
-    </>
-    )
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+                <CCol sm="12" lg="7">
+                    <Desc />
+                </CCol>
+            </CRow>
+        </>
+        )
 }
 
 export default WidgetsExchange

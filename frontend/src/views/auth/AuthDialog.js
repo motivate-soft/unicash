@@ -1,14 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-
 import {
-    CButton,
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,
     CModal,
     CModalBody
   } from '@coreui/react'

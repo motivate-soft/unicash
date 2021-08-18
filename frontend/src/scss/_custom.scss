@@ -9,8 +9,8 @@
   font-family: 'PoppinsM' !important;
   line-height: 1.15;
 
-  @media (min-width: 768px) {
-    padding: 90px 0 50px;
+  @media (max-width: 1168px) {
+    padding: 90px 15px 50px;
   }
 }
 .background-dark {
@@ -74,6 +74,16 @@
 .container-fluid {
   padding: 0px !important;
 }
+.popup-warper {
+  padding: 20px 5%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  border: 2px var(--ifm-link-color) dashed;
+  margin: 10px;
+  white-space: pre-line;
+}
+
 
 // Textfield material ui
 .MuiTextField-root > label {
@@ -199,6 +209,36 @@
   }
 }
 
+.currency-dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.search-dropdown {
+  background-color: white !important;
+}
+.currency-dropdown {
+  background-color: white !important;
+  color: black !important;
+  padding-bottom: 5px;
+  .currency-icon {
+    font-size: 1.6rem;
+    font-style: normal;
+  }
+  .stands-of-currency {
+    margin-left: 18px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #557f96;
+  }
+  .full-currency {
+    margin-left: 12px;
+    color: #557f96;
+  }
+}
+.currency-dropdown:hover {
+  background-color: rgb(231, 229, 229) !important;
+}
+
 .card-desc {
   display: flex;
   flex-direction: column;
@@ -246,6 +286,7 @@
     margin: auto;
   }
 }
+
 .transaction-table {
   .header-title {
     font-size: 24px !important;
