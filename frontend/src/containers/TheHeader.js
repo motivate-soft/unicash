@@ -90,7 +90,7 @@ const TheHeader = () => {
           <CHeaderNavLink to="/home">
             <CImg
               src={'img/Unicash.png'}
-              alt="Company Logo"
+              alt="Unicash"
               height="40"
             />
           </CHeaderNavLink>
@@ -136,7 +136,6 @@ const TheHeader = () => {
         </CDropdown>
       </CHeaderNav>
       
-      <div className="header-border"></div>
     </CHeader>
     </>
   )
