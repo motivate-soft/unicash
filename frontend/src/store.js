@@ -8,7 +8,8 @@ const initialState = {
   isLogin: false,
   openSignup: false,
   openSignin: false,
-  popupForCurrency: false
+  popupForCurrency: false,
+  openAddPayment: false
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {

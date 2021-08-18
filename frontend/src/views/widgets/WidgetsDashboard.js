@@ -46,6 +46,7 @@ function RedditTextField(props) {
   }
 
 const WidgetsDashboard = () => {
+    
  const history = useHistory()
  const [inputSend, setInputSend] = useState(0.1);
  const [inputReceive, setInputReceive] = useState(3000.98);

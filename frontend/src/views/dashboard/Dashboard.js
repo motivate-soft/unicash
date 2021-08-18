@@ -16,6 +16,7 @@ const Dashboard = () => {
   dispatch({type: 'set', darkMode: false})
 
   if (!localStorage.getItem('user')) {
+    dispatch({type: 'set', darkMode: true})
     history.replace('/home')
   }
 

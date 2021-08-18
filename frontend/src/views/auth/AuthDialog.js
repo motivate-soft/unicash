@@ -20,12 +20,6 @@ const AuthDialog = () => {
   };
 
   return (
-    // <Dialog transitionDuration={0} open={openSignup || openSignin} onClose={handleClose} aria-labelledby="signup-form-dialog" className="p-0 ">
-    //     <DialogContent className="p-0 m-0">
-    //         {openSignin ? <Signin /> : <Signup />} 
-    //     </DialogContent>
-    // </Dialog>
-
     <CModal 
         show={openSignup || openSignin} 
         onClose={handleClose}
