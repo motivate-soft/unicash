@@ -11,8 +11,9 @@ import {
     alpha,
     makeStyles,
   } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
   
-const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
+  const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
 
   const useStylesReddit = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,7 @@ function RedditTextField(props) {
   }
 
 const WidgetsDashboard = () => {
+ const history = useHistory()
  const [inputSend, setInputSend] = useState(0.1);
  const [inputReceive, setInputReceive] = useState(3000.98);
 
@@ -65,6 +67,10 @@ const WidgetsDashboard = () => {
         setInputReceive(inputValue)
     }
   };
+
+  const onClickToPayment = () => {
+      history.push('/payment')
+  }
   // render
   return (
     <CRow color="transparent" className="d-box-shadow1">
@@ -115,7 +121,7 @@ const WidgetsDashboard = () => {
                         </div>
                     </div>
                     <div className="d-flex mt-0 float-right">
-                        <div><p className="card-exchange-bank-method-ask">Set payment method?</p></div>
+                        <div><p className="card-exchange-bank-method-ask" onClick={onClickToPayment}>Set payment method?</p></div>
                     </div>
                     <div className="d-flex mt-2">
                         <RedditTextField
