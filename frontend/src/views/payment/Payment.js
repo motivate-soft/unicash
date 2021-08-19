@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { paymentService } from '../../controllers/_services/payment.service';
+import { currencyConstants } from '../../controllers/_constants';
 
 const AddPayment = React.lazy(() => import('./AddPayment'));
 
@@ -60,23 +61,28 @@ const Payment = () => {
   if (!localStorage.getItem('user')) {
     dispatch({type: 'set', darkMode: true})
     history.replace('/home')
-  } else {
-    
   }
 
-  const savedPaymentMethods = useSelector(state => state.paymentMethods)
   const openingPopup = useSelector(state => state.openAddPayment)
+
+  const [savedPaymentMethods, setSavedPaymentMethods] = useState()
 
   useEffect(() => {
     if (user)
       paymentService.getPaymentMethodsById(user.id)
       .then(
           paymentMethods => {
-            dispatch({type: 'set', paymentMethods: paymentMethods})
+            setSavedPaymentMethods(paymentMethods)
           },
           error => {}
       )
-  }, [dispatch, user, openingPopup])
+  }, [openingPopup, user]);
+
+  const editPaymentMethod = (paymentMethod) => {
+     dispatch({type: 'set', openAddPayment: true})
+     dispatch({type: 'set', newPaymentMethod: false})
+     dispatch({type: 'set', selectedPaymentMethod: paymentMethod})
+  }
 
   return (
     <>
@@ -86,7 +92,7 @@ const Payment = () => {
           PAYMENT
           <div className="d-flex mt-0 float-right">
               <div>
-                  <CButton block className="button-exchange" onClick={() => dispatch({type: 'set', openAddPayment: true})}>
+                  <CButton block className="button-exchange" onClick={() => {dispatch({type: 'set', openAddPayment: true}); dispatch({type: 'set', newPaymentMethod: true})}}>
                       + Add payment method
                   </CButton>
               </div>
@@ -105,10 +111,23 @@ const Payment = () => {
                       >
                         <h5 className="m-0 p-0">{paymentMethod.name}</h5>
                       </CButton>
+                      <CButton
+                        color="transparent"
+                        className="text-right text-danger m-0 p-1 button-group float-right" 
+                      >
+                        <h5 className="m-0 p-0">Delete</h5>
+                      </CButton>
+                      <CButton
+                        color="transparent"
+                        className="text-right text-info m-0 p-1 button-group float-right"
+                        onClick={() => editPaymentMethod(paymentMethod)}
+                      >
+                        <h5 className="m-0 p-0">Edit</h5>
+                      </CButton>
                     </CCardHeader>
                     <CCollapse show={accordion === index}>
                       <CCardBody>
-                        { paymentMethod.bankAccountName && paymentMethod.bankAccountName !== '' &&
+                        { paymentMethod.bankAccountName && paymentMethod.bankAccountName !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 1 && 
                           <RedditTextField
                             id="bank-account-name"
                             label="Bank account name"
@@ -120,7 +139,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.bankAccountNo && paymentMethod.bankAccountNo !== '' &&
+                        { paymentMethod.bankAccountNo && paymentMethod.bankAccountNo !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 1 && 
                           <RedditTextField
                             id="bank-account-no"
                             label="Bank account number"
@@ -132,7 +151,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.bankBranch && paymentMethod.bankBranch !== '' &&
+                        { paymentMethod.bankBranch && paymentMethod.bankBranch !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 1 && 
                           <RedditTextField
                             id="bank-branch"
                             label="Bank branch"
@@ -156,7 +175,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.firstName && paymentMethod.firstName !== '' &&
+                        { paymentMethod.firstName && paymentMethod.firstName !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 3 && 
                           <RedditTextField
                             id="first-name"
                             label="First Name"
@@ -168,7 +187,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.middleName && paymentMethod.middleName !== '' &&
+                        { paymentMethod.middleName && paymentMethod.middleName !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 3 && 
                           <RedditTextField
                             id="middle-name"
                             label="Middle Name"
@@ -180,7 +199,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.lastName && paymentMethod.lastName !== '' &&
+                        { paymentMethod.lastName && paymentMethod.lastName !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 3 && 
                           <RedditTextField
                             id="last-name"
                             label="Last Name"
@@ -192,7 +211,7 @@ const Payment = () => {
                             variant="filled"
                           />
                         }
-                        { paymentMethod.completeAddress && paymentMethod.completeAddress !== '' &&
+                        { paymentMethod.completeAddress && paymentMethod.completeAddress !== '' && currencyConstants[paymentMethod.selectedCurrency].kind === 3 && 
                           <RedditTextField
                             id="complete-address"
                             label="Complete address"

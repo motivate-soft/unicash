@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     CModal,
@@ -50,6 +50,9 @@ const AddPayment = () => {
 
   const user = useSelector(state => state.user)
   const openAddPayment = useSelector(state => state.openAddPayment)
+  const newPaymentMethod = useSelector(state => state.newPaymentMethod)
+  const selectedPaymentMethod = useSelector(state => state.selectedPaymentMethod)
+
   const handleClose = () => {
     dispatch({type: 'set', openAddPayment: false})
   };
@@ -66,6 +69,30 @@ const AddPayment = () => {
   const [completeAddress, setCompleteAddress] = useState('')
 
   const [selectedCurrency, setSelectedCurrency] = useState(1)
+
+  useEffect(() => {
+      if (!newPaymentMethod && selectedPaymentMethod) {
+        setSelectedCurrency(selectedPaymentMethod.selectedCurrency)
+        setBankAccountName(selectedPaymentMethod.bankAccountName)
+        setBankAccountNo(selectedPaymentMethod.bankAccountNo)
+        setBankBranch(selectedPaymentMethod.bankBranch)
+        setMobileNo(selectedPaymentMethod.mobileNo)
+        setLastName(selectedPaymentMethod.lastName)
+        setFirstName(selectedPaymentMethod.firstName)
+        setMiddleName(selectedPaymentMethod.middleName)
+        setCompleteAddress(selectedPaymentMethod.completeAddress)
+      } else {
+        setSelectedCurrency(0)
+        setBankAccountName('')
+        setBankAccountNo('')
+        setBankBranch('')
+        setMobileNo('')
+        setLastName('')
+        setFirstName('')
+        setMiddleName('')
+        setCompleteAddress('')
+      }
+  }, [newPaymentMethod,  selectedPaymentMethod]);
 
   const getSavedPaymentMethods = (index) => {
     setSelectedCurrency(index)
@@ -109,17 +136,29 @@ const AddPayment = () => {
           "middleName": middleName,
           "completeAddress": completeAddress
       }
-
-      paymentService.addPaymentmethod(paymentObj)
-        .then(
-            user => {
-                successNotification('Successfully added new payment method.', 3000)
-                dispatch({type: 'set', openAddPayment: false})
-            },
-            error => {
-                warningNotification(error, 3000)
-            }
-        );
+      if (!newPaymentMethod && selectedPaymentMethod) {
+        paymentService.updatePaymentmethod(selectedPaymentMethod.id, paymentObj)
+            .then(
+                payment => {
+                    successNotification('Successfully updated', 3000)
+                    dispatch({type: 'set', openAddPayment: false})
+                },
+                error => {
+                    warningNotification(error, 3000)
+                }
+            );
+      } else {
+        paymentService.addPaymentmethod(paymentObj)
+            .then(
+                payment => {
+                    successNotification('Successfully added new payment method.', 3000)
+                    dispatch({type: 'set', openAddPayment: false})
+                },
+                error => {
+                    warningNotification(error, 3000)
+                }
+            );
+      }
   }
 
   return (
@@ -131,15 +170,17 @@ const AddPayment = () => {
         >
         <CModalBody className="p-3">
             <h3 className="p-3">Payment Method</h3>
-            <div className="px-3 add-payment">
-                <CSelect custom size="lg" className="add-payment-select" name="selectCurrency" id="selectCurrency" onChange={(e) => getSavedPaymentMethods(e.target.value)} value={selectedCurrency}>
-                    {
-                        currencyConstants.map((currency, index) => (
-                            <option value={index}>{currency.label}</option>
-                        ))
-                    }
-                </CSelect>
-            </div>
+            { newPaymentMethod && 
+                <div className="px-3 add-payment">
+                    <CSelect custom size="lg" className="add-payment-select" name="selectCurrency" id="selectCurrency" onChange={(e) => getSavedPaymentMethods(e.target.value)} value={selectedCurrency}>
+                        {
+                            currencyConstants.map((currency, index) => (
+                                <option value={index}>{currency.label}</option>
+                            ))
+                        }
+                    </CSelect>
+                </div>
+            }
             <div className={ currencyConstants[selectedCurrency].kind === 1 ? 'd-flex mt-2 px-3' : 'd-none'}>
                 <RedditTextField
                         id="bank-account-name"
@@ -259,8 +300,10 @@ const AddPayment = () => {
             </div>
             
             <div className="d-flex mx-3 px-3">
-                <CButton block className="button-exchange p-1" onClick={onSubmit}>
-                    <h3>Save</h3>
+                <CButton block className="button-exchange p-1 pt-2" onClick={onSubmit}>
+                    { newPaymentMethod ? 
+                        <h3>Save</h3> : <h3>Update</h3>
+                    }
                 </CButton>
             </div>
         </CModalBody>

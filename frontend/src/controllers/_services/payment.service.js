@@ -4,7 +4,8 @@ const serverURL = 'http://localhost:4000';
 
 export const paymentService = {
     addPaymentmethod,
-    getPaymentMethodsById
+    getPaymentMethodsById,
+    updatePaymentmethod
 };
 
 function addPaymentmethod(payment) {
@@ -15,6 +16,16 @@ function addPaymentmethod(payment) {
     };
 
     return fetch(`${serverURL}/payment/addPaymentmethod`, requestOptions).then(handleResponse);
+}
+
+function updatePaymentmethod(id, payment) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(payment)
+    };
+
+    return fetch(`${serverURL}/payment/updatePaymentmethod/${id}`, requestOptions).then(handleResponse);
 }
 
 function getPaymentMethodsById(id) {

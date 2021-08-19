@@ -6,6 +6,7 @@ const authorize = require('_middleware/authorize')
 const paymentService = require('./payment.service');
 
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
+router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
 
 module.exports = router;
@@ -22,6 +23,12 @@ function createPaymentMethodSchema(req, res, next) {
 function createPaymentMethod(req, res, next) {
     paymentService.createPaymentmethod(req.body)
         .then(() => res.json({ status: true, message: 'Added successfully' }))
+        .catch(next);
+}
+
+function updatePaymentMethod(req, res, next) {
+    paymentService.updatePaymentmethod(req.params.id, req.body)
+        .then(paymentMethod => res.json(paymentMethod))
         .catch(next);
 }
 
