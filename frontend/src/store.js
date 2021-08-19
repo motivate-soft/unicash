@@ -8,6 +8,7 @@ const initialState = {
   isLogin: false,
   openSignup: false,
   openSignin: false,
+  openEmailVerification: false,
   popupForCurrency: false,
   openAddPayment: false
 }

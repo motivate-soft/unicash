@@ -9,7 +9,8 @@ function model(sequelize) {
         password: { type: DataTypes.STRING, allowNull: false },
         emailVerified: { type: DataTypes.BOOLEAN, default: false },
         role: { type: DataTypes.INTEGER, default: 0, allowNull: false },
-        verifyCode: { type: DataTypes.STRING, allowNull: true }
+        verifyCode: { type: DataTypes.STRING, allowNull: true },
+        is2FA: { type: DataTypes.BOOLEAN }
     };
 
     const options = {

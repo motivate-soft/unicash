@@ -19,8 +19,9 @@ async function authenticate({ email, password }) {
 
     if (!user || !(await bcrypt.compare(password, user.password)))
         throw 'Email or password is incorrect';
-    if (user.emailVerified == 0)
-        throw 'Please check your email to verify your account.';
+
+    if (!user.emailVerified)
+        throw 'check-email';
     // authentication successful
     const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
     return { ...omitHash(user.get()), token };
@@ -55,6 +56,7 @@ async function create(params) {
     params['verifyCode'] = verificationCode;
     params['emailVerified'] = 0;
     params['role'] = 0;
+    params['is2FA'] = 0;
 
     let transporter = nodeMailer.createTransport({
         host: config.mail.host, // mail.infomaniak.com
@@ -83,10 +85,10 @@ async function create(params) {
 					+ '</head>'
 					+ '<body aria-readonly="false"><span style="font-family:tahoma,geneva,sans-serif">Hello, ' + params.fullName + ',<br />'
 					+ '<br />'
-					+ '<h3>Welcome to Unicash</h3><br />'
+					+ '<h3>Welcome to Unicash.</h3><br />'
 					+ '<br />'
-					+ 'Please input the following URL to confirm your account.<br />'
-					+ 'http://localhost:4000/verify?email=' + params.email + '&verifyCode=' + verificationCode +'<br />'
+					+ 'Please verify your email with the following code.<br />'
+					+ 'Verification code: ' + verificationCode +'<br />'
 					+ 'Unicash support</span><br />'
 					+ '&nbsp;'
 					+ '<hr />'
@@ -94,7 +96,7 @@ async function create(params) {
 					+ '</html>' // html body
       };
       
-      await transporter.sendMail(mailOptions);
+      // await transporter.sendMail(mailOptions);
 
       await db.User.create(params);
 }

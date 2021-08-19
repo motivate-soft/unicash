@@ -74,6 +74,7 @@ const Signup = () => {
                 successNotification(user.message, 3000);
                 dispatch({type: 'set', openSignup: false})
                 dispatch({type: 'set', openSignin: true})
+                dispatch({type: 'set', openEmailVerification: false})
               }
               setSubmitting(false)
             },

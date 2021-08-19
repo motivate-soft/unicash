@@ -6,6 +6,7 @@ export const userService = {
     login,
     logout,
     register,
+    emailVerify,
     getAll,
     getById,
     update,
@@ -27,6 +28,14 @@ function login(email, password) {
 
             return user;
         });
+}
+
+function emailVerify(email, verifyCode, password) {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${serverURL}/users/verify?email=${email}&verifyCode=${verifyCode}&password=${password}`, requestOptions).then(handleResponse);
 }
 
 function logout() {

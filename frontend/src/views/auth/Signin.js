@@ -60,17 +60,41 @@ const Signin = () => {
     userService.login(values.email, values.password)
       .then(
           user => {
-            console.log(user)
-            dispatch({type: 'set', user: user})
-            dispatch({type: 'set', openSignin: false})
-            dispatch({type: 'set', openSignup: false})
-            dispatch({type: 'set', isLogin: true})
-            // dispatch({type: 'set', isAdmin: true})
-            successNotification('Welcome to Unicach.', 3000)
+            if (user.is2FA) {
+              warningNotification("Please check your email to verify the account.", 3000)
+              dispatch({type: 'set', openSignin: false})
+              dispatch({type: 'set', openSignup: false})
+              dispatch({type: 'set', selectedUser: {
+                                        email: values.email,
+                                        password: values.password
+                                      }})
+              dispatch({type: 'set', openEmailVerification: true})
+              userService.logout();
+            } else {
+              dispatch({type: 'set', user: user})
+              dispatch({type: 'set', openSignin: false})
+              dispatch({type: 'set', openSignup: false})
+              dispatch({type: 'set', openEmailVerification: false})
+              dispatch({type: 'set', isLogin: true})
+              // dispatch({type: 'set', isAdmin: true})
+              successNotification('Welcome to Unicach.', 3000)
+            }
+            
             setSubmitting(false)
           },
           error => {
-            warningNotification(error, 3000)
+            if (error === 'check-email') {
+              warningNotification("Please check your email to verify the account.", 3000)
+              dispatch({type: 'set', openSignin: false})
+              dispatch({type: 'set', openSignup: false})
+              dispatch({type: 'set', selectedUser: {
+                                        email: values.email,
+                                        password: values.password
+                                      }})
+              dispatch({type: 'set', openEmailVerification: true})
+            } else {
+              warningNotification(error, 3000)
+            }
             setSubmitting(false)
           }
       );

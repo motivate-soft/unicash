@@ -42,21 +42,27 @@ function registerSchema(req, res, next) {
 
 function register(req, res, next) {
     userService.create(req.body)
-        .then(() => res.json({ status: true, message: 'Registration successful' }))
+        .then(() => res.json({ status: true, message: 'Registration successful.' }))
         .catch(next);
 }
 
 function getVerify(req, res, next) {
-    if (req.query.email && req.query.verifyCode) {
+    if (req.query.email && req.query.verifyCode && req.query.password) {
         userService.getByEmail(req.query.email)
-        .then(user => {
-            if (user && user.verifyCode == req.query.verifyCode) {
-                user.emailVerified = true;
-                user.save();
-                res.redirect('http://localhost:3000')
-            }
-        })
-        .catch(next);
+            .then(async user => {
+                if (user && user.verifyCode == req.query.verifyCode) {
+                    if (!user.emailVerified) {
+                        user.emailVerified = true;
+                        await user.save();
+                    }
+                    res.json({message: "Verification successful."})
+                } else {
+                    throw "Verification code is incorrect."
+                }
+            })
+            .catch(next);
+    } else {
+        throw 'Invald request'
     }
 }
 
