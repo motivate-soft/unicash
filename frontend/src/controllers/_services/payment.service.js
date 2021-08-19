@@ -6,7 +6,8 @@ export const paymentService = {
     addPaymentmethod,
     getPaymentMethodsById,
     updatePaymentmethod,
-    deletePaymentmethod
+    deletePaymentmethod,
+    getConversionPrice
 };
 
 function addPaymentmethod(payment) {
@@ -45,6 +46,14 @@ function getPaymentMethodsById(id) {
     };
 
     return fetch(`${serverURL}/payment/paymentmethod/${id}`, requestOptions).then(handleResponse);
+}
+
+function getConversionPrice(symbol) {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${serverURL}/payment/getConversionPrice?symbol=${symbol}`, requestOptions).then(handleResponse);
 }
 
 function logout() {

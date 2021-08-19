@@ -156,7 +156,15 @@
     background-color: rgba(255, 0, 0, 0.63);
     color: white;
 }
-
+.card-exchange-rate {
+  margin: 12px 0;
+  color: #557f96;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  font-size: 13px;
+  font-weight: 600;
+}
 .card-exchange {
   min-width: 468px;
   max-width: 650px;
@@ -166,16 +174,6 @@
   box-shadow: 20px 20px 60px #232b33;
   color: black;
   padding: 30px;
-
-  .card-exchange-rate {
-    margin: 12px 0;
-    color: #181c1f;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-    font-size: 15px;
-    font-weight: 600;
-  }
 
   .card-exchange-bank-method-ask {
     color: #394247b4;

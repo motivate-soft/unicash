@@ -4,7 +4,8 @@ module.exports = {
     createPaymentmethod,
     updatePaymentmethod,
     getPaymentMethods,
-    deletePaymentMethod
+    deletePaymentMethod,
+    getConversionBetweenUSDPHP
 };
 
 async function createPaymentmethod(params) {
@@ -43,4 +44,10 @@ async function getPaymentMethodsByUserId(userId) {
 async function deletePaymentMethod(id) {
     const paymentMethod = await getPaymentMethod(id);
     await paymentMethod.destroy();
+}
+
+async function getConversionBetweenUSDPHP() {
+    const conversionRate = await db.Conversion.findOne({ where: { fromCurrency: "USD", toCurrency: "PHP" }});
+    if (!conversionRate) return 50.01;
+    return conversionRate.rate;
 }

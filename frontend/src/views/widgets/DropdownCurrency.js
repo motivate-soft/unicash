@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { yousendConstants, currencyConstants } from '../../controllers/_constants';
 import { paymentService } from '../../controllers/_services/payment.service';
 
@@ -35,9 +35,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const DropdownCurrency = ({listType}) => {
-  const dispatch = useDispatch()
-
+const DropdownCurrency = ({listType, passDropListData}) => {
+  
   const classes = useStyles();
   const user = useSelector(state => state.user)
 
@@ -55,8 +54,9 @@ const DropdownCurrency = ({listType}) => {
           item.desc.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
       );
       setArrYousendList(yousendList)
-      if (yousendList && yousendList.length > 0) {
-        setSelectedYousend(yousendList[0])
+      if (yousendList && yousendList.length > 1) {
+        setSelectedYousend(yousendList[1])
+        passDropListData(yousendList[1])
       }
     } else {
       if (user) {
@@ -70,6 +70,7 @@ const DropdownCurrency = ({listType}) => {
                 setArrYoureceiveList(youreceiveList)
                 if (youreceiveList && youreceiveList.length > 0) {
                   setSelectedYoureceive(currencyConstants[youreceiveList[0].selectedCurrency])
+                  passDropListData(currencyConstants[youreceiveList[0].selectedCurrency])
                 }
               },
               error => {}
@@ -82,6 +83,7 @@ const DropdownCurrency = ({listType}) => {
         setArrYoureceiveList(youreceiveList);
         if (youreceiveList && youreceiveList.length > 0) {
           setSelectedYoureceive(youreceiveList[0])
+          passDropListData(youreceiveList[0])
         }
       }
     }
@@ -149,7 +151,10 @@ const DropdownCurrency = ({listType}) => {
         </CDropdownItem>
         { listType === 'yousend' && arrYousendList && 
           arrYousendList.map((yousend, index) => (
-            <CDropdownItem className="currency-dropdown" onClick={() => {setSelectedYousend(yousend)}}>
+            <CDropdownItem className="currency-dropdown" onClick={() => { 
+              passDropListData(yousend)
+              setSelectedYousend(yousend);
+              }}>
               <CImg src={yousend.logo} alt="BTC Logo" height={25}></CImg>
               <span className="stands-of-currency">{yousend.label}</span>
               <span className="full-currency">{yousend.desc}</span>
@@ -160,8 +165,10 @@ const DropdownCurrency = ({listType}) => {
           arrYoureceiveList.map((youreceive, index) => (
             <CDropdownItem className="currency-dropdown" onClick={() => {
               if (user) {
-                setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency])
+                passDropListData(currencyConstants[youreceive.selectedCurrency]);
+                setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency]);
               } else {
+                passDropListData(youreceive)
                 setSelectedYoureceive(youreceive)
               }
             }}>

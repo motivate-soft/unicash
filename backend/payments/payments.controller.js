@@ -4,13 +4,32 @@ const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const paymentService = require('./payment.service');
+const request = require('request');
 
+router.get('/getConversionPrice', getConversionPrice);
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
 router.delete('/paymentmethod/:id', authorize(), deletePaymentmethod);
 
 module.exports = router;
+
+function getConversionPrice(req, res, next) {
+    if (req.query.symbol) {
+        request('https://api.binance.com/api/v3/ticker/price?symbol=' + req.query.symbol, function (error, response, body) {
+            if (error) {
+                throw 'Failed: ' + error
+            }
+            if (response && response.statusCode) {
+                paymentService.getConversionBetweenUSDPHP()
+                .then(price => res.json({data: body, conversionRate: price, status: true}))
+                .catch(next);
+            }
+        });
+    } else {
+        throw 'Invald request'
+    }
+}
 
 function createPaymentMethodSchema(req, res, next) {
     const schema = Joi.object({

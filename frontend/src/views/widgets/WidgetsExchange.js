@@ -1,4 +1,4 @@
-import React, { lazy, useState } from 'react'
+import React, { lazy, useState, useEffect } from 'react'
 import {
   CRow,
   CCol,
@@ -13,6 +13,7 @@ import {
   } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { paymentService } from '../../controllers/_services/payment.service';
 
 const Desc = lazy(() => import('./Desc'))
 const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
@@ -54,7 +55,12 @@ const WidgetsExchange = () => {
     const isLogin = useSelector(state => state.isLogin)
 
     const [inputSend, setInputSend] = useState(0.1);
-    const [inputReceive, setInputReceive] = useState(3000.98);
+    const [inputReceive, setInputReceive] = useState();
+
+    const [yousend, setYousend] = useState();
+    const [youreceive, setYoureceive] = useState();
+    const [pricePerUnit, setPricePerUnit] = useState();
+    const [conversionRateBetweenUSDPHP, setConversionRateBetweenUSDPHP] = useState();
 
     const onChangeOnSend = e => {
         const inputValue = e.target.value;
@@ -75,6 +81,29 @@ const WidgetsExchange = () => {
             dispatch({type: 'set', openSignup: true})
         }
     }
+
+    useEffect(() => {
+        if (yousend)
+        paymentService.getConversionPrice(yousend.label + 'USDT')
+        .then(
+            price => {
+                if (price.status) {
+                    setConversionRateBetweenUSDPHP(Number(price.conversionRate));
+                    const priceRate = Number(JSON.parse(price.data)['price'])
+                    if (!isNaN(priceRate)) {
+                        setPricePerUnit(priceRate)
+                        setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+                    }
+                    else {
+                        setPricePerUnit(null)
+                    }
+                }
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    }, [yousend, inputSend]);
     // render
     return (
         <>
@@ -87,7 +116,7 @@ const WidgetsExchange = () => {
                                     <RedditTextField
                                         id="you-send"
                                         label="You send"
-                                        placeholder="You send"
+                                        placeholder="..."
                                         value={inputSend}
                                         fullWidth
                                         InputLabelProps={{
@@ -99,18 +128,34 @@ const WidgetsExchange = () => {
                                         />
                                 </div>
                                 <div className="mr-auto">
-                                    <DropdownCurrency listType="yousend" />
+                                    <DropdownCurrency listType="yousend" passDropListData={setYousend} />
                                 </div>
                             </div>
                             <div className="d-flex mt-2">
-                                <div><p className="card-exchange-rate">1BTC = $ 30,000 USDT</p></div>
+                                <div>
+                                    <p className="card-exchange-rate">
+                                        { yousend && 
+                                            <span className="card-exchange-rate">
+                                                1 {yousend.label} ~
+                                            </span>
+                                        }
+                                        <span className="card-exchange-rate">
+                                            { pricePerUnit ? Math.floor(pricePerUnit * conversionRateBetweenUSDPHP * 10000) / 10000 : '...' }
+                                        </span>
+                                        { youreceive && 
+                                            <span className="card-exchange-rate">
+                                                PHP
+                                            </span>
+                                        }
+                                    </p>
+                                </div>
                             </div>
                             <div className="d-flex mt-2">
                                 <div className="flex-grow-1">
                                     <RedditTextField
                                         id="you-receive"
                                         label="You receive"
-                                        placeholder="You receive"
+                                        placeholder="..."
                                         value={inputReceive}
                                         fullWidth
                                         InputLabelProps={{
@@ -122,7 +167,7 @@ const WidgetsExchange = () => {
                                         />
                                 </div>
                                 <div className="mr-auto">
-                                    <DropdownCurrency listType="youreceive" />
+                                    <DropdownCurrency listType="youreceive" passDropListData={setYoureceive}/>
                                 </div>
                             </div>
                             <div className="d-flex mt-3">
