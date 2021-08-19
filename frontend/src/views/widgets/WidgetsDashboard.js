@@ -95,7 +95,7 @@ const WidgetsDashboard = () => {
                                 />
                         </div>
                         <div className="mr-auto">
-                            <DropdownCurrency />
+                            <DropdownCurrency listType="yousend" />
                         </div>
                     </div>
                     <div className="d-flex mt-2">
@@ -118,7 +118,7 @@ const WidgetsDashboard = () => {
                                 />
                         </div>
                         <div className="mr-auto">
-                            <DropdownCurrency />
+                            <DropdownCurrency listType="youreceive"  />
                         </div>
                     </div>
                     <div className="d-flex mt-0 float-right">

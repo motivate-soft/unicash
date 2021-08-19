@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CButton,
   CDropdown,
@@ -11,6 +11,9 @@ import clsx from 'clsx';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { yousendConstants, currencyConstants } from '../../controllers/_constants';
+import { paymentService } from '../../controllers/_services/payment.service';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,9 +35,57 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const DropdownCurrency = () => {
+const DropdownCurrency = ({listType}) => {
+  const dispatch = useDispatch()
+
   const classes = useStyles();
+  const user = useSelector(state => state.user)
+
   const [toggle, setToggle] = useState(false);
+  const [searchInput, setSearchInput] = useState('')
+  const [arrYousendList, setArrYousendList] = useState()
+  const [arrYoureceiveList, setArrYoureceiveList] = useState()
+  const [selectedYousend, setSelectedYousend] = useState()
+  const [selectedYoureceive, setSelectedYoureceive] = useState()
+
+  useEffect(() => {
+    if (listType === 'yousend') {
+      const yousendList = Object.assign([], yousendConstants).filter(
+        item => item.label.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 || 
+          item.desc.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+      );
+      setArrYousendList(yousendList)
+      if (yousendList && yousendList.length > 0) {
+        setSelectedYousend(yousendList[0])
+      }
+    } else {
+      if (user) {
+        paymentService.getPaymentMethodsById(user.id)
+          .then(
+              paymentMethods => {
+                const youreceiveList = Object.assign([], paymentMethods).filter(
+                  item => item.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 || 
+                    currencyConstants[item.selectedCurrency].desc.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+                );
+                setArrYoureceiveList(youreceiveList)
+                if (youreceiveList && youreceiveList.length > 0) {
+                  setSelectedYoureceive(currencyConstants[youreceiveList[0].selectedCurrency])
+                }
+              },
+              error => {}
+          )
+      } else {
+        const youreceiveList = Object.assign([], currencyConstants).filter(
+          item => item.label.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 || 
+            item.desc.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+        );
+        setArrYoureceiveList(youreceiveList);
+        if (youreceiveList && youreceiveList.length > 0) {
+          setSelectedYoureceive(youreceiveList[0])
+        }
+      }
+    }
+  }, [listType, searchInput, user])
   
   return (
     <CDropdown
@@ -49,10 +100,20 @@ const DropdownCurrency = () => {
             <div className="d-flex mt-0 button-currency">
                 <div className="flex-grow-1">
                     <div className="align-self-start small-full-currency">
-                        <span>Bitcoin</span>
+                      { listType === 'yousend' && arrYousendList && selectedYousend && 
+                        <span title={selectedYousend.desc}>{selectedYousend.desc}</span>
+                      }
+                      { listType === 'youreceive' && arrYoureceiveList && selectedYoureceive && 
+                        <span title={selectedYoureceive.desc}>{selectedYoureceive.desc}</span>
+                      }
                     </div>
                     <div className="align-self-end currency-name">
-                        <span>BTC</span>
+                      { listType === 'yousend' && arrYousendList && selectedYousend && 
+                        <span title={selectedYousend.label}>{selectedYousend.label}</span>
+                      }
+                      { listType === 'youreceive' && arrYoureceiveList && selectedYoureceive && 
+                        <span title={selectedYoureceive.label}>{selectedYoureceive.label}</span>
+                      }
                     </div>
                 </div>
                 <div className="status-icon">
@@ -76,26 +137,43 @@ const DropdownCurrency = () => {
             label=""
             id="standard-start-adornment"
             className={clsx(classes.margin, classes.textField)}
+            value={searchInput}
             InputProps={{
                 startAdornment: 
                 <InputAdornment position="start">
                     <CImg src={'img/icons8-search-96.png'} alt="Search" height={20}></CImg>
                 </InputAdornment>,
             }}
+            onChange={(e) => setSearchInput(e.target.value)}
             />
         </CDropdownItem>
-
-        <CDropdownItem className="currency-dropdown">
-            <CImg src={'img/btc.png'} alt="BTC Logo" height={25}></CImg>
-            <span className="stands-of-currency">BTC</span>
-            <span className="full-currency">Bitcoin</span>
-        </CDropdownItem>
-
-        <CDropdownItem className="currency-dropdown">
-            <CImg src={'img/eth.png'} alt="ETH Logo" height={25}></CImg>
-            <span className="stands-of-currency">ETH</span>
-            <span className="full-currency">Ethereum</span>
-        </CDropdownItem>
+        { listType === 'yousend' && arrYousendList && 
+          arrYousendList.map((yousend, index) => (
+            <CDropdownItem className="currency-dropdown" onClick={() => {setSelectedYousend(yousend)}}>
+              <CImg src={yousend.logo} alt="BTC Logo" height={25}></CImg>
+              <span className="stands-of-currency">{yousend.label}</span>
+              <span className="full-currency">{yousend.desc}</span>
+            </CDropdownItem>
+          ))
+        }
+        { listType === 'youreceive' && arrYoureceiveList && 
+          arrYoureceiveList.map((youreceive, index) => (
+            <CDropdownItem className="currency-dropdown" onClick={() => {
+              if (user) {
+                setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency])
+              } else {
+                setSelectedYoureceive(youreceive)
+              }
+            }}>
+              <span className="stands-of-currency">
+                { user ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
+              </span>
+              <span className="full-currency">
+                { user ? currencyConstants[youreceive.selectedCurrency].desc : youreceive.desc}
+              </span>
+            </CDropdownItem>
+          ))
+        }
       </CDropdownMenu>
     </CDropdown>
   )

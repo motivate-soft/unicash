@@ -48,6 +48,7 @@ function RedditTextField(props) {
   }
 
 const WidgetsExchange = () => {
+
     const dispatch = useDispatch()
     const history = useHistory()
     const isLogin = useSelector(state => state.isLogin)
@@ -98,7 +99,7 @@ const WidgetsExchange = () => {
                                         />
                                 </div>
                                 <div className="mr-auto">
-                                    <DropdownCurrency />
+                                    <DropdownCurrency listType="yousend" />
                                 </div>
                             </div>
                             <div className="d-flex mt-2">
@@ -121,7 +122,7 @@ const WidgetsExchange = () => {
                                         />
                                 </div>
                                 <div className="mr-auto">
-                                    <DropdownCurrency />
+                                    <DropdownCurrency listType="youreceive" />
                                 </div>
                             </div>
                             <div className="d-flex mt-3">

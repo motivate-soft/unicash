@@ -200,9 +200,11 @@
       font-size: 13px;
       line-height: 18px;
       overflow: hidden;
+      max-width: 70px;
       text-overflow: ellipsis;
       color: #b4b4b4;
       text-align: left;
+      white-space: nowrap;
     }
     .currency-name {
       text-align: left;
@@ -212,6 +214,8 @@
       color: #394247;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: 80px;
+      white-space: nowrap;
     }
     .status-icon {
       padding-top: 15px;
