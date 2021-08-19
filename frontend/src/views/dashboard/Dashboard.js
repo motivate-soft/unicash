@@ -4,7 +4,7 @@ import {
   CCardBody,
   CCardHeader,
 } from '@coreui/react'
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const WidgetsDashboard = lazy(() => import('../widgets/WidgetsDashboard.js'))
@@ -15,9 +15,11 @@ const Dashboard = () => {
 
   dispatch({type: 'set', darkMode: false})
 
+  const user = useSelector(state => state.user)
+
   if (!localStorage.getItem('user')) {
     dispatch({type: 'set', darkMode: true})
-    history.replace('/home')
+    history.push('/home')
   }
 
   return (

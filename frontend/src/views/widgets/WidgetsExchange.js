@@ -70,13 +70,16 @@ const WidgetsExchange = () => {
     };
     const onChangeOnReceive = e => {
         const inputValue = e.target.value;
-        if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
+        if (inputValue === '' || inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
             setInputReceive(inputValue)
+            // if (Number(inputValue) && yousend && conversionRateBetweenUSDPHP && pricePerUnit) {
+            //     setInputSend(Math.floor(Number(inputReceive) / pricePerUnit / conversionRateBetweenUSDPHP * 10000) / 10000)
+            // }
         }
     };
     const onClickExchangeNow = () => {
         if (isLogin) {
-            history.replace('dashboard')
+            history.push('dashboard')
         } else {
             dispatch({type: 'set', openSignup: true})
         }
@@ -95,7 +98,8 @@ const WidgetsExchange = () => {
                         setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
                     }
                     else {
-                        setPricePerUnit(null)
+                        setPricePerUnit(null);
+                        setInputReceive('');
                     }
                 }
             },

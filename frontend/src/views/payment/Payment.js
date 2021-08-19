@@ -69,7 +69,7 @@ const Payment = () => {
 
   if (!localStorage.getItem('user')) {
     dispatch({type: 'set', darkMode: true})
-    history.replace('/home')
+    history.push('/home')
   }
 
   const openingPopup = useSelector(state => state.openAddPayment)
@@ -262,6 +262,9 @@ const Payment = () => {
                 ))
               }
             </div>
+          }
+          { Object.assign([], savedPaymentMethods).length === 0 && 
+            <h3 className="text-muted mt-3 pt-3">NO PAYMENT METHOD YET</h3>
           }
           <CModal 
               show={deleteConfirm} 

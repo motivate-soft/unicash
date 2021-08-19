@@ -12,6 +12,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
+  CLink,
 } from '@coreui/react'
 import { useHistory } from 'react-router-dom';
 import { userService } from '../controllers/_services/user.service';
@@ -50,7 +51,7 @@ const TheHeader = () => {
     userService.logout();
     dispatch({type: 'set', isLogin: false})
     dispatch({type: 'set', isAdmin: false})
-    history.replace('/home')
+    history.push('/home')
   }
 
   const handleSignupClickOpen = () => {
@@ -129,13 +130,13 @@ const TheHeader = () => {
                 {fullName}
             </CDropdownToggle>
             <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
-                <CDropdownItem className="dropdown-toggle-menuitem">Payment method</CDropdownItem>
+                <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('payment')}>Payment method</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem">Settings</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={logout}>Log out</CDropdownItem>
             </CDropdownMenu>
         </CDropdown>
       </CHeaderNav>
-      
+      <div className="header-border"></div>
     </CHeader>
     </>
   )

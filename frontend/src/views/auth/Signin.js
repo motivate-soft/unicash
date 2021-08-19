@@ -80,7 +80,9 @@ const Signin = () => {
               dispatch({type: 'set', isLogin: true})
               // dispatch({type: 'set', isAdmin: true})
               successNotification('Welcome to Unicach.', 3000)
-              history.replace('dashboard')
+              setTimeout(() => {
+                history.push('dashboard')
+              }, 1000);
             }
             
             setSubmitting(false)

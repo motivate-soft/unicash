@@ -161,17 +161,17 @@ const DropdownCurrency = ({listType, passDropListData}) => {
             </CDropdownItem>
           ))
         }
-        { listType === 'youreceive' && arrYoureceiveList && 
+        {  listType === 'youreceive' && arrYoureceiveList && 
           arrYoureceiveList.map((youreceive, index) => (
             <CDropdownItem className="currency-dropdown" onClick={() => {
-              if (user) {
-                passDropListData(currencyConstants[youreceive.selectedCurrency]);
-                setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency]);
-              } else {
-                passDropListData(youreceive)
-                setSelectedYoureceive(youreceive)
-              }
-            }}>
+                if (user) {
+                  passDropListData(currencyConstants[youreceive.selectedCurrency]);
+                  setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency]);
+                } else {
+                  passDropListData(youreceive)
+                  setSelectedYoureceive(youreceive)
+                }
+              }}>
               <span className="stands-of-currency">
                 { user ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
               </span>

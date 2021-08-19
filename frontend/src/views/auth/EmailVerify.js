@@ -70,8 +70,10 @@ const EmailVerify = () => {
                         dispatch({type: 'set', isLogin: true})
                         // dispatch({type: 'set', isAdmin: true})
                         successNotification('Welcome to Unicach.', 3000)
-                        history.replace('dashboard')
                         setSubmitting(false)
+                        setTimeout(() => {
+                          history.push('dashboard')
+                        }, 1000);
                     },
                     error => {
                         warningNotification(error, 3000)
