@@ -5,7 +5,8 @@ const serverURL = 'http://localhost:4000';
 export const paymentService = {
     addPaymentmethod,
     getPaymentMethodsById,
-    updatePaymentmethod
+    updatePaymentmethod,
+    deletePaymentmethod
 };
 
 function addPaymentmethod(payment) {
@@ -26,6 +27,15 @@ function updatePaymentmethod(id, payment) {
     };
 
     return fetch(`${serverURL}/payment/updatePaymentmethod/${id}`, requestOptions).then(handleResponse);
+}
+
+function deletePaymentmethod(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/paymentmethod/${id}`, requestOptions).then(handleResponse);
 }
 
 function getPaymentMethodsById(id) {

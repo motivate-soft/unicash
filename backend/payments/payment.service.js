@@ -3,7 +3,8 @@ const db = require('_helpers/db');
 module.exports = {
     createPaymentmethod,
     updatePaymentmethod,
-    getPaymentMethods
+    getPaymentMethods,
+    deletePaymentMethod
 };
 
 async function createPaymentmethod(params) {
@@ -37,4 +38,9 @@ async function getPaymentMethodsByUserId(userId) {
     const paymentmethods = await db.Paymentmethod.findAll({ where: { userId: userId }});
     if (!paymentmethods) throw 'NO PAYMENT METHOD YET';
     return paymentmethods;
+}
+
+async function deletePaymentMethod(id) {
+    const paymentMethod = await getPaymentMethod(id);
+    await paymentMethod.destroy();
 }

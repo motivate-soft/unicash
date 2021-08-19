@@ -8,6 +8,7 @@ const paymentService = require('./payment.service');
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
+router.delete('/paymentmethod/:id', authorize(), deletePaymentmethod);
 
 module.exports = router;
 
@@ -35,5 +36,11 @@ function updatePaymentMethod(req, res, next) {
 function getPaymentMethodsById(req, res, next) {
     paymentService.getPaymentMethods(req.params.id)
         .then(paymentMethods => res.json(paymentMethods))
+        .catch(next);
+}
+
+function deletePaymentmethod(req, res, next) {
+    paymentService.deletePaymentMethod(req.params.id)
+        .then(() => res.json({ message: 'Payment method deleted successfully' }))
         .catch(next);
 }

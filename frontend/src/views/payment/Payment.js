@@ -4,7 +4,12 @@ import {
   CCardBody,
   CCardHeader,
   CButton,
-  CCollapse
+  CCollapse,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter
 } from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -13,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { paymentService } from '../../controllers/_services/payment.service';
 import { currencyConstants } from '../../controllers/_constants';
+import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const AddPayment = React.lazy(() => import('./AddPayment'));
 
@@ -55,6 +61,9 @@ const Payment = () => {
   const history = useHistory()
 
   const [accordion, setAccordion] = useState(0)
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [selectedDeleteRequest, setSelectedDeleteRequest] = useState()
+
   const user = useSelector(state => state.user)
   dispatch({type: 'set', darkMode: false})
 
@@ -66,6 +75,29 @@ const Payment = () => {
   const openingPopup = useSelector(state => state.openAddPayment)
 
   const [savedPaymentMethods, setSavedPaymentMethods] = useState()
+
+  const deletePaymentMethod = () => {
+    if (selectedDeleteRequest) {
+      paymentService.deletePaymentmethod(selectedDeleteRequest)
+      .then(
+        paymentmethod => {
+          successNotification("Successfully deleted.", 3000)
+          setDeleteConfirm(!deleteConfirm)
+          paymentService.getPaymentMethodsById(user.id)
+          .then(
+              paymentMethods => {
+                setSavedPaymentMethods(paymentMethods)
+              },
+              error => {}
+          )
+        },
+        error => {
+          warningNotification(error, 3000)
+          setDeleteConfirm(!deleteConfirm)
+        }
+      )
+    }
+  }
 
   useEffect(() => {
     if (user)
@@ -113,7 +145,8 @@ const Payment = () => {
                       </CButton>
                       <CButton
                         color="transparent"
-                        className="text-right text-danger m-0 p-1 button-group float-right" 
+                        className="text-right text-danger m-0 p-1 button-group float-right"
+                        onClick={() => { setSelectedDeleteRequest(paymentMethod.id); setDeleteConfirm(true)}} 
                       >
                         <h5 className="m-0 p-0">Delete</h5>
                       </CButton>
@@ -230,6 +263,24 @@ const Payment = () => {
               }
             </div>
           }
+          <CModal 
+              show={deleteConfirm} 
+              onClose={() => setDeleteConfirm(!deleteConfirm)}
+              color="danger"
+              className="p-0 auth-modal"
+              size="sm"
+            >
+            <CModalHeader closeButton>
+              <CModalTitle>Please confirm</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <h5 className="text-center">Are you sure you want to delete it?</h5>
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="danger" onClick={() => deletePaymentMethod()}>Delete</CButton>{' '}
+              <CButton color="secondary" onClick={() => setDeleteConfirm(!deleteConfirm)}>Cancel</CButton>
+            </CModalFooter>
+          </CModal>
         </CCardBody>
       </CCard>
       <AddPayment />
