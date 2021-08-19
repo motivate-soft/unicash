@@ -15,6 +15,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { userService } from '../../controllers/_services/user.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
+import { useHistory } from 'react-router-dom';
 
 const validationSchema = function (values) {
   return Yup.object().shape({
@@ -51,6 +52,7 @@ const initialValues = {
 
 const EmailVerify = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const selectedUser = useSelector(state => state.selectedUser);
   
@@ -68,6 +70,7 @@ const EmailVerify = () => {
                         dispatch({type: 'set', isLogin: true})
                         // dispatch({type: 'set', isAdmin: true})
                         successNotification('Welcome to Unicach.', 3000)
+                        history.replace('dashboard')
                         setSubmitting(false)
                     },
                     error => {

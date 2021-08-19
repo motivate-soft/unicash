@@ -5,7 +5,8 @@ import {
   CImg,
   CButton,
   CCard,
-  CCardBody
+  CCardBody,
+  CLink
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
@@ -20,17 +21,22 @@ const Desc = () => {
           </CCol>
           <CCol sm="12" lg="12" style={{marginTop: "24px"}}>
               <div>
-                <CImg
-                  src={'img/play.png'}
-                  alt="Google play"
-                  height="40"
-                />
-                <CImg
-                  src={'img/app-store.png'}
-                  alt="App Store"
-                  height="40"
-                  className="pl-2"
-                />
+                <CLink href="https://play.google.com" target="_blank">
+                  <CImg
+                    src={'img/play.png'}
+                    alt="Google play"
+                    height="40"
+                    className="app-icon-img"
+                  />
+                </CLink>
+                <CLink href="https://apps.apple.com" target="_blank">
+                  <CImg
+                    src={'img/app-store.png'}
+                    alt="App Store"
+                    height="40"
+                    className="pl-2 app-icon-img"
+                  />
+                </CLink>
               </div>
           </CCol>
           <CCol sm="12" lg="12" className="pb-1" style={{marginTop: "24px"}}>

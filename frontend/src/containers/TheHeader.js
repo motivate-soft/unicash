@@ -24,7 +24,7 @@ const TheHeader = () => {
   const sidebarShow = useSelector(state => state.sidebarShow)
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)
-  const currPath = history.location.pathname
+  // const currPath = history.location.pathname
 
   const [fullName, setFullName] = useState('')
 
@@ -113,13 +113,13 @@ const TheHeader = () => {
         <TheHeaderDropdown/> */}
 
         <CHeaderNavLink className={isLogin ? 'd-none' : undefined}>
-            <CButton block onClick={handleSignupClickOpen} className={currPath === '/signup' ? 'button-sign-active' : 'button-sign'}>
+            <CButton block onClick={handleSignupClickOpen} className="button-sign">
               <strong>Sign up</strong>
             </CButton>
         </CHeaderNavLink>
 
         <CHeaderNavLink className={isLogin ? 'd-none' : undefined}>
-            <CButton block onClick={handleSigninClickOpen} className={currPath === '/signin' ? 'button-sign-active' : 'button-sign'}>
+            <CButton block onClick={handleSigninClickOpen} className="button-sign-active" active>
               <strong>Sign in</strong>
             </CButton>
         </CHeaderNavLink>

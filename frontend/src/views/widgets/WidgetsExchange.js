@@ -71,7 +71,7 @@ const WidgetsExchange = () => {
         if (isLogin) {
             history.replace('dashboard')
         } else {
-            dispatch({type: 'set', openSignin: true})
+            dispatch({type: 'set', openSignup: true})
         }
     }
     // render
