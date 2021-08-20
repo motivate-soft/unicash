@@ -61,8 +61,8 @@ const Signin = () => {
   const onSubmit = (values, { setSubmitting, setErrors }) => {
     userService.login(values.email, values.password)
       .then(
-          user => {
-            if (user.is2FA) {
+          result => {
+            if (result.is2FA) {
               warningNotification("Please check your email to verify the account.", 3000)
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
@@ -73,7 +73,7 @@ const Signin = () => {
               dispatch({type: 'set', openEmailVerification: true})
               userService.logout();
             } else {
-              dispatch({type: 'set', user: user})
+              dispatch({type: 'set', user: result})
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', openEmailVerification: false})

@@ -10,7 +10,8 @@ const initialState = {
   openSignin: false,
   openEmailVerification: false,
   popupForCurrency: false,
-  openAddPayment: false
+  openAddPayment: false,
+  user: {}
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {

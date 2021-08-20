@@ -394,6 +394,20 @@
   border: 1px solid red;
 }
 
+.copy-button {
+  width: 100%;
+  background-color: red;
+  color: white;
+  border: none;
+  font-size: 12px;
+}
+
+.copy-button:hover, .copied-button {
+  background-color: green;
+  color: white;
+  border: 1px solid green;
+}
+
 .auth-modal {
   background-color: transparent !important;
 }
@@ -413,4 +427,22 @@
 
 .add-payment-select:hover, .add-payment-select:focus {
   border: none;
+}
+
+.pay-exact-amount-in-exchange, .note-in-exchange, .amount-in-exchange {
+  color: #394247;
+  font-weight: bold;
+}
+
+.pay-exact-amount-in-exchange {
+  font-size: 14px;
+  font-weight: 500;
+}
+.amount-in-exchange {
+  font-size: 28px;
+  font-weight: 700;
+}
+.scan-desc-in-exchange {
+  margin-top: -15px;
+  margin-left: -10px;
 }

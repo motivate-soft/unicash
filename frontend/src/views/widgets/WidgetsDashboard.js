@@ -83,7 +83,7 @@ function RedditTextFieldNoEdit(props) {
   }
 
 const WidgetsDashboard = () => {
-    
+ const dispatch = useDispatch()
  const history = useHistory()
 
  const user = useSelector(state => state.user)
@@ -97,6 +97,7 @@ const WidgetsDashboard = () => {
  const [conversionRateBetweenUSDPHP, setConversionRateBetweenUSDPHP] = useState();
 
  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState()
+ const [isSubmitting, setIsSubmitting] = useState(false)
 
  const onChangeOnSend = e => {
     const inputValue = e.target.value;
@@ -152,9 +153,9 @@ const WidgetsDashboard = () => {
             error => {}
         )
   }, [youreceive]);
-
+  
   const onSubmit = () => {
-      if (user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
+      if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
         const obj = {
             userId: user.id,
             from: yousend.label,
@@ -164,17 +165,11 @@ const WidgetsDashboard = () => {
             conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
             amount: inputReceive,
             image: '',
-            status: 'Processing'
+            status: '',
+            startTime: 300
         }
-        paymentService.createTransaction(obj)
-        .then(
-            transaction => {
-                console.log(transaction)
-            },
-            error => {
-                console.log(error)
-            }
-        )
+        dispatch({type: 'set', transaction: obj})
+        history.push('/exchange')
       }
   }
   // render
@@ -368,8 +363,8 @@ const WidgetsDashboard = () => {
                     </div>
 
                     <div className="d-flex mt-0">
-                        <CButton block className="button-exchange" onClick={() => onSubmit()} disabled={yousend && youreceive && inputSend && inputReceive ? false : true}>
-                            Next
+                        <CButton block className="button-exchange" onClick={() => onSubmit()} disabled={isSubmitting || !yousend || !youreceive || !inputSend || !inputReceive}>
+                            {isSubmitting ? 'Wait...' : 'Next'}
                         </CButton>
                     </div>
                 </CCardBody>

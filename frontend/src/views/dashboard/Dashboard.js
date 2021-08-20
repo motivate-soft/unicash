@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import {
   CCard,
   CCardBody,
@@ -6,6 +6,7 @@ import {
 } from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { paymentService } from '../../controllers/_services/payment.service';
 
 const WidgetsDashboard = lazy(() => import('../widgets/WidgetsDashboard.js'))
 
@@ -17,10 +18,23 @@ const Dashboard = () => {
 
   const user = useSelector(state => state.user)
 
-  if (!localStorage.getItem('user')) {
+  if (!localStorage.getItem('user') || !user) {
     dispatch({type: 'set', darkMode: true})
     history.push('/home')
   }
+
+  const [mytransactions, setMytransactions] = useState()
+
+  useEffect(() => {
+    if (user)
+    paymentService.getMyAllTransaction(user.id)
+    .then(
+      transactions => {
+        setMytransactions(transactions)
+      },
+      error => {}
+    )
+  }, [user])
 
   return (
     <>
@@ -31,90 +45,42 @@ const Dashboard = () => {
           Transaction History
         </CCardHeader>
         <CCardBody className="p-0" color="default">
-          
-          <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-            <thead className="thead-light">
-              <tr>
-                <th className="text-center">From</th>
-                <th className="text-center">To</th>
-                <th className="text-center">Amount</th>
-                <th className="text-center">Date Time</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="text-center">
-                  USDT
-                </td>
-                <td className="text-center">
-                  GCash
-                </td>
-                <td className="text-center">
-                  245.09
-                </td>
-                <td className="text-center">
-                  2021-7-27 07:45 am
-                </td>
-                <td>
-                  Completed
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center">
-                  USDT
-                </td>
-                <td className="text-center">
-                  GCash
-                </td>
-                <td className="text-center">
-                  245.09
-                </td>
-                <td className="text-center">
-                  2021-7-27 07:45 am
-                </td>
-                <td>
-                  Completed
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center">
-                  USDT
-                </td>
-                <td className="text-center">
-                  GCash
-                </td>
-                <td className="text-center">
-                  245.09
-                </td>
-                <td className="text-center">
-                  2021-7-27 07:45 am
-                </td>
-                <td>
-                  Completed
-                </td>
-              </tr>
-              <tr>
-                <td className="text-center">
-                  USDT
-                </td>
-                <td className="text-center">
-                  GCash
-                </td>
-                <td className="text-center">
-                  245.09
-                </td>
-                <td className="text-center">
-                  2021-7-27 07:45 am
-                </td>
-                <td>
-                  Completed
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-
+          { mytransactions && 
+            <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center">From</th>
+                  <th className="text-center">To</th>
+                  <th className="text-center">Amount</th>
+                  <th className="text-center">Date Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  mytransactions.map((transaction, index) => (
+                    <tr>
+                      <td className="text-center">
+                        {transaction.from}
+                      </td>
+                      <td className="text-center">
+                        {transaction.to}
+                      </td>
+                      <td className="text-center">
+                        {transaction.amount}
+                      </td>
+                      <td className="text-center">
+                        {transaction.createdAt}
+                      </td>
+                      <td>
+                        {transaction.status}
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+        }
         </CCardBody>
       </CCard>
 

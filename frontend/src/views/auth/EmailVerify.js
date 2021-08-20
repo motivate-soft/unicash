@@ -59,11 +59,11 @@ const EmailVerify = () => {
   const onSubmit = (values, { setSubmitting, setErrors }) => {
     userService.emailVerify(selectedUser.email, values.verifyCode, selectedUser.password)
       .then(
-          user => {
+          res => {
             userService.login(selectedUser.email, selectedUser.password)
                 .then(
-                    user => {
-                        dispatch({type: 'set', user: user})
+                    result => {
+                        dispatch({type: 'set', user: result})
                         dispatch({type: 'set', openSignin: false})
                         dispatch({type: 'set', openSignup: false})
                         dispatch({type: 'set', openEmailVerification: false})

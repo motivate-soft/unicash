@@ -6,7 +6,10 @@ module.exports = {
     getPaymentMethods,
     deletePaymentMethod,
     getConversionBetweenUSDPHP,
-    createTransaction
+    
+    createTransaction,
+    getTransactionById,
+    getAllTransactionsByUserId
 };
 
 async function createPaymentmethod(params) {
@@ -54,9 +57,19 @@ async function getConversionBetweenUSDPHP() {
 }
 
 ///////////////////////////////////// Transaction ////////////////////////////////////
-async function createTransaction(params) {
-    
-    params['status'] = "Processing";
-
+async function createTransaction(params) {  
     return await db.Transaction.create(params);
+}
+async function getTransactionById(id) {
+    return await getTransaction(id);
+}
+async function getAllTransactionsByUserId(id) {
+    const transactions = await db.Transaction.findAll({ where: { userId: id }});
+    if (!transactions) throw 'NO TRANSACTION';
+    return transactions;
+}
+async function getTransaction(id) {
+    const transaction = await db.Transaction.findByPk(id);
+    if (!transaction) throw 'Transaction not found';
+    return transaction;
 }

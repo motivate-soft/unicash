@@ -173,10 +173,10 @@ const DropdownCurrency = ({listType, passDropListData}) => {
                 }
               }}>
               <span className="stands-of-currency">
-                { user ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
+                { youreceive && user ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
               </span>
               <span className="full-currency">
-                { user ? currencyConstants[youreceive.selectedCurrency].desc : youreceive.desc}
+                { youreceive && user ? currencyConstants[youreceive.selectedCurrency].desc : youreceive.desc}
               </span>
             </CDropdownItem>
           ))

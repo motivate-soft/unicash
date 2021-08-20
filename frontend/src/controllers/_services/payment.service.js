@@ -9,7 +9,9 @@ export const paymentService = {
     deletePaymentmethod,
     getConversionPrice,
     // Transction
-    createTransaction
+    createTransaction,
+    getTransactionById,
+    getMyAllTransaction
 };
 
 function addPaymentmethod(payment) {
@@ -72,6 +74,22 @@ function createTransaction(transaction) {
     };
 
     return fetch(`${serverURL}/payment/createTransaction`, requestOptions).then(handleResponse);
+}
+function getMyAllTransaction(userId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getAllTransactions/${userId}`, requestOptions).then(handleResponse);
+}
+function getTransactionById(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getTransaction/${id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
