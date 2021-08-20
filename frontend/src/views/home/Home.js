@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import {
   CCard,
   CCardBody,
@@ -9,6 +9,7 @@ import {
   CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
+import { paymentService } from '../../controllers/_services/payment.service';
 
 const WidgetsExchange = lazy(() => import('../widgets/WidgetsExchange.js'))
 const WidgetsAdvantage = lazy(() => import('../widgets/WidgetsAdvantage.js'))
@@ -17,6 +18,18 @@ const Home = () => {
   const dispatch = useDispatch()
   
   dispatch({type: 'set', darkMode: true})
+
+  const [mytransactions, setMytransactions] = useState()
+
+  useEffect(() => {
+    paymentService.getTransactions()
+    .then(
+      transactions => {
+        setMytransactions(transactions)
+      },
+      error => {}
+    )
+  });
 
   return (
     <>
@@ -29,7 +42,7 @@ const Home = () => {
               Live Transaction
             </CCardHeader>
             <CCardBody className="p-0" color="default">
-              
+            { mytransactions && 
               <table className="table table-hover table-outline mb-0">
                 <thead className="thead-light">
                   <tr>
@@ -42,72 +55,36 @@ const Home = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      recbon***
-                    </td>
-                    <td className="text-center">
-                      USDT
-                    </td>
-                    <td className="text-center">
-                      GCash
-                    </td>
-                    <td className="text-center">
-                      245.09
-                    </td>
-                    <td className="text-center">
-                      2021-7-27 07:45 am
-                    </td>
-                    <td>
-                      Completed
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      recbon***
-                    </td>
-                    <td className="text-center">
-                      USDT
-                    </td>
-                    <td className="text-center">
-                      GCash
-                    </td>
-                    <td className="text-center">
-                      245.09
-                    </td>
-                    <td className="text-center">
-                      2021-7-27 07:45 am
-                    </td>
-                    <td>
-                      Completed
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      recbon***
-                    </td>
-                    <td className="text-center">
-                      USDT
-                    </td>
-                    <td className="text-center">
-                      GCash
-                    </td>
-                    <td className="text-center">
-                      245.09
-                    </td>
-                    <td className="text-center">
-                      2021-7-27 07:45 am
-                    </td>
-                    <td>
-                      Completed
-                    </td>
-                  </tr>
-                  
+                {
+                  mytransactions.map((transaction, index) => (
+                    <tr>
+                      <td>
+                        recbon***
+                      </td>
+                      <td className="text-center">
+                        {transaction.from}
+                      </td>
+                      <td className="text-center">
+                        {transaction.to}
+                      </td>
+                      <td className="text-center">
+                        {transaction.amount}
+                      </td>
+                      <td className="text-center">
+                        {transaction.createdAt}
+                      </td>
+                      <td>
+                        {transaction.status}
+                      </td>
+                    </tr>
+                  ))
+                }
                 </tbody>
               </table>
-
+            }
+            { Object.assign([], mytransactions).length === 0 && 
+              <h3 className="text-muted m-3 pt-3 text-center">NO TRANSACTION</h3>
+            }
             </CCardBody>
           </CCard>
         </CCol>

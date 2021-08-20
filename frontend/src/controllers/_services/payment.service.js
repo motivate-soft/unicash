@@ -11,7 +11,8 @@ export const paymentService = {
     // Transction
     createTransaction,
     getTransactionById,
-    getMyAllTransaction
+    getMyAllTransaction,
+    getTransactions
 };
 
 function addPaymentmethod(payment) {
@@ -83,6 +84,16 @@ function getMyAllTransaction(userId) {
 
     return fetch(`${serverURL}/payment/getAllTransactions/${userId}`, requestOptions).then(handleResponse);
 }
+
+function getTransactions() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getTransactions`, requestOptions).then(handleResponse);
+}
+
 function getTransactionById(id) {
     const requestOptions = {
         method: 'GET',

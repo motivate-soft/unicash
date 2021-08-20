@@ -80,7 +80,10 @@ const Dashboard = () => {
                 }
               </tbody>
             </table>
-        }
+          }
+          { Object.assign([], mytransactions).length === 0 && 
+            <h3 className="text-muted m-3 pt-3 text-center">NO TRANSACTION</h3>
+          }
         </CCardBody>
       </CCard>
 

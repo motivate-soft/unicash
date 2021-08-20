@@ -9,7 +9,8 @@ module.exports = {
     
     createTransaction,
     getTransactionById,
-    getAllTransactionsByUserId
+    getAllTransactionsByUserId,
+    getTransactions
 };
 
 async function createPaymentmethod(params) {
@@ -65,6 +66,11 @@ async function getTransactionById(id) {
 }
 async function getAllTransactionsByUserId(id) {
     const transactions = await db.Transaction.findAll({ where: { userId: id }});
+    if (!transactions) throw 'NO TRANSACTION';
+    return transactions;
+}
+async function getTransactions() { // Limited 5
+    const transactions = await db.Transaction.findAll();
     if (!transactions) throw 'NO TRANSACTION';
     return transactions;
 }

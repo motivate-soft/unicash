@@ -7,6 +7,7 @@ const paymentService = require('./payment.service');
 const request = require('request');
 
 router.get('/getConversionPrice', getConversionPrice);
+router.get('/getTransactions', getTransactions)
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
@@ -30,7 +31,6 @@ function getConversionPrice(req, res, next) {
                         res.json({data: body, conversionRate: 50.01, status: true})
                     }
                     if (response_ && response_.statusCode) {
-                        console.log(JSON.parse(body_))
                         try {
                             const price = JSON.parse(body_)['quotes']['USDPHP'];
                             res.json({data: body, conversionRate: price, status: true})   
@@ -92,8 +92,13 @@ function getTransactionById(req, res, next) {
 }
 
 function getAllTransactionsByUserId(req, res, next) {
-    console.log('req.params.userId: ', req.params.userId)
     paymentService.getAllTransactionsByUserId(req.params.userId)
+        .then(transaction => res.json(transaction))
+        .catch(next);
+}
+
+function getTransactions(req, res, next) {
+    paymentService.getTransactions()
         .then(transaction => res.json(transaction))
         .catch(next);
 }
