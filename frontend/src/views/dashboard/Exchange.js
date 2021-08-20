@@ -59,7 +59,6 @@ const Exchange = () => {
   const user = useSelector(state => state.user)
   const transaction = useSelector(state => state.transaction)
 
-  const [expiredTime, setExpiredTime] = useState(300); // 300 second, 5 mins
   const [displayExpiredTime, setDisplayExpiredTime] = useState()
 
   if (!localStorage.getItem('user') || !user) {
@@ -70,29 +69,37 @@ const Exchange = () => {
      history.push('/dashboard')
   }
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     if (transaction && expiredTime) {
-  //       if (expiredTime > 0) {
-  //         setExpiredTime(expiredTime - 1);
-  //         setDisplayExpiredTime('0'+ Math.floor(expiredTime / 60) + ':' + Math.floor(expiredTime % 60));
-  //       } else {
-  //         transaction['status'] = "Canceled"
-  //         paymentService.createTransaction(transaction)
-  //         .then(
-  //             result => {
-  //                 warningNotification("The transaction calceled.", 3000);
-  //                 history.push('/dashboard')
-  //             },
-  //             error => {
-  //               warningNotification(error, 3000)
-  //               history.push('/dashboard')
-  //             }
-  //         )
-  //       }
-  //     }
-  //   }, 1000);
-  // }, [expiredTime])
+  const [counter, setCounter] = useState(300);
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  useEffect(() => {
+    let timer = setInterval(() => {
+        setCounter(counter => {
+            const updatedCounter = counter - 1;
+            if (updatedCounter === 0 && !isSubmitting) {
+              setIsSubmitting(true)
+              clearInterval(timer)
+              transaction['status'] = "Canceled"
+              paymentService.createTransaction(transaction)
+              .then(
+                  result => {
+                      warningNotification("The transaction calceled.", 3000);
+                      history.push('/dashboard')
+                  },
+                  error => {
+                    warningNotification(error, 3000)
+                    history.push('/dashboard')
+                  }
+              )
+              return 300
+            } else {
+              setDisplayExpiredTime('0'+ Math.floor(counter / 60) + ':' + Math.floor(counter % 60));
+              return updatedCounter;
+            }
+        }); // use callback function to set the state
+
+    }, 1000);
+    return () => clearInterval(timer); // cleanup the timer
+}, []);
 
 //   if (!queryString.parse(location.search) || !queryString.parse(location.search).id || isNaN(Number(queryString.parse(location.search).id))) {
 //     history.push('/dashboard')

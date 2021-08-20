@@ -1,4 +1,5 @@
 const db = require('_helpers/db');
+const { param } = require('./payments.controller');
 
 module.exports = {
     createPaymentmethod,
@@ -58,7 +59,7 @@ async function getConversionBetweenUSDPHP() {
 }
 
 ///////////////////////////////////// Transaction ////////////////////////////////////
-async function createTransaction(params) {  
+async function createTransaction(params) {
     return await db.Transaction.create(params);
 }
 async function getTransactionById(id) {

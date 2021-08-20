@@ -165,8 +165,7 @@ const WidgetsDashboard = () => {
             conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
             amount: inputReceive,
             image: '',
-            status: '',
-            startTime: 300
+            status: ''
         }
         dispatch({type: 'set', transaction: obj})
         history.push('/exchange')
