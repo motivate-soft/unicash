@@ -26,6 +26,7 @@ const useStylesReddit = makeStyles((theme) => ({
       fontWeight: '700',
       lineHeight: '24px',
       fontSize: '24px',
+      color: 'green',
       transition: theme.transitions.create(['border-color', 'box-shadow']),
       '&:hover': {
         backgroundColor: '#fff',
@@ -36,7 +37,8 @@ const useStylesReddit = makeStyles((theme) => ({
         borderRadius: 4,
         borderColor: "#24242f",
         borderBottom: "2px solid black",
-        color: "#24242f"
+        // color: "#24242f",
+        color: 'green',
       }
     },
     focused: {},

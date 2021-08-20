@@ -5,7 +5,8 @@ module.exports = {
     updatePaymentmethod,
     getPaymentMethods,
     deletePaymentMethod,
-    getConversionBetweenUSDPHP
+    getConversionBetweenUSDPHP,
+    createTransaction
 };
 
 async function createPaymentmethod(params) {
@@ -50,4 +51,12 @@ async function getConversionBetweenUSDPHP() {
     const conversionRate = await db.Conversion.findOne({ where: { fromCurrency: "USD", toCurrency: "PHP" }});
     if (!conversionRate) return 50.01;
     return conversionRate.rate;
+}
+
+///////////////////////////////////// Transaction ////////////////////////////////////
+async function createTransaction(params) {
+    
+    params['status'] = "Processing";
+
+    return await db.Transaction.create(params);
 }

@@ -26,6 +26,7 @@ const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
       fontWeight: '700',
       lineHeight: '24px',
       fontSize: '24px',
+      color: "green",
       transition: theme.transitions.create(['border-color', 'box-shadow']),
       '&:hover': {
         backgroundColor: '#fff',
@@ -36,7 +37,7 @@ const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
         borderRadius: 4,
         borderColor: "#24242f",
         borderBottom: "2px solid black",
-        color: "#24242f"
+        color: "green"
       }
     },
     focused: {},
@@ -151,7 +152,31 @@ const WidgetsDashboard = () => {
             error => {}
         )
   }, [youreceive]);
-    
+
+  const onSubmit = () => {
+      if (user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
+        const obj = {
+            userId: user.id,
+            from: yousend.label,
+            to: youreceive.label,
+            sendAmount: inputSend,
+            pricePerUnit: pricePerUnit,
+            conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
+            amount: inputReceive,
+            image: '',
+            status: 'Processing'
+        }
+        paymentService.createTransaction(obj)
+        .then(
+            transaction => {
+                console.log(transaction)
+            },
+            error => {
+                console.log(error)
+            }
+        )
+      }
+  }
   // render
   return (
     <CRow color="transparent" className="d-box-shadow1">
@@ -343,7 +368,7 @@ const WidgetsDashboard = () => {
                     </div>
 
                     <div className="d-flex mt-0">
-                        <CButton block className="button-exchange">
+                        <CButton block className="button-exchange" onClick={() => onSubmit()} disabled={yousend && youreceive && inputSend && inputReceive ? false : true}>
                             Next
                         </CButton>
                     </div>

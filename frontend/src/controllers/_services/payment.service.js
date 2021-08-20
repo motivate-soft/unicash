@@ -7,7 +7,9 @@ export const paymentService = {
     getPaymentMethodsById,
     updatePaymentmethod,
     deletePaymentmethod,
-    getConversionPrice
+    getConversionPrice,
+    // Transction
+    createTransaction
 };
 
 function addPaymentmethod(payment) {
@@ -59,6 +61,17 @@ function getConversionPrice(symbol) {
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
+}
+
+//////////////////////// Transaction /////////////////////////
+function createTransaction(transaction) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(transaction)
+    };
+
+    return fetch(`${serverURL}/payment/createTransaction`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
