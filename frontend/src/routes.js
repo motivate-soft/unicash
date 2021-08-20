@@ -6,7 +6,7 @@ const Signup = lazy(() => import('./views/auth/Signup'));
 const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
 const Exchange = lazy(() => import('./views/dashboard/Exchange'))
 const Payment = lazy(() => import('./views/payment/Payment'))
-
+const PersionalSetting = lazy(() => import('./views/setting/PersionalSetting'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -16,6 +16,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/exchange', name: 'Exchange', component: Exchange },
   { path: '/payment', name: 'Payment', component: Payment },
+  { path: '/setting', name: 'Setting', component: PersionalSetting },
 ];
 
 export default routes;

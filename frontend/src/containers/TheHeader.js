@@ -131,7 +131,7 @@ const TheHeader = () => {
             </CDropdownToggle>
             <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('payment')}>Payment method</CDropdownItem>
-                <CDropdownItem className="dropdown-toggle-menuitem">Settings</CDropdownItem>
+                <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('setting')}>Settings</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={logout}>Log out</CDropdownItem>
             </CDropdownMenu>
         </CDropdown>
