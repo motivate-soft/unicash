@@ -69,36 +69,40 @@ const Exchange = () => {
      history.push('/dashboard')
   }
 
-  const [counter, setCounter] = useState(300);
+  const [counter, setCounter] = useState(3);
   const [isSubmitting, setIsSubmitting] = useState(false)
   useEffect(() => {
-    let timer = setInterval(() => {
-        setCounter(counter => {
-            const updatedCounter = counter - 1;
-            if (updatedCounter === 0 && !isSubmitting) {
-              setIsSubmitting(true)
-              clearInterval(timer)
-              transaction['status'] = "Canceled"
-              paymentService.createTransaction(transaction)
-              .then(
-                  result => {
-                      warningNotification("The transaction calceled.", 3000);
+    if(!isSubmitting) {
+      setIsSubmitting(true)
+      setTimeout(() => {
+        let timer = setInterval(() => {
+          setCounter(counter => {
+              const updatedCounter = counter - 1;
+              if (updatedCounter === 0) {
+                clearInterval(timer)
+                transaction['status'] = "Canceled"
+                paymentService.createTransaction(transaction)
+                .then(
+                    result => {
+                        warningNotification("The transaction calceled.", 3000);
+                        history.push('/dashboard')
+                    },
+                    error => {
+                      warningNotification(error, 3000)
                       history.push('/dashboard')
-                  },
-                  error => {
-                    warningNotification(error, 3000)
-                    history.push('/dashboard')
-                  }
-              )
-              return 300
-            } else {
-              setDisplayExpiredTime('0'+ Math.floor(counter / 60) + ':' + Math.floor(counter % 60));
-              return updatedCounter;
-            }
-        }); // use callback function to set the state
+                    }
+                )
+                return 300
+              } else {
+                setDisplayExpiredTime(Math.floor(counter / 60) + ':' + Math.floor(counter % 60));
+                return updatedCounter;
+              }
+          }); // use callback function to set the state
 
-    }, 1000);
-    return () => clearInterval(timer); // cleanup the timer
+        }, 1000);
+        return () => clearInterval(timer); // cleanup the timer
+      }, 1000);
+    }
 }, []);
 
 //   if (!queryString.parse(location.search) || !queryString.parse(location.search).id || isNaN(Number(queryString.parse(location.search).id))) {

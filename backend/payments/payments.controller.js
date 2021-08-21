@@ -5,6 +5,7 @@ const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const paymentService = require('./payment.service');
 const request = require('request');
+const userService = require('../users/user.service');
 
 router.get('/getConversionPrice', getConversionPrice);
 router.get('/getTransactions', getTransactions)
@@ -99,6 +100,14 @@ function getAllTransactionsByUserId(req, res, next) {
 
 function getTransactions(req, res, next) {
     paymentService.getTransactions()
-        .then(transaction => res.json(transaction))
+        .then(transactions => {
+            transactions.forEach(async (transaction, index) => {
+                const userName = await userService.getUsernameById(transaction.userId);
+                transaction['userName'] = userName.slice(0, 5) + '***';
+                if (index === transactions.length - 1) {
+                    res.json(transactions)
+                }
+            });
+        })
         .catch(next);
 }

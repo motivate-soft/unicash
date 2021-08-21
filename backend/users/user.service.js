@@ -11,7 +11,8 @@ module.exports = {
     getByEmail,
     create,
     update,
-    delete: _delete
+    delete: _delete,
+    getUsernameById,
 };
 
 async function authenticate({ email, password }) {
@@ -133,6 +134,12 @@ async function getUser(id) {
     const user = await db.User.findByPk(id);
     if (!user) throw 'User not found';
     return user;
+}
+
+async function getUsernameById(id) {
+    const user = await db.User.findByPk(id);
+    if (!user) return 'Unknown user';
+    return user.fullName;
 }
 
 async function getUserByEmail(mail) {

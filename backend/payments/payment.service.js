@@ -1,5 +1,6 @@
 const db = require('_helpers/db');
 const { param } = require('./payments.controller');
+const userService = require('../users/user.service');
 
 module.exports = {
     createPaymentmethod,
@@ -73,7 +74,15 @@ async function getAllTransactionsByUserId(id) {
 async function getTransactions() { // Limited 5
     const transactions = await db.Transaction.findAll();
     if (!transactions) throw 'NO TRANSACTION';
-    return transactions;
+
+    let result = [];
+    transactions.forEach((transaction, index) => {
+        result.push({
+            ...transaction.dataValues,
+            userName: "unknown"
+        })
+    });
+    return result;
 }
 async function getTransaction(id) {
     const transaction = await db.Transaction.findByPk(id);

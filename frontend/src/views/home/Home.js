@@ -9,6 +9,7 @@ import {
   CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
+import { format } from 'date-fns';
 import { paymentService } from '../../controllers/_services/payment.service';
 
 const WidgetsExchange = lazy(() => import('../widgets/WidgetsExchange.js'))
@@ -29,7 +30,7 @@ const Home = () => {
       },
       error => {}
     )
-  });
+  }, []);
 
   return (
     <>
@@ -59,7 +60,7 @@ const Home = () => {
                   mytransactions.map((transaction, index) => (
                     <tr>
                       <td>
-                        recbon***
+                        { transaction.userName }
                       </td>
                       <td className="text-center">
                         {transaction.from}
@@ -71,7 +72,7 @@ const Home = () => {
                         {transaction.amount}
                       </td>
                       <td className="text-center">
-                        {transaction.createdAt}
+                        { format(new Date(transaction.createdAt), 'yyyy-MM-dd kk:mm') }
                       </td>
                       <td>
                         {transaction.status}

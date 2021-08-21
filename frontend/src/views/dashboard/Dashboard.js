@@ -6,6 +6,7 @@ import {
 } from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import { paymentService } from '../../controllers/_services/payment.service';
 
 const WidgetsDashboard = lazy(() => import('../widgets/WidgetsDashboard.js'))
@@ -70,7 +71,7 @@ const Dashboard = () => {
                         {transaction.amount}
                       </td>
                       <td className="text-center">
-                        {transaction.createdAt}
+                        { format(new Date(transaction.createdAt), 'yyyy-MM-dd kk:mm') }
                       </td>
                       <td>
                         {transaction.status}
