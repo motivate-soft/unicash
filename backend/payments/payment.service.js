@@ -67,12 +67,12 @@ async function getTransactionById(id) {
     return await getTransaction(id);
 }
 async function getAllTransactionsByUserId(id) {
-    const transactions = await db.Transaction.findAll({ where: { userId: id }});
+    const transactions = await db.Transaction.findAll({ order: [['id', 'DESC']], where: { userId: id }});
     if (!transactions) throw 'NO TRANSACTION';
     return transactions;
 }
 async function getTransactions() { // Limited 5
-    const transactions = await db.Transaction.findAll();
+    const transactions = await db.Transaction.findAll({ limit: 5, order: [['id', 'DESC']]});
     if (!transactions) throw 'NO TRANSACTION';
 
     let result = [];

@@ -69,7 +69,7 @@ const Exchange = () => {
      history.push('/dashboard')
   }
 
-  const [counter, setCounter] = useState(3);
+  const [counter, setCounter] = useState(299);
   const [isSubmitting, setIsSubmitting] = useState(false)
   useEffect(() => {
     if(!isSubmitting) {
