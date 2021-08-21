@@ -105,6 +105,12 @@ const Exchange = () => {
     }
 }, []);
 
+const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
+const [isCopied, setIsCopied] = useState(false);
+const onCopyClicked = () => {
+  navigator.clipboard.writeText(BTCAddress);
+  setIsCopied(true)
+}
 //   if (!queryString.parse(location.search) || !queryString.parse(location.search).id || isNaN(Number(queryString.parse(location.search).id))) {
 //     history.push('/dashboard')
 //   }
@@ -128,7 +134,7 @@ const Exchange = () => {
                                 id="btc-address"
                                 label="BTC ADDRESS"
                                 placeholder="..."
-                                value="3LdaJwE9ashRRTvTqhauu8VzkF83"
+                                value={BTCAddress}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -137,7 +143,12 @@ const Exchange = () => {
                             />
                         </div>
                         <div className="mr-auto pt-2">
-                            <CButton className="copy-button mt-3">Copy</CButton>
+                          { !isCopied && 
+                            <CButton className="copy-button mt-3" onClick={() => onCopyClicked()}>Copy</CButton>
+                          }
+                          { isCopied && 
+                            <CButton className="copied-button mt-3">Copied</CButton>
+                          }
                         </div>
                     </div>
                     <div className="d-flex mb-3">
