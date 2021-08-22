@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
@@ -30,22 +30,28 @@ const TheHeader = () => {
   const [fullName, setFullName] = useState('')
 
   const localUser = localStorage.getItem('user')
+  const user = useSelector(state => state.user)
   
-  if (localUser && JSON.parse(localUser).id) {
-    userService.getById(JSON.parse(localUser).id)
-      .then(
-        user => {
-          if (user.id && user.id === JSON.parse(localUser).id) {
-            dispatch({type: 'set', isLogin: true})
-            dispatch({type: 'set', user: user})
-            setFullName(user.fullName);
+  useEffect(() => {
+    if (localUser && JSON.parse(localUser).id) {
+      userService.getById(JSON.parse(localUser).id)
+        .then(
+          user => {
+            if (user.id && user.id === JSON.parse(localUser).id) {
+              dispatch({type: 'set', isLogin: true})
+              dispatch({type: 'set', user: user})
+            }
+          },
+          error => {
+            logout()
           }
-        },
-        error => {
-          logout()
-        }
-      )
-  }
+        )
+    }
+  }, [localUser])
+
+  useEffect(() => {
+    setFullName(user.fullName);
+  }, [user])
 
   const logout = () => {
     userService.logout();

@@ -25,6 +25,7 @@ const PersionalSetting = () => {
     <>
       <CRow color="transparent" className="d-box-shadow1">
         <CCol className="p-0 d-box-shadow1 d-border" sm="12" lg="6" md="6">
+            <h3>Persional Information</h3>
             <PersionalInfoSetting />
         </CCol>
         <CCol className="p-0 d-box-shadow1 d-border" sm="12" lg="6" md="6"></CCol>

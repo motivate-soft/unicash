@@ -70,12 +70,12 @@ const Exchange = () => {
   }
 
   const [counter, setCounter] = useState(299);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState()
   useEffect(() => {
     if(!isSubmitting) {
       setIsSubmitting(true)
       setTimeout(() => {
-        let timer = setInterval(() => {
+        const timer = setInterval(() => {
           setCounter(counter => {
               const updatedCounter = counter - 1;
               if (updatedCounter === 0) {
@@ -94,7 +94,8 @@ const Exchange = () => {
                 )
                 return 300
               } else {
-                setDisplayExpiredTime(Math.floor(counter / 60) + ':' + Math.floor(counter % 60));
+                const minute = Math.floor(counter % 60) < 10 ? '0' + Math.floor(counter % 60) : '' + Math.floor(counter % 60)
+                setDisplayExpiredTime(Math.floor(counter / 60) + ':' + minute);
                 return updatedCounter;
               }
           }); // use callback function to set the state
@@ -103,7 +104,7 @@ const Exchange = () => {
         return () => clearInterval(timer); // cleanup the timer
       }, 1000);
     }
-}, []);
+}, [isSubmitting]);
 
 const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
 const [isCopied, setIsCopied] = useState(false);
