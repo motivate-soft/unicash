@@ -31,6 +31,8 @@ const TheHeader = () => {
 
   const localUser = localStorage.getItem('user')
   const user = useSelector(state => state.user)
+
+  const [toggle, setToggle] = useState(false);
   
   useEffect(() => {
     if (localUser && JSON.parse(localUser).id) {
@@ -131,9 +133,16 @@ const TheHeader = () => {
             </CButton>
         </CHeaderNavLink>
         
-        <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'}>
+        <CDropdown variant="btn-group" className={isLogin ? 'm-0 pt-0' : 'd-none'} toggle={toggle}
+          onFocus={() => setToggle(!toggle)}
+          onBlur={() => setToggle(!toggle)}>
             <CDropdownToggle className="m-0 pt-0 p-0 dropdown-toggle-exchange" color="success" caret={false}>
-                {fullName}
+                Hi {fullName} 
+                { !toggle ? 
+                    <CImg src={'img/icons8-white-expand-arrow-24.png'} alt="Search" height={24}></CImg>
+                :
+                    <CImg src={'img/icons8-white-collapse-arrow-24.png'} alt="Search" height={24}></CImg>
+                }
             </CDropdownToggle>
             <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('payment')}>Payment method</CDropdownItem>

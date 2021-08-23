@@ -59,7 +59,7 @@ const DropdownCurrency = ({listType, passDropListData}) => {
         passDropListData(yousendList[1])
       }
     } else {
-      if (user) {
+      if (user && JSON.stringify(user) !== '{}') {
         paymentService.getPaymentMethodsById(user.id)
           .then(
               paymentMethods => {
@@ -164,7 +164,7 @@ const DropdownCurrency = ({listType, passDropListData}) => {
         {  listType === 'youreceive' && arrYoureceiveList && 
           arrYoureceiveList.map((youreceive, index) => (
             <CDropdownItem className="currency-dropdown" onClick={() => {
-                if (user) {
+                if (user && JSON.stringify(user) !== '{}') {
                   passDropListData(currencyConstants[youreceive.selectedCurrency]);
                   setSelectedYoureceive(currencyConstants[youreceive.selectedCurrency]);
                 } else {
@@ -173,10 +173,10 @@ const DropdownCurrency = ({listType, passDropListData}) => {
                 }
               }}>
               <span className="stands-of-currency">
-                { youreceive && user ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
+                { youreceive && user && JSON.stringify(user) !== '{}' ? currencyConstants[youreceive.selectedCurrency].label : youreceive.label}
               </span>
               <span className="full-currency">
-                { youreceive && user ? currencyConstants[youreceive.selectedCurrency].desc : youreceive.desc}
+                { youreceive && user && JSON.stringify(user) !== '{}' ? currencyConstants[youreceive.selectedCurrency].desc : youreceive.desc}
               </span>
             </CDropdownItem>
           ))

@@ -11,6 +11,7 @@ import {
     alpha,
     makeStyles,
     } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import { currencyConstants } from '../../controllers/_constants';
 import { paymentService } from '../../controllers/_services/payment.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
@@ -47,6 +48,7 @@ function RedditTextField(props) {
 
 const AddPayment = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const user = useSelector(state => state.user)
   const openAddPayment = useSelector(state => state.openAddPayment)
@@ -142,6 +144,7 @@ const AddPayment = () => {
                 payment => {
                     successNotification('Successfully updated', 3000)
                     dispatch({type: 'set', openAddPayment: false})
+                    history.push('/dashboard')
                 },
                 error => {
                     warningNotification(error, 3000)
@@ -153,6 +156,7 @@ const AddPayment = () => {
                 payment => {
                     successNotification('Successfully added new payment method.', 3000)
                     dispatch({type: 'set', openAddPayment: false})
+                    history.push('/dashboard')
                 },
                 error => {
                     warningNotification(error, 3000)
