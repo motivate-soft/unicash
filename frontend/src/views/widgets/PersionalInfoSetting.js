@@ -52,7 +52,7 @@ function RedditTextField(props) {
     return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
   }
 
-const WidgetsDashboard = () => {
+const PersionalInfoSetting = () => {
  const dispatch = useDispatch()
  const history = useHistory()
  
@@ -167,4 +167,4 @@ const WidgetsDashboard = () => {
     )
 }
 
-export default WidgetsDashboard
+export default PersionalInfoSetting

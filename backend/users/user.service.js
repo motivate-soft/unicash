@@ -11,6 +11,7 @@ module.exports = {
     getByEmail,
     create,
     update,
+    updatePassword,
     delete: _delete,
     getUsernameById,
 };
@@ -104,13 +105,33 @@ async function create(params) {
 
 async function update(id, params) {
     const user = await getUser(id);
-
+    console.log("============= ", params.is2FA)
     // validate
     const emailChanged = params.email && user.email !== params.email;
     if (emailChanged && await db.User.findOne({ where: { email: params.email } })) {
         throw 'Email "' + params.email + '" is already taken';
     }
 
+    // hash password if it was entered
+    if (params.password) {
+        params.password = await bcrypt.hash(params.password, 10);
+    }
+
+    // copy params to user and save
+    Object.assign(user, params);
+    await user.save();
+
+    return omitHash(user.get());
+}
+
+async function updatePassword(id, params) {
+    const user = await db.User.scope('withHash').findOne({ where: { id } });
+
+    // validate
+    if (!user || !(await bcrypt.compare(params.oldPassword, user.password))) {
+        throw 'Old password is incorrect';
+    }
+    
     // hash password if it was entered
     if (params.password) {
         params.password = await bcrypt.hash(params.password, 10);

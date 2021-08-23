@@ -10,6 +10,7 @@ export const userService = {
     getAll,
     getById,
     update,
+    updatePassword,
     delete: _delete
 };
 
@@ -79,6 +80,16 @@ function update(user) {
     };
 
     return fetch(`${serverURL}/users/${user.id}`, requestOptions).then(handleResponse);;
+}
+
+function updatePassword(user) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch(`${serverURL}/users/updatePassword/${user.id}`, requestOptions).then(handleResponse);;
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

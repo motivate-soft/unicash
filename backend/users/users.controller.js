@@ -13,6 +13,7 @@ router.get('/', authorize(), getAll);
 router.get('/current', authorize(), getCurrent);
 router.get('/:id', authorize(), getById);
 router.put('/:id', authorize(), updateSchema, update);
+router.put('/updatePassword/:id', authorize(), updatePasswordSchema, updatePassword);
 router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
@@ -88,7 +89,16 @@ function updateSchema(req, res, next) {
         email: Joi.string().empty(''),
         address: Joi.string().empty(''),
         birthday: Joi.string().empty(''),
+        is2FA: Joi.boolean().empty(''),
         password: Joi.string().min(6).empty('')
+    });
+    validateRequest(req, next, schema);
+}
+
+function updatePasswordSchema(req, res, next) {
+    const schema = Joi.object({
+        oldPassword: Joi.string().empty(''),
+        password: Joi.string().empty('')
     });
     validateRequest(req, next, schema);
 }
@@ -96,6 +106,14 @@ function updateSchema(req, res, next) {
 function update(req, res, next) {
     userService.update(req.params.id, req.body)
         .then(user => res.json(user))
+        .catch(next);
+}
+
+function updatePassword(req, res, next) {
+    userService.updatePassword(req.params.id, req.body)
+        .then(user => {
+            res.json(user)
+        })
         .catch(next);
 }
 
