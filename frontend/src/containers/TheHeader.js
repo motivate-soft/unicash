@@ -24,7 +24,7 @@ const TheHeader = () => {
   const sidebarShow = useSelector(state => state.sidebarShow)
   const isAdmin = useSelector(state => state.isAdmin)
   const isLogin = useSelector(state => state.isLogin)
-  // const currPath = history.location.pathname
+  const currPath = history.location.pathname
 
   const [fullName, setFullName] = useState('')
 
@@ -105,15 +105,15 @@ const TheHeader = () => {
         </CHeaderNavItem>
       </CHeaderNav>
 
-      <CHeaderNav className={isLogin ? 'd-md-down-none mr-auto' : 'invisible mr-auto'}>
-        <CHeaderNavItem className="px-3" >
-          <CHeaderNavLink to="/dashboard" className="dropdown-toggle-exchange">Exchange</CHeaderNavLink>
+      <CHeaderNav className="d-md-down-none mr-auto">
+        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+          <CHeaderNavLink to="/dashboard" className={currPath === '/dashboard' || currPath === '/exchange' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Exchange</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem  className="px-3">
-          <CHeaderNavLink to="/payment" className="dropdown-toggle-exchange">Payment</CHeaderNavLink>
+        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+          <CHeaderNavLink to="/payment" className={currPath === '/payment' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Payment</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className="px-3">
-          <CHeaderNavLink to="/setting" className="dropdown-toggle-exchange">Settings</CHeaderNavLink>
+        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+          <CHeaderNavLink to="/setting" className={currPath === '/setting' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
         </CHeaderNavItem>
       </CHeaderNav>
 
