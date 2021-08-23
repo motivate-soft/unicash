@@ -73,16 +73,13 @@ const Signin = () => {
               dispatch({type: 'set', openEmailVerification: true})
               userService.logout();
             } else {
-              dispatch({type: 'set', user: result})
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', openEmailVerification: false})
               dispatch({type: 'set', isLogin: true})
               // dispatch({type: 'set', isAdmin: true})
               successNotification('Welcome to Unicach.', 3000)
-              setTimeout(() => {
-                history.push('dashboard')
-              }, 1000);
+              history.push('dashboard')
             }
             
             setSubmitting(false)

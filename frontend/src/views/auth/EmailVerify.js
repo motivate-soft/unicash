@@ -63,7 +63,6 @@ const EmailVerify = () => {
             userService.login(selectedUser.email, selectedUser.password)
                 .then(
                     result => {
-                        dispatch({type: 'set', user: result})
                         dispatch({type: 'set', openSignin: false})
                         dispatch({type: 'set', openSignup: false})
                         dispatch({type: 'set', openEmailVerification: false})
@@ -71,9 +70,7 @@ const EmailVerify = () => {
                         // dispatch({type: 'set', isAdmin: true})
                         successNotification('Welcome to Unicach.', 3000)
                         setSubmitting(false)
-                        setTimeout(() => {
-                          history.push('dashboard')
-                        }, 1000);
+                        history.push('dashboard')
                     },
                     error => {
                         warningNotification(error, 3000)

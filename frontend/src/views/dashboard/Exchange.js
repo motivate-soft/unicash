@@ -73,6 +73,7 @@ const Exchange = () => {
   const [isSubmitting, setIsSubmitting] = useState()
   useEffect(() => {
     if(!isSubmitting) {
+      console.log("start-----------------")
       setIsSubmitting(true)
       setTimeout(() => {
         const timer = setInterval(() => {

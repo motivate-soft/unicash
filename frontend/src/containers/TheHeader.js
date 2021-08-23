@@ -37,10 +37,10 @@ const TheHeader = () => {
     if (localUser && JSON.parse(localUser).id) {
       userService.getById(JSON.parse(localUser).id)
         .then(
-          user => {
-            if (user.id && user.id === JSON.parse(localUser).id) {
+          result => {
+            if (result.id && result.id === JSON.parse(localUser).id) {
               dispatch({type: 'set', isLogin: true})
-              dispatch({type: 'set', user: user})
+              dispatch({type: 'set', user: result})
             }
           },
           error => {
@@ -58,6 +58,7 @@ const TheHeader = () => {
     userService.logout();
     dispatch({type: 'set', isLogin: false})
     dispatch({type: 'set', isAdmin: false})
+    dispatch({type: 'refresh'})
     history.push('/home')
   }
 
