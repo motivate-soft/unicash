@@ -12,7 +12,6 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CLink,
 } from '@coreui/react'
 import { useHistory } from 'react-router-dom';
 import { userService } from '../controllers/_services/user.service';
@@ -94,8 +93,8 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
 
-      <CHeaderNav className={isAdmin ? '' : ' mr-auto'}>
-        <CHeaderNavItem className="px-3" >
+      <CHeaderNav className={isAdmin ? '' : ''}>
+        <CHeaderNavItem >
           <CHeaderNavLink to="/home">
             <CImg
               src={'img/Unicash.png'}
@@ -103,6 +102,18 @@ const TheHeader = () => {
               height="40"
             />
           </CHeaderNavLink>
+        </CHeaderNavItem>
+      </CHeaderNav>
+
+      <CHeaderNav className={isLogin ? 'd-md-down-none mr-auto' : 'invisible mr-auto'}>
+        <CHeaderNavItem className="px-3" >
+          <CHeaderNavLink to="/dashboard" className="dropdown-toggle-exchange">Exchange</CHeaderNavLink>
+        </CHeaderNavItem>
+        <CHeaderNavItem  className="px-3">
+          <CHeaderNavLink to="/payment" className="dropdown-toggle-exchange">Payment</CHeaderNavLink>
+        </CHeaderNavItem>
+        <CHeaderNavItem className="px-3">
+          <CHeaderNavLink to="/setting" className="dropdown-toggle-exchange">Settings</CHeaderNavLink>
         </CHeaderNavItem>
       </CHeaderNav>
 

@@ -349,9 +349,12 @@
 .dropdown-toggle-exchange {
   background-color: transparent !important;
   box-shadow: none !important;
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 0px !important;
+  font-size: 18px;
+  font-weight: 200;
+  color:#fff !important;
+}
+.dropdown-toggle-exchange:hover {
+  color:rgb(179, 178, 178) !important;
 }
 
 .widget-advantage {
