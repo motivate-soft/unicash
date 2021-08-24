@@ -116,27 +116,30 @@ const WidgetsDashboard = () => {
       history.push('/payment')
   }
   useEffect(() => {
-        if (yousend)
-        paymentService.getConversionPrice(yousend.label + 'USDT')
-        .then(
-            price => {
-                if (price.status) {
-                    setConversionRateBetweenUSDPHP(Number(price.conversionRate));
-                    const priceRate = Number(JSON.parse(price.data)['price'])
-                    if (!isNaN(priceRate)) {
-                        setPricePerUnit(priceRate)
-                        setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+        if (yousend) {
+          setIsSubmitting(true)
+          paymentService.getConversionPrice(yousend.label + 'USDT')
+            .then(
+                price => {
+                    if (price.status) {
+                        setConversionRateBetweenUSDPHP(Number(price.conversionRate));
+                        const priceRate = Number(JSON.parse(price.data)['price'])
+                        if (!isNaN(priceRate)) {
+                            setPricePerUnit(priceRate)
+                            setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+                            setIsSubmitting(false)
+                        }
+                        else {
+                            setPricePerUnit(null);
+                            setInputReceive('');
+                        }
                     }
-                    else {
-                        setPricePerUnit(null);
-                        setInputReceive('');
-                    }
+                },
+                error => {
+                    console.log(error);
                 }
-            },
-            error => {
-                console.log(error);
-            }
-        )
+            )
+        }
     }, [yousend, inputSend]);
 
   useEffect(() => {

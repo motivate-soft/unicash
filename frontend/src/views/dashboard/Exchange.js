@@ -59,8 +59,6 @@ const Exchange = () => {
   const user = useSelector(state => state.user)
   const transaction = useSelector(state => state.transaction)
 
-  const [displayExpiredTime, setDisplayExpiredTime] = useState()
-
   if (!localStorage.getItem('user') || !user) {
     dispatch({type: 'set', darkMode: true})
     history.push('/home')
@@ -68,42 +66,45 @@ const Exchange = () => {
   if (!transaction) {
      history.push('/dashboard')
   }
+  const [countDown, setCountDown] = useState(0);
+  const [runTimer, setRunTimer] = useState(true);
 
-  const [counter, setCounter] = useState(5);
-  const [isSubmitting, setIsSubmitting] = useState()
   useEffect(() => {
-    if(!isSubmitting) {
-      setIsSubmitting(!isSubmitting)
-      setTimeout(() => {
-        const timer = setInterval(() => {
-          setCounter(counter => {
-              let updatedCounter = counter - 1;
-              if (updatedCounter === 0) {
-                transaction['status'] = "Canceled"
-                  paymentService.createTransaction(transaction)
-                  .then(
-                      result => {
-                          warningNotification("The transaction calceled.", 3000);
-                          history.push('/dashboard')
-                      },
-                      error => {
-                        warningNotification(error, 3000)
-                        history.push('/dashboard')
-                      }
-                  )
-                return 300
-              } else {
-                const minute = Math.floor(counter % 60) < 10 ? '0' + Math.floor(counter % 60) : '' + Math.floor(counter % 60)
-                setDisplayExpiredTime(Math.floor(counter / 60) + ':' + minute);
-                return updatedCounter;
-              }
-          }); // use callback function to set the state
+    let timerId;
 
-        }, 1000);
-        return () => clearInterval(timer); // cleanup the timer
+    if (runTimer) {
+      setCountDown(60 * 5);
+      timerId = setInterval(() => {
+        setCountDown((countDown) => countDown - 1);
       }, 1000);
+    } else {
+      clearInterval(timerId);
     }
-}, [isSubmitting]);
+
+    return () => clearInterval(timerId);
+  }, [runTimer]);
+
+  useEffect(() => {
+    if (countDown < 0 && runTimer) {
+      transaction['status'] = "Canceled"
+      paymentService.createTransaction(transaction)
+      .then(
+          result => {
+              warningNotification("The transaction calceled.", 3000);
+              history.push('/dashboard')
+          },
+          error => {
+            warningNotification(error, 3000)
+            history.push('/dashboard')
+          }
+      )
+      setRunTimer(false);
+      setCountDown(0);
+    }
+  }, [countDown, runTimer]);
+
+  const seconds = String(countDown % 60).padStart(2, 0);
+  const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
 
 const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
 const [isCopied, setIsCopied] = useState(false);
@@ -126,7 +127,7 @@ const onCopyClicked = () => {
                         <h3>Exchange</h3>
                     </div>
                     <div className="text-center mt-3 mb-3">
-                        <h4 className="text-center">EXPIRES IN {displayExpiredTime}</h4>
+                        <h4 className="text-center">EXPIRES IN {minutes}:{seconds}</h4>
                     </div>
                     <div className="d-flex mb-1">
                         <div className="flex-grow-1">

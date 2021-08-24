@@ -63,6 +63,7 @@ const WidgetsExchange = () => {
     const [youreceive, setYoureceive] = useState();
     const [pricePerUnit, setPricePerUnit] = useState();
     const [conversionRateBetweenUSDPHP, setConversionRateBetweenUSDPHP] = useState();
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const onChangeOnSend = e => {
         const inputValue = e.target.value;
@@ -88,27 +89,30 @@ const WidgetsExchange = () => {
     }
 
     useEffect(() => {
-        if (yousend)
-        paymentService.getConversionPrice(yousend.label + 'USDT')
-        .then(
-            price => {
-                if (price.status) {
-                    setConversionRateBetweenUSDPHP(Number(price.conversionRate));
-                    const priceRate = Number(JSON.parse(price.data)['price'])
-                    if (!isNaN(priceRate)) {
-                        setPricePerUnit(priceRate)
-                        setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+        if (yousend) {
+            setIsSubmitting(true)
+            paymentService.getConversionPrice(yousend.label + 'USDT')
+                .then(
+                    price => {
+                        if (price.status) {
+                            setConversionRateBetweenUSDPHP(Number(price.conversionRate));
+                            const priceRate = Number(JSON.parse(price.data)['price'])
+                            if (!isNaN(priceRate)) {
+                                setPricePerUnit(priceRate)
+                                setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+                            }
+                            else {
+                                setPricePerUnit(null);
+                                setInputReceive('');
+                            }
+                            setIsSubmitting(false)
+                        }
+                    },
+                    error => {
+                        console.log(error);
                     }
-                    else {
-                        setPricePerUnit(null);
-                        setInputReceive('');
-                    }
-                }
-            },
-            error => {
-                console.log(error);
-            }
-        )
+                )
+        }
     }, [yousend, inputSend]);
     // render
     return (
@@ -177,7 +181,7 @@ const WidgetsExchange = () => {
                                 </div>
                             </div>
                             <div className="d-flex mt-3">
-                                <CButton block className="button-exchange" onClick={onClickExchangeNow}>
+                                <CButton block className="button-exchange" onClick={onClickExchangeNow} disabled={isSubmitting || !yousend || !youreceive}>
                                     Exchange now
                                 </CButton>
                             </div>
