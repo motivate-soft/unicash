@@ -2,7 +2,8 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     CModal,
-    CModalBody
+    CModalBody,
+    CModalHeader
   } from '@coreui/react'
 
 const Signup = React.lazy(() => import('./Signup'));
@@ -28,7 +29,7 @@ const AuthDialog = () => {
         onClose={handleClose}
         className="p-0 auth-modal"
         centered
-        size="sm"
+        size={openSignin || openSignup ? '' : 'sm' }
         >
         <CModalBody className="p-0">
             {openSignin ? <Signin /> : (openEmailVerification ? <EmailVerify /> : <Signup /> )} 

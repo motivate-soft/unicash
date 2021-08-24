@@ -41,6 +41,7 @@ const TheHeader = () => {
             if (result.id && result.id === JSON.parse(localUser).id) {
               dispatch({type: 'set', isLogin: true})
               dispatch({type: 'set', user: result})
+              // if (result.role === 1) dispatch({type: 'set', isAdmin: true})
             }
           },
           error => {
@@ -51,7 +52,7 @@ const TheHeader = () => {
   }, [localUser])
 
   useEffect(() => {
-    setFullName(user.fullName);
+    setFullName(String(user.fullName).split(' ')[0]);
   }, [user])
 
   const logout = () => {
@@ -163,7 +164,6 @@ const TheHeader = () => {
             </CDropdownMenu>
         </CDropdown>
       </CHeaderNav>
-      <div className="header-border"></div>
     </CHeader>
     </>
   )

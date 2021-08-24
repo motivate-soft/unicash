@@ -1,73 +1,59 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CWidgetSimple,
   CButton,
-  CCol,
-  CForm,
-  CInvalidFeedback,
-  CFormGroup,
-  CLabel,
-  CInput,
-  CRow
+  CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { userService } from '../../controllers/_services/user.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
+import TextField from '@material-ui/core/TextField';
+import {
+    alpha,
+    makeStyles,
+  } from '@material-ui/core/styles';
 
-const validationSchema = function (values) {
-  return Yup.object().shape({
-    fullName: Yup.string()
-    .min(2, `Full name has to be at least 2 characters`)
-    .required('Full name is required'),
-    email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required!'),
-    password: Yup.string()
-    .min(6, `Password has to be at least ${6} characters!`)
-    .matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/, 'Password must contain: numbers, uppercase and lowercase letters\n')
-    .required('Password is required'),
-    confirmPassword: Yup.string()
-    .oneOf([values.password], 'Passwords must match')
-    .required('Password confirmation is required')
-  })
-}
-
-const validate = (getValidationSchema) => {
-  return (values) => {
-    const validationSchema = getValidationSchema(values)
-    try {
-      validationSchema.validateSync(values, { abortEarly: false })
-      return {}
-    } catch (error) {
-      return getErrorsFromValidationError(error)
+const useStylesReddit = makeStyles((theme) => ({
+  root: {
+    border: "1px solid lightgray",
+    overflow: 'hidden',
+    backgroundColor: '#fcfcfb',
+    fontWeight: '400',
+    lineHeight: '18px',
+    fontSize: '18px',
+    height: '55px',
+    color: "black",
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    '&:hover': {
+      backgroundColor: '#fff',
+    },
+    '&$focused': {
+      backgroundColor: '#fff',
+      boxShadow: `${alpha("#24242f", 0.25)} 0 0 0 1px`,
+      borderRadius: 2,
+      borderColor: "#24242f",
+      borderBottom: "1px solid black",
+      color: "black"
     }
-  }
-}
+  },
+  focused: {},
+}));
 
-const getErrorsFromValidationError = (validationError) => {
-  const FIRST_ERROR = 0
-  return validationError.inner.reduce((errors, error) => {
-    return {
-      ...errors,
-      [error.path]: error.errors[FIRST_ERROR],
-    }
-  }, {})
-}
+function RedditTextField(props) {
+  const classes = useStylesReddit();
 
-const initialValues = {
-  fullName: "",
-  email: "",
-  password: "",
-  confirmPassword: ""
+  return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
 }
 
 const Signup = () => {
   const dispatch = useDispatch()
 
-  const onSubmit = async (values, { setSubmitting, setErrors }) => {
-    userService.register(values)
+  const onSubmit = () => {
+    userService.register({
+      "fullName": fullName,
+      "email": email,
+      "password": password
+    })
         .then(
             user => { 
               if (user && user.status) {
@@ -76,113 +62,158 @@ const Signup = () => {
                 dispatch({type: 'set', openSignin: true})
                 dispatch({type: 'set', openEmailVerification: false})
               }
-              setSubmitting(false)
             },
             error => {
-                console.log("error: ", error)
                 warningNotification(error, 3000);
-                setSubmitting(false)
             }
         );    
   }
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [fullName, setFullName] = useState()
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [confirmPassword, setConfirmPassword] = useState()
+
+  const [errMessageForFullName, setErrMessageForFullName] = useState('')
+  const [errMessageForEmail, setErrMessageForEmail] = useState('')
+  const [errMessageForNewPassword, setErrMessageForNewPassword] = useState('')
+  const [errMessageForConfirmPassword, setErrMessageForConfirmPassword] = useState('')
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
+
+  useEffect(() => {
+    if (fullName !== '' && email !== '' && password !== '' && errMessageForFullName === '' && errMessageForEmail === '' && errMessageForNewPassword === '' && 
+        errMessageForConfirmPassword === '' && password === confirmPassword) {
+      setSubmitButtonDisabled(false);
+    } else {
+      setSubmitButtonDisabled(true);
+    }
+  }, [fullName, email, password, confirmPassword])
+
   return (
     <>
       <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
-        <h3 className="text-center mb-2">Welcome to Unicash<span className="text-success">.</span></h3>
-        <Formik
-            initialValues={initialValues}
-            validate={validate(validationSchema)}
-            onSubmit={onSubmit}
-          >
-            {
-              ({
-                values,
-                errors,
-                touched,
-                status,
-                dirty,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                isSubmitting,
-                isValid,
-                handleReset,
-                setTouched
-              }) => (
-                <CRow>
-                  <CCol>
-                    <CForm onSubmit={handleSubmit} noValidate name='loginForm' className="text-left">
-                      <CFormGroup>
-                        <CLabel htmlFor="fullName">Full Name</CLabel>
-                        <CInput type="text"
-                                name="fullName"
-                                id="fullName"
-                                placeholder="Full Name"
-                                autoComplete="given-name"
-                                valid={!errors.fullName}
-                                invalid={touched.fullName && !!errors.fullName}
-                                autoFocus={true}
-                                required
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.fullName} />
-                        <CInvalidFeedback>{errors.fullName}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                        <CLabel htmlFor="email">Email</CLabel>
-                        <CInput type="email"
-                                name="email"
-                                id="email"
-                                placeholder="Email"
-                                autoComplete="email"
-                                valid={!errors.email}
-                                invalid={touched.email && !!errors.email}
-                                required
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.email} />
-                        <CInvalidFeedback>{errors.email}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                            <CLabel htmlFor="password">Password</CLabel>
-                            <CInput type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Password"
-                                    autoComplete="new-password"
-                                    valid={!errors.password}
-                                    invalid={touched.password && !!errors.password}
-                                    required
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.password}/>
-                            {/*<CInvalidFeedback>Required password containing at least: number, uppercase and lowercase letter, 8 characters</CInvalidFeedback>*/}
-                            <CInvalidFeedback>{errors.password}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                          <CLabel htmlFor="confirmPassword">Password</CLabel>
-                          <CInput type="password"
-                                  name="confirmPassword"
-                                  id="confirmPassword"
-                                  placeholder="Confirm password"
-                                  autoComplete="new-password"
-                                  valid={!errors.confirmPassword}
-                                  invalid={touched.confirmPassword && !!errors.confirmPassword}
-                                  required
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.confirmPassword} />
-                          <CInvalidFeedback>{errors.confirmPassword}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                        <CButton type="submit" color="primary" className="signin-button mt-3 mb-0" disabled={isSubmitting || !isValid}>{isSubmitting ? 'Wait...' : 'Sign up'}</CButton>
-                      </CFormGroup>
-                    </CForm>
-                  </CCol>
-                </CRow>
-              )}
-          </Formik>
+        <div className="float-right" style={{marginRight: '-20px'}}>
+          <CImg src={'img/icons8-close.png'} style={{cursor: 'pointer'}} onClick={() => dispatch({type: 'set', openSignup: false})}></CImg>
+        </div>
+        <h2 className="text-left signin-header-title">Welcome to Unicash<span className="text-success">.</span></h2>
+        <h5 className="text-left signin-header-desc">Login or register to continue Exchange</h5>
+        <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="full-name"
+                        label="Full name"
+                        placeholder="Type full name"
+                        value={fullName}
+                        helperText={errMessageForFullName && errMessageForFullName !== '' ? errMessageForFullName : '' }
+                        error={errMessageForFullName && errMessageForFullName !== ''}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                        variant="filled"
+                        onBlur={() => {
+                          if (!fullName || fullName === '') setErrMessageForFullName('Full name is required')
+                          else setErrMessageForFullName('')
+                        }}
+                        onChange={(e) => {
+                          setFullName(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="email"
+                        label="Email"
+                        placeholder="Type your email"
+                        value={email}
+                        helperText={errMessageForEmail && errMessageForEmail !== '' ? errMessageForEmail : '' }
+                        error={errMessageForEmail && errMessageForEmail !== ''}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                        variant="filled"
+                        onBlur={() => {
+                          const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                          if (!email || email === '') setErrMessageForEmail('Email is required')
+                          else if (!re.test(String(email).toLowerCase())) setErrMessageForEmail('Invalid email address')
+                          else setErrMessageForEmail('')
+                        }}
+                        onChange={(e) => {
+                          setEmail(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="password"
+                        label="Password"
+                        placeholder="Type your password"
+                        value={password}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        type="password"
+                        fullWidth
+                        variant="filled"
+                        helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
+                        error={errMessageForNewPassword && errMessageForNewPassword !== ''}
+                        onBlur={() => {
+                          if (!password || password === '') setErrMessageForNewPassword('Password is required')
+                          else if (password.length < 6) setErrMessageForNewPassword('Password hat to be at least 6 characters!')
+                          else if (!password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/)) setErrMessageForNewPassword('Password must contain: numbers, uppercase and lowercase letters');
+                          else setErrMessageForNewPassword('')
+                        }}
+                        onChange={(e) => { setPassword(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="confirm-password"
+                        label="Repeat new password"
+                        placeholder="Repeat new password"
+                        value={confirmPassword}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        type="password"
+                        fullWidth
+                        variant="filled"
+                        helperText={errMessageForConfirmPassword && errMessageForConfirmPassword !== '' ? errMessageForConfirmPassword : '' }
+                        error={errMessageForConfirmPassword && errMessageForConfirmPassword !== ''}
+                        onBlur={() => {
+                          if (!confirmPassword || confirmPassword === '') setErrMessageForConfirmPassword('Password confirmation is required!')
+                          else if (confirmPassword !== password) setErrMessageForConfirmPassword('Passwords must match')
+                          else setErrMessageForConfirmPassword('')
+                        }}
+                        onChange={(e) => { setConfirmPassword(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-2">
+              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline">Terms of Use</span> and <span className="span-underline">Privacy Policy</span></h5>
+            </div>
+
+            <div className="d-flex mt-1">
+                <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
+                    <h3>Sign up</h3>
+                </CButton>
+            </div>
+            <div className="mt-1 text-center">
+              <h5 className="signin-header-desc">Already have an account? <span className="span-underline" onClick={() => {
+                dispatch({type: 'set', openSignup: false})
+                dispatch({type: 'set', openSignin: true})
+                }}>Sign in</span></h5>
+            </div>
       </CWidgetSimple>
     </>
   )

@@ -349,7 +349,7 @@
 .dropdown-toggle-exchange {
   background-color: transparent !important;
   box-shadow: none !important;
-  font-size: 20px;
+  font-size: 17px;
   // font-weight: 400;
   margin-bottom: 0px !important;
 }
@@ -358,7 +358,7 @@
   color: white !important;
   background-color: transparent !important;
   box-shadow: none !important;
-  font-size: 20px;
+  font-size: 17px;
   // font-weight: 400;
   margin-bottom: 0px !important;
 }
@@ -387,19 +387,39 @@
 */
 .signin-widget {
   margin: 0;
-  // background-color: white !important;
-  // color: #181924;
-  padding: 5px 15px !important;
+  background-color: white !important;
+  color: #181924;
+  padding: 3px 20px !important;
 
-  // input {
-  //   color: #181924 !important;
-  //   border-color: #3f42529f !important;
-  // }
+  input {
+    color: #181924 !important;
+    border-color: #3f42529f !important;
+  }
   button {
     background-color: red !important;
   }
 }
 
+.signin-header-title {
+  font-size: 26px;
+  line-height: 32px;
+  margin-top: 30px;
+  color: #404b51;
+  font-weight: 600;
+}
+.signin-header-desc {
+  color: #7d7e7e;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+.span-underline {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.span-underline:hover {
+  color: #494949;
+}
 .signin-button {
   width: 100%;
   background-color: red;

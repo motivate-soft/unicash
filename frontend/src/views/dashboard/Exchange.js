@@ -69,30 +69,28 @@ const Exchange = () => {
      history.push('/dashboard')
   }
 
-  const [counter, setCounter] = useState(299);
+  const [counter, setCounter] = useState(5);
   const [isSubmitting, setIsSubmitting] = useState()
   useEffect(() => {
     if(!isSubmitting) {
-      console.log("start-----------------")
-      setIsSubmitting(true)
+      setIsSubmitting(!isSubmitting)
       setTimeout(() => {
         const timer = setInterval(() => {
           setCounter(counter => {
-              const updatedCounter = counter - 1;
+              let updatedCounter = counter - 1;
               if (updatedCounter === 0) {
-                clearInterval(timer)
                 transaction['status'] = "Canceled"
-                paymentService.createTransaction(transaction)
-                .then(
-                    result => {
-                        warningNotification("The transaction calceled.", 3000);
+                  paymentService.createTransaction(transaction)
+                  .then(
+                      result => {
+                          warningNotification("The transaction calceled.", 3000);
+                          history.push('/dashboard')
+                      },
+                      error => {
+                        warningNotification(error, 3000)
                         history.push('/dashboard')
-                    },
-                    error => {
-                      warningNotification(error, 3000)
-                      history.push('/dashboard')
-                    }
-                )
+                      }
+                  )
                 return 300
               } else {
                 const minute = Math.floor(counter % 60) < 10 ? '0' + Math.floor(counter % 60) : '' + Math.floor(counter % 60)

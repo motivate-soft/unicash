@@ -1,65 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CWidgetSimple,
   CButton,
-  CCol,
-  CForm,
-  CInvalidFeedback,
-  CFormGroup,
-  CLabel,
-  CInput,
-  CRow
+  CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
 import { userService } from '../../controllers/_services/user.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 import { useHistory } from 'react-router-dom';
+import TextField from '@material-ui/core/TextField';
+import {
+    alpha,
+    makeStyles,
+  } from '@material-ui/core/styles';
 
-const validationSchema = function (values) {
-  return Yup.object().shape({
-    email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required!'),
-    password: Yup.string()
-    .required('Password is required!')
-  })
-}
 
-const validate = (getValidationSchema) => {
-  return (values) => {
-    const validationSchema = getValidationSchema(values)
-    try {
-      validationSchema.validateSync(values, { abortEarly: false })
-      return {}
-    } catch (error) {
-      return getErrorsFromValidationError(error)
-    }
+  const useStylesReddit = makeStyles((theme) => ({
+    root: {
+      border: "1px solid lightgray",
+      overflow: 'hidden',
+      backgroundColor: '#fcfcfb',
+      fontWeight: '400',
+      lineHeight: '18px',
+      fontSize: '18px',
+      height: '55px',
+      color: "black",
+      transition: theme.transitions.create(['border-color', 'box-shadow']),
+      '&:hover': {
+        backgroundColor: '#fff',
+      },
+      '&$focused': {
+        backgroundColor: '#fff',
+        boxShadow: `${alpha("#24242f", 0.25)} 0 0 0 1px`,
+        borderRadius: 2,
+        borderColor: "#24242f",
+        borderBottom: "1px solid black",
+        color: "black"
+      }
+    },
+    focused: {},
+  }));
+  
+  function RedditTextField(props) {
+    const classes = useStylesReddit();
+  
+    return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
   }
-}
-
-const getErrorsFromValidationError = (validationError) => {
-  const FIRST_ERROR = 0
-  return validationError.inner.reduce((errors, error) => {
-    return {
-      ...errors,
-      [error.path]: error.errors[FIRST_ERROR],
-    }
-  }, {})
-}
-
-const initialValues = {
-  email: "",
-  password: ""
-}
-
+  
 const Signin = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   
-  const onSubmit = (values, { setSubmitting, setErrors }) => {
-    userService.login(values.email, values.password)
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+  const [errMessageForEmail, setErrMessageForEmail] = useState('')
+  const [errMessageForNewPassword, setErrMessageForNewPassword] = useState('')
+
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
+
+  useEffect(() => {
+    if (email !== '' && password !== '' && errMessageForEmail === '' && errMessageForNewPassword === '' ) {
+      setSubmitButtonDisabled(false);
+    } else {
+      setSubmitButtonDisabled(true);
+    }
+  }, [ email, password ])
+
+  const onSubmit = () => {
+    userService.login(email, password)
       .then(
           result => {
             if (result.is2FA) {
@@ -67,8 +76,8 @@ const Signin = () => {
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', selectedUser: {
-                                        email: values.email,
-                                        password: values.password
+                                        "email": email,
+                                        "password": password
                                       }})
               dispatch({type: 'set', openEmailVerification: true})
               userService.logout();
@@ -81,8 +90,6 @@ const Signin = () => {
               successNotification('Welcome to Unicach.', 3000)
               history.push('dashboard')
             }
-            
-            setSubmitting(false)
           },
           error => {
             if (error === 'check-email') {
@@ -90,14 +97,13 @@ const Signin = () => {
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', selectedUser: {
-                                        email: values.email,
-                                        password: values.password
+                                        "email": email,
+                                        "password": password
                                       }})
               dispatch({type: 'set', openEmailVerification: true})
             } else {
               warningNotification(error, 3000)
             }
-            setSubmitting(false)
           }
       );
   }
@@ -105,69 +111,76 @@ const Signin = () => {
   return (
     <>
       <CWidgetSimple className="signin-widget text-left p-3 pt-0 pb-0 mx-auto">
-        <h3 className="text-center mb-2">Welcome to Unicash<span className="text-success">.</span></h3>
-        <Formik
-            initialValues={initialValues}
-            validate={validate(validationSchema)}
-            onSubmit={onSubmit}
-          >
-            {
-              ({
-                values,
-                errors,
-                touched,
-                status,
-                dirty,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                isSubmitting,
-                isValid,
-                handleReset,
-                setTouched
-              }) => (
-                <CRow>
-                  <CCol>
-                    <CForm onSubmit={handleSubmit} noValidate name='loginForm' className="text-left">
-                      <CFormGroup>
-                        <CLabel htmlFor="email">Email</CLabel>
-                        <CInput type="email"
-                                name="email"
-                                id="email"
-                                placeholder="Email"
-                                autoComplete="email"
-                                valid={!errors.email}
-                                invalid={touched.email && !!errors.email}
-                                required
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.email} />
-                        <CInvalidFeedback>{errors.email}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                            <CLabel htmlFor="password">Password</CLabel>
-                            <CInput type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Password"
-                                    autoComplete="new-password"
-                                    valid={!errors.password}
-                                    invalid={touched.password && !!errors.password}
-                                    required
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.password}/>
-                            {/*<CInvalidFeedback>Required password containing at least: number, uppercase and lowercase letter, 8 characters</CInvalidFeedback>*/}
-                            <CInvalidFeedback>{errors.password}</CInvalidFeedback>
-                      </CFormGroup>
-                      <CFormGroup>
-                        <CButton type="submit" color="primary" className="signin-button mt-3 mb-0" disabled={isSubmitting || !isValid}>{isSubmitting ? 'Wait...' : 'Sign in'}</CButton>
-                      </CFormGroup>
-                    </CForm>
-                  </CCol>
-                </CRow>
-              )}
-          </Formik>
+        <div className="float-right" style={{marginRight: '-20px'}}>
+          <CImg src={'img/icons8-close.png'} style={{cursor: 'pointer'}} onClick={() => dispatch({type: 'set', openSignin: false})}></CImg>
+        </div>
+        <h2 className="text-left signin-header-title">Welcome to Unicash<span className="text-success">.</span></h2>
+        <h5 className="text-left signin-header-desc">Login or register to continue Exchange</h5>
+            <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="email"
+                        label="Email"
+                        placeholder="Type your email"
+                        value={email}
+                        helperText={errMessageForEmail && errMessageForEmail !== '' ? errMessageForEmail : '' }
+                        error={errMessageForEmail && errMessageForEmail !== ''}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                        variant="filled"
+                        onBlur={() => {
+                          const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                          if (!email || email === '') setErrMessageForEmail('Email is required')
+                          else if (!re.test(String(email).toLowerCase())) setErrMessageForEmail('Invalid email address')
+                          else setErrMessageForEmail('')
+                        }}
+                        onChange={(e) => {
+                          setEmail(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-3">
+                {
+                    <RedditTextField
+                        id="password"
+                        label="Password"
+                        placeholder="Type your password"
+                        value={password}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        type="password"
+                        fullWidth
+                        variant="filled"
+                        helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
+                        error={errMessageForNewPassword && errMessageForNewPassword !== ''}
+                        onBlur={() => {
+                          if (!password || password === '') setErrMessageForNewPassword('Password is required')
+                          else setErrMessageForNewPassword('')
+                        }}
+                        onChange={(e) => { setPassword(e.target.value); }}
+                    />
+                }
+            </div>
+
+            <div className="d-flex mt-2">
+              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline">Terms of Use</span> and <span className="span-underline">Privacy Policy</span></h5>
+            </div>
+
+            <div className="d-flex mt-1">
+                <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
+                    <h3>Sign in</h3>
+                </CButton>
+            </div>
+            <div className="mt-1 text-center">
+              <h5 className="signin-header-desc">No account yet? <span className="span-underline" onClick={() => {
+                dispatch({type: 'set', openSignin: false})
+                dispatch({type: 'set', openSignup: true})
+                }}>Sign up</span></h5>
+            </div>
       </CWidgetSimple>
     </>
   )
