@@ -50,6 +50,7 @@ const Dashboard = () => {
             <table className="table table-hover table-outline mb-0 d-none d-sm-table">
               <thead className="thead-light">
                 <tr>
+                  <th className="text-center">ID</th>
                   <th className="text-center">From</th>
                   <th className="text-center">To</th>
                   <th className="text-center">Amount</th>
@@ -61,6 +62,9 @@ const Dashboard = () => {
                 {
                   mytransactions.map((transaction, index) => (
                     <tr>
+                      <td className="text-center">
+                        {transaction.id}
+                      </td>
                       <td className="text-center">
                         {transaction.from}
                       </td>

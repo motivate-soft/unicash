@@ -95,13 +95,14 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
 
-      <CHeaderNav className={isAdmin ? '' : ''}>
+      <CHeaderNav >
         <CHeaderNavItem >
           <CHeaderNavLink to="/home">
             <CImg
               src={'img/Unicash.png'}
               alt="Unicash"
-              height="40"
+              height="37"
+              style={{marginTop: "-9px"}}
             />
           </CHeaderNavLink>
         </CHeaderNavItem>

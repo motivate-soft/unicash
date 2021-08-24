@@ -57,8 +57,8 @@ const TFAVerification = () => {
   // render
   return (
 
-    <CCard color="transparent" className="d-box-shadow1 d-border">
-        <CCardBody className="card-setting m-0">
+    <CCard color="transparent" className="d-box-shadow1 d-border" style={{height: "222.5px"}}>
+        <CCardBody className="card-setting m-0" style={{height: "222.5px"}}>
 
             <div className="d-flex mt-3">
                 <h5>

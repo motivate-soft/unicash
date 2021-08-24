@@ -101,8 +101,8 @@ const DeleteAccount = () => {
   // render
   return (
 
-    <CCard color="transparent" className="d-box-shadow1 d-border">
-        <CCardBody className="card-setting m-0">
+    <CCard color="transparent" className="d-box-shadow1 d-border" style={{height: "222.5px"}}>
+        <CCardBody className="card-setting m-0" style={{height: "222.5px"}}>
 
             <div className="d-flex mt-3">
                 {
@@ -120,7 +120,7 @@ const DeleteAccount = () => {
                 }
             </div>
 
-            <div className="d-flex mt-0 float-right">
+            <div className="d-flex mt-4 float-right">
                 <CButton className="button-exchange" onClick={() => setDeleteConfirm(true)} disabled={isSubmitting}>
                     {isSubmitting ? 'Wait...' : 'Delete Account'}
                 </CButton>
