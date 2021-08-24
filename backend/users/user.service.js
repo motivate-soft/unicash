@@ -2,7 +2,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
-const nodeMailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 
 module.exports = {
