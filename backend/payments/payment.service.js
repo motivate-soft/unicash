@@ -127,7 +127,7 @@ async function createTransaction(params) {
         html: htmlContent
       };
 
-      if (params.status === 'Processing' || params.status === 'Completed')
+      //if (params.status === 'Processing' || params.status === 'Completed')
       sgMail
       .send(msg)
       .then(() => {}, error => {
