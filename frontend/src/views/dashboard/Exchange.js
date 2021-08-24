@@ -71,7 +71,6 @@ const Exchange = () => {
 
   useEffect(() => {
     let timerId;
-
     if (runTimer) {
       setCountDown(60 * 5);
       timerId = setInterval(() => {

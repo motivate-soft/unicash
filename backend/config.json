@@ -8,11 +8,7 @@
     },
     "secret": "Database for Unicash",
     "mail": {
-        "host": "mail.infomaniak.com",
-        "port": 587,
-        "secure": false,
-        "user": "",
-        "password": "",
-        "from": "support@unicash.com"
+        "sendgrid_api": "",
+        "from": "support@unicash.ph"
     }
 }
