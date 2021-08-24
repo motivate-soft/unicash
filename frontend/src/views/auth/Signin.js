@@ -14,7 +14,6 @@ import {
     makeStyles,
   } from '@material-ui/core/styles';
 
-
   const useStylesReddit = makeStyles((theme) => ({
     root: {
       border: "1px solid lightgray",
@@ -167,15 +166,24 @@ const Signin = () => {
             </div>
 
             <div className="d-flex mt-2">
-              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline">Terms of Use</span> and <span className="span-underline">Privacy Policy</span></h5>
+              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline" onClick={() => {
+                history.push('/terms'); dispatch({type: 'set', openSignin: false}); dispatch({type: 'set', openSignup: false})
+              }}>Terms of Use</span> and <span className="span-underline" onClick={() => {
+                history.push('/privacy');  dispatch({type: 'set', openSignin: false}); dispatch({type: 'set', openSignup: false})}
+                }>Privacy Policy</span></h5>
             </div>
 
-            <div className="d-flex mt-1">
+            <div className="mt-0 text-right p-0">
+              <h5 className="text-right signin-header-desc p-0 m-0"><span className="span-underline">Forgot password?</span></h5>
+            </div>
+
+            <div className="d-flex mt-0">
                 <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
                     <h3>Sign in</h3>
                 </CButton>
             </div>
-            <div className="mt-1 text-center">
+            
+            <div className="mt-1 text-center mb-0">
               <h5 className="signin-header-desc">No account yet? <span className="span-underline" onClick={() => {
                 dispatch({type: 'set', openSignin: false})
                 dispatch({type: 'set', openSignup: true})

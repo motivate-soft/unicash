@@ -12,6 +12,7 @@ import {
     alpha,
     makeStyles,
   } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStylesReddit = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,7 @@ function RedditTextField(props) {
 
 const Signup = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const onSubmit = () => {
     userService.register({
@@ -200,7 +202,11 @@ const Signup = () => {
             </div>
 
             <div className="d-flex mt-2">
-              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline">Terms of Use</span> and <span className="span-underline">Privacy Policy</span></h5>
+              <h5 className="text-left signin-header-desc">By signing in or creating an account. you agree with our <span className="span-underline" onClick={() => {
+                history.push('/terms');  dispatch({type: 'set', openSignin: false}); dispatch({type: 'set', openSignup: false})}}
+                >Terms of Use</span> and <span className="span-underline" onClick={() => {
+                  dispatch({type: 'set', openSignin: false}); dispatch({type: 'set', openSignup: false}); history.push('/privacy')
+                }}>Privacy Policy</span></h5>
             </div>
 
             <div className="d-flex mt-1">

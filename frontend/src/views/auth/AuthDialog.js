@@ -32,7 +32,11 @@ const AuthDialog = () => {
         size={openSignin || openSignup ? '' : 'sm' }
         >
         <CModalBody className="p-0">
-            {openSignin ? <Signin /> : (openEmailVerification ? <EmailVerify /> : <Signup /> )} 
+          <>
+            { openSignin && <Signin /> }
+            { openSignup && <Signup /> }
+            { openEmailVerification && <EmailVerify />}
+          </>
         </CModalBody>
     </CModal>
   )
