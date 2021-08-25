@@ -11,6 +11,7 @@ function model(sequelize) {
         pricePerUnit: { type: DataTypes.STRING, allowNull: false },
         conversionBetweenUSDPHP: { type: DataTypes.STRING, allowNull: false },
         amount: { type: DataTypes.STRING, allowNull: false },
+        orderId: { type: DataTypes.STRING, allowNull: false },
         status: { type: DataTypes.ENUM('Completed', 'Canceled', 'Refunded', 'Processing') },
         image: { type: DataTypes.STRING }
     };

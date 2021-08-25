@@ -63,7 +63,7 @@ const Dashboard = () => {
                   mytransactions.map((transaction, index) => (
                     <tr>
                       <td className="text-center">
-                        {transaction.id}
+                        {transaction.orderId}
                       </td>
                       <td className="text-center">
                         {transaction.from}

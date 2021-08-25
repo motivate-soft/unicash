@@ -63,6 +63,8 @@ async function getConversionBetweenUSDPHP() {
 
 ///////////////////////////////////// Transaction ////////////////////////////////////
 async function createTransaction(params) {
+    const orderId = randomOrderId();
+    params['orderId'] = orderId;
     const newTransaction = await db.Transaction.create(params);
     sgMail.setApiKey(config.mail.sendgrid_api);
     const user = await userService.getById(params.userId)
@@ -83,7 +85,7 @@ async function createTransaction(params) {
 
                             <h3>You send: <strong>${params.sendAmount}${params.from}</strong></h3>
                             <h3 style="margin-top: -15px">You received: <strong>${params.amount} PHP ${params.to}</strong></h3>
-                            <h3 style="margin-top: -15px">Order Id: <strong>${newTransaction.id}</strong></h3>
+                            <h3 style="margin-top: -15px">Order Id: <strong>${orderId}</strong></h3>
                             <h3 style="margin-top: -15px">Status: <strong>${params.status}</strong></h3>
 
                         <h4>We will send you email transaction information once completed.</h4>
@@ -166,3 +168,13 @@ async function getTransaction(id) {
     if (!transaction) throw 'Transaction not found';
     return transaction;
 }
+
+function randomOrderId() {
+    var length = 6;
+    var charset = "0123456789";
+    var retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }
