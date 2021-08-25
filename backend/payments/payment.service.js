@@ -88,7 +88,7 @@ async function createTransaction(params) {
                         
                             <div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">${params.sendAmount}${params.from}</h3></div>
                             <div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">${params.amount} PHP ${params.to}</h3></div>
-                            <div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">${orderId}</h3></div>
+                            <div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">${newTransaction.orderId}</h3></div>
                             <div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">${params.status}</h3></div>
                         
                         <h4>We will send you email transaction information once completed.</h4>
@@ -115,7 +115,7 @@ async function createTransaction(params) {
 
                             <h3>You send: <strong>${params.sendAmount}${params.from}</strong></h3>
                             <h3 style="margin-top: -15px">You received: <strong>${params.amount} PHP ${params.to}</strong></h3>
-                            <h3 style="margin-top: -15px">Order Id: <strong>${orderId}</strong></h3>
+                            <h3 style="margin-top: -15px">Order Id: <strong>${newTransaction.orderId}</strong></h3>
                             <h3 style="margin-top: -15px">Status: <strong>${params.status}</strong></h3>
 
                         <h4>Please give us a feedback <a href="https://www.unicash.ph/feedback">https://www.unicash.ph/feedback</a></h4>
