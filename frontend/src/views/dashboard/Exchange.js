@@ -68,11 +68,13 @@ const Exchange = () => {
   }
   const [countDown, setCountDown] = useState(0);
   const [runTimer, setRunTimer] = useState(true);
+  const [qrCodeImageSrc, setQrCodeImageSrc] = useState();
+  const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
 
   useEffect(() => {
     let timerId;
     if (runTimer) {
-      setCountDown(1 * 5);
+      setCountDown(60 * 5);
       timerId = setInterval(() => {
         setCountDown((countDown) => countDown - 1);
       }, 1000);
@@ -100,17 +102,17 @@ const Exchange = () => {
       setRunTimer(false);
       setCountDown(0);
     }
+    setQrCodeImageSrc('https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl= '+BTCAddress+' &choe=UTF-8')
   }, [countDown, runTimer]);
 
   const seconds = String(countDown % 60).padStart(2, 0);
   const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
-
-const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
-const [isCopied, setIsCopied] = useState(false);
-const onCopyClicked = () => {
-  navigator.clipboard.writeText(BTCAddress);
-  setIsCopied(true)
-}
+  
+  const [isCopied, setIsCopied] = useState(false);
+  const onCopyClicked = () => {
+    navigator.clipboard.writeText(BTCAddress);
+    setIsCopied(true)
+  }
 //   if (!queryString.parse(location.search) || !queryString.parse(location.search).id || isNaN(Number(queryString.parse(location.search).id))) {
 //     history.push('/dashboard')
 //   }
@@ -153,7 +155,8 @@ const onCopyClicked = () => {
                     </div>
                     <div className="d-flex mb-3">
                         <div>
-                            <CImg src={'img/qr_btc.png'} alt="QR for BTC" height={200} style={{marginLeft: "-15px"}}></CImg>
+                            {/* <CImg src={'img/qr_btc.png'} alt="QR for BTC" height={200} style={{marginLeft: "-15px"}}></CImg> */}
+                            <CImg src={qrCodeImageSrc} alt="QR for BTC" height={200} style={{marginLeft: "-15px"}}></CImg> 
                             <p className="text-center note-in-exchange scan-desc-in-exchange">SCAN QRCODE</p>
                         </div>
                         <div className="pt-2 text-center flex-grow-1 m-auto">
