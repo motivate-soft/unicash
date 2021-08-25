@@ -161,6 +161,7 @@ const WidgetsDashboard = () => {
       if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
         const obj = {
             userId: user.id,
+            fullName: user.fullName,
             from: yousend.label,
             to: youreceive.label,
             sendAmount: inputSend,
