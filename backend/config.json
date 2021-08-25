@@ -8,7 +8,7 @@
     },
     "secret": "Database for Unicash",
     "mail": {
-        "sendgrid_api": "",
+        "sendgrid_api": "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",
         "from": "support@unicash.ph"
     }
 }

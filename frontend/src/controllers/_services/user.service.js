@@ -4,6 +4,8 @@ const serverURL = 'http://localhost:4000';
 
 export const userService = {
     login,
+    forgotPasswordToConfirmEmail,
+    forgotPassword,
     logout,
     register,
     emailVerify,
@@ -29,6 +31,26 @@ function login(email, password) {
 
             return user;
         });
+}
+
+function forgotPasswordToConfirmEmail(email) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    };
+
+    return fetch(`${serverURL}/users/forgotPasswordToConfirmEmail`, requestOptions).then(handleResponse);
+}
+
+function forgotPassword(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch(`${serverURL}/users/forgotPassword`, requestOptions).then(handleResponse);;
 }
 
 function emailVerify(email, verifyCode, password) {

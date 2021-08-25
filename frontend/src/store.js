@@ -11,6 +11,8 @@ const initialState = {
   openEmailVerification: false,
   popupForCurrency: false,
   openAddPayment: false,
+  forgotPassword1: false,
+  forgotPassword2: false,
   user: {}
 }
 

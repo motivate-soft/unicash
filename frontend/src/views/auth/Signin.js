@@ -174,7 +174,11 @@ const Signin = () => {
             </div>
 
             <div className="mt-0 text-right p-0">
-              <h5 className="text-right signin-header-desc p-0 m-0"><span className="span-underline">Forgot password?</span></h5>
+              <h5 className="text-right signin-header-desc p-0 m-0"><span className="span-underline" onClick={() => {
+                dispatch({type: 'set', openSignin: false})
+                dispatch({type: 'set', openSignup: false})
+                dispatch({type: 'set', forgotPassword1: true})
+              }}>Forgot password?</span></h5>
             </div>
 
             <div className="d-flex mt-0">

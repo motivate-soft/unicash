@@ -9,6 +9,8 @@ const userService = require('./user.service');
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
 router.get('/verify', getVerify);
+router.post('/forgotPasswordToConfirmEmail', forgotPasswordToConfirmEmailSchema, forgotPasswordToConfirmEmail);
+router.post('/forgotPassword', forgotPasswordSchema, forgotPassword);
 router.get('/', authorize(), getAll);
 router.get('/current', authorize(), getCurrent);
 router.get('/:id', authorize(), getById);
@@ -44,6 +46,34 @@ function registerSchema(req, res, next) {
 function register(req, res, next) {
     userService.create(req.body)
         .then(() => res.json({ status: true, message: 'Registration successful.' }))
+        .catch(next);
+}
+
+function forgotPasswordToConfirmEmailSchema(req, res, next) {
+    const schema = Joi.object({
+        email: Joi.string().required()
+    });
+    validateRequest(req, next, schema);
+}
+
+function forgotPasswordToConfirmEmail(req, res, next) {
+    userService.forgotPasswordToConfirmEmail(req.body)
+        .then(user => res.json(user))
+        .catch(next);
+}
+
+function forgotPasswordSchema(req, res, next) {
+    const schema = Joi.object({
+        code: Joi.string().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+    });
+    validateRequest(req, next, schema);
+}
+
+function forgotPassword(req, res, next) {
+    userService.forgotPassword(req.body)
+        .then(user => res.json(user))
         .catch(next);
 }
 
