@@ -56,51 +56,34 @@ const Signup = () => {
   const [btcKeys, setBtcKeys] = useState('Kz28CifCRty176kvGuvT3R9x9JiWKdsnVnKBSeyzoZqsCsWoq9tC')
 
   const onSubmit = () => {
-    paymentService.getETHAddress().then(
-      result => {
-        if (!result.error) {
-          setEthAddress(result.address)
-          setEthKeys(result.keys)
-          paymentService.getBTCAddress().then(
-            btcResult => {
-              if (!btcResult.error) {
-                setBtcAddress(btcResult.address);
-                setBtcKeys(btcResult.keys);
-
-                userService.register({
-                  "fullName": fullName,
-                  "email": email,
-                  "password": password,
-                  "ETH_ADDRESS": ethAddress,
-                  "ETH_KEYS": ethKeys,
-                  "BTC_ADDRESS": btcAddress,
-                  "BTC_KEYS": btcKeys
-                })
-                .then(
-                    user => { 
-                      if (user && user.status) {
-                        successNotification(user.message, 3000);
-                        dispatch({type: 'set', openSignup: false})
-                        dispatch({type: 'set', openSignin: true})
-                        dispatch({type: 'set', openEmailVerification: false})
-                      }
-                    },
-                    error => {
-                        warningNotification(error, 3000);
-                    }
-                );    
-              }
-            },
-            err_ => {
-              warningNotification('BTC address not found', 3000)
-            }
-          )
+    setIsSubmitting(true);
+    userService.register({
+      "fullName": fullName,
+      "email": email,
+      "password": password,
+      "ETH_ADDRESS": ethAddress,
+      "ETH_KEYS": ethKeys,
+      "BTC_ADDRESS": btcAddress,
+      "BTC_KEYS": btcKeys
+    })
+    .then(
+        user => { 
+          if (user && user.status) {
+            successNotification(user.message, 3000);
+            dispatch({type: 'set', openSignup: false})
+            dispatch({type: 'set', openSignin: true})
+            dispatch({type: 'set', openEmailVerification: false})
+            setIsSubmitting(false);
+          } else {
+            warningNotification('Failed', 3000);
+            setIsSubmitting(false);
+          }
+        },
+        error => {
+            warningNotification(error, 3000);
+            setIsSubmitting(false);
         }
-      },
-      err => {
-        warningNotification('ETH address not found', 3000)
-      }
-    )
+    );
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -242,7 +225,7 @@ const Signup = () => {
             </div>
 
             <div className="d-flex mt-1">
-                <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled}>
+                <CButton block className="button-exchange p-2" onClick={() => onSubmit()} disabled={submitButtonDisabled || isSubmitting}>
                     <h3>Sign up</h3>
                 </CButton>
             </div>

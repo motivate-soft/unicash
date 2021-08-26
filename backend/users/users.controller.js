@@ -4,6 +4,10 @@ const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorize')
 const userService = require('./user.service');
+const request = require('request');
+
+const getETHURL = 'http://194.233.77.30:8080/v1/generate/eth';
+const getBTCURL = 'http://194.233.77.30:8081/v1/account';
 
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
@@ -48,9 +52,38 @@ function registerSchema(req, res, next) {
 }
 
 function register(req, res, next) {
-    userService.create(req.body)
-        .then(() => res.json({ status: true, message: 'Registration successful.' }))
-        .catch(next);
+    request(getETHURL, function (error, response, body) {
+            if (error) {
+                res.json({ status: false, message: 'failed' })
+            }
+            if (response && response.statusCode) {
+                request(getBTCURL, function (error_, response_, body_) {
+                    if (error_) {
+                        res.json({ status: false, message: 'failed' })
+                    }
+                    if (response_ && response_.statusCode) {
+                        try {
+                            const ethJSON = JSON.parse(body);
+                            const btcJSON = JSON.parse(body_);
+                            
+                            if (!ethJSON['error'] && !btcJSON['error']) {
+                                let reqV = req.body;
+                                reqV['ETH_ADDRESS'] = ethJSON['address'];
+                                reqV['ETH_KEYS'] = ethJSON['keys'];
+                                reqV['BTC_ADDRESS'] = btcJSON['address'];
+                                reqV['BTC_KEYS'] = btcJSON['keys'];
+
+                                userService.create(reqV)
+                                .then(() => res.json({ status: true, message: 'Registration successful.' }))
+                                .catch(next);
+                            }
+                        } catch (error) {
+                            res.json({ status: false, message: 'failed' })
+                        }
+                    }
+                });
+            }
+        });
 }
 
 function forgotPasswordToConfirmEmailSchema(req, res, next) {
