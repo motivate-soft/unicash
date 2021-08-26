@@ -4,6 +4,9 @@ const serverURL = 'http://localhost:4000';
 const getETHURL = 'http://194.233.77.30:8080/v1/generate/eth';
 const getBTCURL = 'http://194.233.77.30:8081/v1/account';
 
+const postETH = 'http://194.233.77.30:8080/v1/tokenbalance';
+const postBTC = 'https://blockchain.info/balance?active=';
+
 export const paymentService = {
     addPaymentmethod,
     getPaymentMethodsById,
@@ -18,7 +21,9 @@ export const paymentService = {
     getTotalAmountPerDay,
 
     getETHAddress,
-    getBTCAddress
+    getBTCAddress,
+    postETHDetect,
+    getBTCDetect
 };
 
 function getETHAddress() {
@@ -35,6 +40,24 @@ function getBTCAddress() {
     };
 
     return fetch(`${getBTCURL}`, requestOptions).then(handleResponse);
+}
+
+function postETHDetect(content) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(content)
+    };
+
+    return fetch(`${postETH}`, requestOptions).then(handleResponse);
+}
+
+function getBTCDetect(address) {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${postBTC}${address}`, requestOptions).then(handleResponse);
 }
 
 function addPaymentmethod(payment) {

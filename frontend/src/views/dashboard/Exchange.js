@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // import { useLocation } from 'react-router';
 // import queryString from 'query-string';
 import { paymentService } from '../../controllers/_services/payment.service';
-import { warningNotification } from '../../controllers/_helpers';
+import { warningNotification, successNotification } from '../../controllers/_helpers';
 
 const useStylesReddit = makeStyles((theme) => ({
     root: {
@@ -70,6 +70,7 @@ const Exchange = () => {
   const [runTimer, setRunTimer] = useState(true);
   const [qrCodeImageSrc, setQrCodeImageSrc] = useState();
   const [BTCAddress, setBTCAddress] = useState()
+  const [isSubmit, setIsSubmit] = useState(false)
 
   useEffect(() => {
     let timerId;
@@ -114,6 +115,90 @@ const Exchange = () => {
       }
     }
   }, [countDown, runTimer]);
+
+  useEffect(() => {
+    if (Number(seconds) === 0) { // per min
+      if (transaction && transaction.from === 'BTC') {
+        paymentService.getBTCDetect(user.BTC_ADDRESS).then(
+          result => {
+            const valanceJSON = result[user.BTC_ADDRESS];
+            if (!isSubmit && valanceJSON.final_balance / 100000000 >= Number(transaction.sendAmount)) {
+              transaction['status'] = "Processing"
+              setIsSubmit(true)
+              paymentService.createTransaction(transaction)
+              .then(
+                  result => {
+                      successNotification("The transaction is processing.", 3000);
+                      history.push('/dashboard')
+                  },
+                  error => {
+                    warningNotification(error, 3000)
+                    history.push('/dashboard')
+                  }
+              )
+              setRunTimer(false);
+              setCountDown(0);
+            }
+          },
+          err => {
+            console.log(err)
+          }
+        )
+      }
+      else if (transaction && transaction.from === 'ETH') {
+        paymentService.postETHDetect({address: user.ETH_ADDRESS}).then(
+          result => {
+            if (!result.error) {
+              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
+                setIsSubmit(true)
+                transaction['status'] = "Processing"
+                paymentService.createTransaction(transaction)
+                .then(
+                    result => {
+                        successNotification("The transaction is processing.", 3000);
+                        history.push('/dashboard')
+                    },
+                    error => {
+                      warningNotification(error, 3000)
+                      history.push('/dashboard')
+                    }
+                )
+                setRunTimer(false);
+                setCountDown(0);
+              }
+            }
+          },
+          err => console.log(err)
+        )
+      }
+      else if (transaction) {
+        paymentService.postETHDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
+          result => {
+            if (!result.error) {
+              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
+                setIsSubmit(true)
+                transaction['status'] = "Processing"
+                paymentService.createTransaction(transaction)
+                .then(
+                    result => {
+                        successNotification("The transaction is processing.", 3000);
+                        history.push('/dashboard')
+                    },
+                    error => {
+                      warningNotification(error, 3000)
+                      history.push('/dashboard')
+                    }
+                )
+                setRunTimer(false);
+                setCountDown(0);
+              }
+            }
+          },
+          err => console.log(err)
+        )
+      }
+    }
+  }, [seconds])
 
   const seconds = String(countDown % 60).padStart(2, 0);
   const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);

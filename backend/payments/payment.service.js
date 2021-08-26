@@ -66,12 +66,46 @@ async function getConversionBetweenUSDPHP() {
 ///////////////////////////////////// Transaction ////////////////////////////////////
 async function createTransaction(params) {
     const orderId = randomOrderId();
-    console.log("orderID >>>>>>>>>>>>>>>", orderId)
     params['orderId'] = orderId;
     const newTransaction = await db.Transaction.create(params);
 
     sgMail.setApiKey(config.mail.sendgrid_api);
     const user = await userService.getById(params.userId)
+
+    const todayD = new Date();
+
+    let htmlContentForAdmin = '<html>'
+                        +'<head>'
+                        +'<title>Unicash Team</title>'
+                        +'<style>'
+                        +'  * {'
+                            +'      font-family: Arial, Helvetica, sans-serif;'
+                            +'}'
+                            +'</style>'
+                            +'</head>'
+                        +'<body aria-readonly="false">'
+                        +'<h3>Dear Admin,</h3>'
+                        
+                        
+                        +'<h4>New transaction has been made.</h4>'
+                        
+                        +'<h4>Here is the exchange transaction information, and it is currently processing.</h4>'
+                        
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">'+params.status+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Email:</h4> <h3 style="font-weight: 800;">'+user.email+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Date:</h4> <h3 style="font-weight: 800;">'+todayD.toLocaleDateString()+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">BTC or ETH address:</h4> <h3 style="font-weight: 800;">'+ (params.from == 'BTC' ? user.BTC_ADDRESS : user.ETH_ADDRESS) +'</h3></div>'
+                        
+                        +'<h4>We will send you email transaction information once completed.</h4>'
+                        
+                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+                        
+                        +'<h3>Unicash Team</h3>'
+                        +'</body>'
+                        +'</html>'
 
     let htmlContent = '<html>'
                         +'<head>'
@@ -86,7 +120,7 @@ async function createTransaction(params) {
                         +'<h3>Dear '+params.fullName+',</h3>'
                         
                         
-                        +'<h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
                         
                         +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
                         
@@ -100,6 +134,7 @@ async function createTransaction(params) {
                         +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
                         
                         +'<h3>Unicash Team</h3>'
+                        +'</body>'
                         +'</html>'
     if (params.status === 'Completed') 
             htmlContent = '<html>'
@@ -115,7 +150,7 @@ async function createTransaction(params) {
                         +'<h3>Dear '+params.fullName+',</h3>'
                         
                         
-                        +'<h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
                         
                         +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
                         
@@ -129,6 +164,7 @@ async function createTransaction(params) {
                         +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
                         
                         +'<h3>Unicash Team</h3>'
+                        +'</body>'
                         +'</html>'
         
     const msg = {
@@ -139,13 +175,33 @@ async function createTransaction(params) {
         html: htmlContent
       };
 
+    if (params.status === 'Processing') // to Admin
+    {
+        const msgForAdmin = {
+            to: config.admin,
+            from: config.mail.from,
+            subject: 'Welcome to Unicash',
+            text: 'Transaction',
+            html: htmlContentForAdmin
+          };
+        sgMail
+        .send(msgForAdmin)
+        .then(() => {}, error => {
+               // console.error(error);
+
+            if (error.response) {
+             //   console.error(error.response.body)
+            }
+        });
+    } 
+
     sgMail
         .send(msg)
         .then(() => {}, error => {
-            console.error(error);
+        //    console.error(error);
 
             if (error.response) {
-            console.error(error.response.body)
+            // console.error(error.response.body)
             }
         });
 
