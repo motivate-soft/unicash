@@ -3,6 +3,7 @@ const config = require('config.json');
 const { param } = require('./payments.controller');
 const userService = require('../users/user.service');
 const sgMail = require('@sendgrid/mail');
+const Op = require('Sequelize').Op
 
 module.exports = {
     createPaymentmethod,
@@ -14,7 +15,8 @@ module.exports = {
     createTransaction,
     getTransactionById,
     getAllTransactionsByUserId,
-    getTransactions
+    getTransactions,
+    getTotalAmountPerDay
 };
 
 async function createPaymentmethod(params) {
@@ -174,6 +176,25 @@ async function getTransaction(id) {
     const transaction = await db.Transaction.findByPk(id);
     if (!transaction) throw 'Transaction not found';
     return transaction;
+}
+
+async function getTotalAmountPerDay(user, currDate) {
+    const todayD = new Date();
+    const year = todayD.getFullYear()
+    const month = todayD.getMonth();
+    const date = todayD.getDate();
+    const startTime = new Date(year, month, date, 0, 0, 0);
+    const transactions = await db.Transaction.findAll({attributes: ['amount'], where: { userId: user, status: 'Completed', createdAt: {
+        [Op.gte]: startTime,
+        [Op.lte]: todayD
+    }}})
+    if (!transactions) throw 'Transaction not found';
+
+    let totalAmount = 0;
+    transactions.forEach(transaction => {
+        totalAmount += Number(transaction.amount)
+    });
+    return totalAmount;
 }
 
 function randomOrderId() {

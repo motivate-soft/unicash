@@ -17,14 +17,17 @@ router.delete('/paymentmethod/:id', authorize(), deletePaymentmethod);
 router.post('/createTransaction', authorize(), createTransaction);
 router.get('/getTransaction/:id', authorize(), getTransactionById)
 router.get('/getAllTransactions/:userId', authorize(), getAllTransactionsByUserId)
+router.get('/getTotalAmountPerDay', authorize(), getTotalAmountPerDay)
 
 module.exports = router;
 
 function getConversionPrice(req, res, next) {
     if (req.query.symbol) {
-        request('https://api.binance.com/api/v3/ticker/price?symbol=' + req.query.symbol, function (error, response, body) {
+        let symbolSigner = req.query.symbol;
+        if (symbolSigner == 'USDTUSDT') symbolSigner = "USDCUSDT"
+        request('https://api.binance.com/api/v3/ticker/price?symbol=' + symbolSigner, function (error, response, body) {
             if (error) {
-                res.json({data: JSON.stringify({ symbol: req.query.symbol, price: 4829.23 }), conversionRate: 50.01, status: true})
+                res.json({data: JSON.stringify({ symbol: symbolSigner, price: 4829.23 }), conversionRate: 50.01, status: true})
             }
             if (response && response.statusCode) {
                 request('http://apilayer.net/api/live?access_key=bfd1a4b361f51a8d1109f6fed1485c57&currencies=PHP&source=USD&format=1', function (error_, response_, body_) {
@@ -110,4 +113,16 @@ function getTransactions(req, res, next) {
             });
         })
         .catch(next);
+}
+
+function getTotalAmountPerDay(req, res, next) {
+    if (req.query.user && req.query.date) {
+        const userId = req.query.user;
+        const currDate = req.query.date;
+        paymentService.getTotalAmountPerDay(userId, currDate).then(
+         result => res.json({status: true, data: result})   
+        ).catch(next)
+    } else {
+        throw 'Invalid request'
+    }
 }

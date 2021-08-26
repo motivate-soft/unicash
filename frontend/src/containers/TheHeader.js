@@ -59,6 +59,7 @@ const TheHeader = () => {
     userService.logout();
     dispatch({type: 'set', isLogin: false})
     dispatch({type: 'set', isAdmin: false})
+    dispatch({type: 'set', user: {}})
     dispatch({type: 'refresh'})
     history.push('/home')
   }

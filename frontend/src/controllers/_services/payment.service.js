@@ -12,7 +12,8 @@ export const paymentService = {
     createTransaction,
     getTransactionById,
     getMyAllTransaction,
-    getTransactions
+    getTransactions,
+    getTotalAmountPerDay
 };
 
 function addPaymentmethod(payment) {
@@ -59,6 +60,15 @@ function getConversionPrice(symbol) {
     };
 
     return fetch(`${serverURL}/payment/getConversionPrice?symbol=${symbol}`, requestOptions).then(handleResponse);
+}
+
+function getTotalAmountPerDay(id, date) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getTotalAmountPerDay?user=${id}&date=${date}`, requestOptions).then(handleResponse);
 }
 
 function logout() {

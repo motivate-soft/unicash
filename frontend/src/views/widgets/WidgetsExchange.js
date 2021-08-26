@@ -99,7 +99,7 @@ const WidgetsExchange = () => {
                             const priceRate = Number(JSON.parse(price.data)['price'])
                             if (!isNaN(priceRate)) {
                                 setPricePerUnit(priceRate)
-                                setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
+                                setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 100) / 100)
                             }
                             else {
                                 setPricePerUnit(null);
@@ -146,11 +146,11 @@ const WidgetsExchange = () => {
                                     <p className="card-exchange-rate">
                                         { yousend && 
                                             <span className="card-exchange-rate">
-                                                1 {yousend.label} ~
+                                                1 {yousend.label} =
                                             </span>
                                         }
                                         <span className="card-exchange-rate">
-                                            { pricePerUnit ? Math.floor(pricePerUnit * conversionRateBetweenUSDPHP * 10000) / 10000 : '...' }
+                                            { pricePerUnit ? Math.floor(pricePerUnit * conversionRateBetweenUSDPHP * 100) / 100 : '...' }
                                         </span>
                                         { youreceive && 
                                             <span className="card-exchange-rate">

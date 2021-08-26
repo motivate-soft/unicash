@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { paymentService } from '../../controllers/_services/payment.service';
 import { currencyConstants } from '../../controllers/_constants';
+import { warningNotification } from '../../controllers/_helpers';
 
 const DropdownCurrency = lazy(() => import('./DropdownCurrency'));
 
@@ -108,7 +109,7 @@ const WidgetsDashboard = () => {
   const onChangeOnReceive = e => {
     const inputValue = e.target.value;
     if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
-        setInputReceive(inputValue)
+       // setInputReceive(inputValue)
     }
   };
 
@@ -118,6 +119,8 @@ const WidgetsDashboard = () => {
   useEffect(() => {
         if (yousend) {
           setIsSubmitting(true)
+          setPricePerUnit(null)
+          setInputReceive('')
           paymentService.getConversionPrice(yousend.label + 'USDT')
             .then(
                 price => {
@@ -125,9 +128,23 @@ const WidgetsDashboard = () => {
                         setConversionRateBetweenUSDPHP(Number(price.conversionRate));
                         const priceRate = Number(JSON.parse(price.data)['price'])
                         if (!isNaN(priceRate)) {
-                            setPricePerUnit(priceRate)
-                            setInputReceive(Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 10000) / 10000)
-                            setIsSubmitting(false)
+                           setPricePerUnit(priceRate)
+                           paymentService.getTotalAmountPerDay(user.id, new Date().toLocaleString()).then(
+                             result => {
+                               const inputV = Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 100) / 100;
+                               if (result.data + inputV > 50000) {
+                                  warningNotification('You can exchange max 50,000PHP per day.', 3000);
+                                  setInputReceive('')
+                                  setIsSubmitting(true)
+                               } else {
+                                  setInputReceive(inputV)
+                                  setIsSubmitting(false)
+                               }
+                             },
+                             error_ => {
+                               warningNotification(error_, 3000);
+                             }
+                           )
                         }
                         else {
                             setPricePerUnit(null);
@@ -206,11 +223,11 @@ const WidgetsDashboard = () => {
                             <p className="card-exchange-rate">
                                 { yousend && 
                                     <span className="card-exchange-rate">
-                                        1 {yousend.label} ~
+                                        1 {yousend.label} =
                                     </span>
                                 }
                                 <span className="card-exchange-rate">
-                                    { pricePerUnit ? Math.floor(pricePerUnit * conversionRateBetweenUSDPHP * 10000) / 10000 : '...' }
+                                    { pricePerUnit ? Math.floor(pricePerUnit * conversionRateBetweenUSDPHP * 100) / 100 : '...' }
                                 </span>
                                 { youreceive && 
                                     <span className="card-exchange-rate">

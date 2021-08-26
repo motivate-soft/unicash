@@ -14,7 +14,7 @@ router.post('/forgotPassword', forgotPasswordSchema, forgotPassword);
 router.get('/', authorize(), getAll);
 router.get('/current', authorize(), getCurrent);
 router.get('/:id', authorize(), getById);
-router.put('/:id', authorize(), updateSchema, update);
+router.put('/:id', authorize(), update);
 router.put('/updatePassword/:id', authorize(), updatePasswordSchema, updatePassword);
 router.delete('/:id', authorize(), _delete);
 

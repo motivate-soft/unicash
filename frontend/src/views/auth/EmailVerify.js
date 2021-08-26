@@ -68,7 +68,7 @@ const EmailVerify = () => {
                         dispatch({type: 'set', openEmailVerification: false})
                         dispatch({type: 'set', isLogin: true})
                         // dispatch({type: 'set', isAdmin: true})
-                        successNotification('Welcome to Unicach.', 3000)
+                        successNotification('Welcome to Unicash', 3000)
                         setSubmitting(false)
                         history.push('dashboard')
                     },

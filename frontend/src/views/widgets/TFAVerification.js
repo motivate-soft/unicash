@@ -3,30 +3,16 @@ import {
   CCard,
   CButton,
   CCardBody
-} from '@coreui/react'
-import TextField from '@material-ui/core/TextField';
-import {
-    alpha,
-    makeStyles,
-  } from '@material-ui/core/styles';
-// import {
-//     MuiPickersUtilsProvider,
-//     KeyboardTimePicker,
-//     KeyboardDatePicker,
-//   } from '@material-ui/pickers';
+} from '@coreui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { format } from 'date-fns';
 import { userService } from '../../controllers/_services';
-import InputMask from 'react-input-mask';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const TFAVerification = () => {
  const dispatch = useDispatch()
- const history = useHistory()
  
  const [isSubmitting, setIsSubmitting] = useState(false)
- const [fullName, setFullName] = useState()
  const [is2FA, setIs2FA] = useState()
 
  const user = useSelector(state => state.user)
@@ -38,18 +24,21 @@ const TFAVerification = () => {
  }, [user]);
   
   const onSubmit = () => {
-      if (user && fullName !== '') {
+      if (user) {
           const newUser = {
               ...user,
               "is2FA": !is2FA
           }
+          setIsSubmitting(true)
           userService.update(newUser).then(
               result => {
                   dispatch({type: 'set', user: result})
                   successNotification("Updated your profile successfully", 3000)
+                  setIsSubmitting(false)
               },
               error => {
                   warningNotification(error, 3000)
+                  setIsSubmitting(false)
               }
           )
       }

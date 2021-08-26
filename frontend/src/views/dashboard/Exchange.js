@@ -74,7 +74,9 @@ const Exchange = () => {
   useEffect(() => {
     let timerId;
     if (runTimer) {
-      setCountDown(60 * 5);
+      if (transaction && transaction.from === 'BTC')
+        setCountDown(60 * 30);
+      else {setCountDown(60 * 5);}
       timerId = setInterval(() => {
         setCountDown((countDown) => countDown - 1);
       }, 1000);

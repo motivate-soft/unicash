@@ -6,8 +6,7 @@ import {
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
 import { userService } from '../../controllers/_services/user.service';
-import { successNotification, warningNotification } from '../../controllers/_helpers';
-import { useHistory } from 'react-router-dom';
+import { warningNotification } from '../../controllers/_helpers';
 import TextField from '@material-ui/core/TextField';
 import {
     alpha,
@@ -48,7 +47,6 @@ import {
   
 const ForgotPassword = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
   
   const [email, setEmail] = useState()
   const [errMessageForEmail, setErrMessageForEmail] = useState('')

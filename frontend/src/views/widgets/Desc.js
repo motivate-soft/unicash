@@ -76,9 +76,10 @@ const Desc = () => {
               <div className="d-flex">
                 <div className="pl-0">
                   <CImg
-                      src={'img/Unicash logo red.png'}
+                      src={'img/Union-Bank.png'}
                       alt="Union Bank"
-                      height="80"
+                      height="115"
+                      style={{marginTop: '-5px', marginLeft: '-5px'}}
                     />
                 </div>
                 <div className="pl-2 flex-grow-1 pt-3">
@@ -91,7 +92,7 @@ const Desc = () => {
                       <small className="text-muted ml-1 pt-2 font-weight-bold font-xs">& more...</small>
                     </div>
                     <div className="align-self-end">
-                      <small className="ml-3 mt-1 font-weight-bold unicash-url" color="secondary">unicash.ph</small>
+                      <small className="ml-3 mt-1 font-weight-bold unicash-url" color="secondary">coins.ph</small>
                     </div>
                 </div>
                 <div className="pl-2 align-self-end pb-0">
