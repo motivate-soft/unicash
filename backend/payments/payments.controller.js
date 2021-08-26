@@ -7,6 +7,9 @@ const paymentService = require('./payment.service');
 const request = require('request');
 const userService = require('../users/user.service');
 
+const querystring = require('querystring');
+const http = require('http');
+
 router.get('/getConversionPrice', getConversionPrice);
 router.get('/getTransactions', getTransactions)
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
@@ -18,6 +21,7 @@ router.post('/createTransaction', authorize(), createTransaction);
 router.get('/getTransaction/:id', authorize(), getTransactionById)
 router.get('/getAllTransactions/:userId', authorize(), getAllTransactionsByUserId)
 router.get('/getTotalAmountPerDay', authorize(), getTotalAmountPerDay)
+router.post('/postETHDetect', authorize(), postETHDetect);
 
 module.exports = router;
 
@@ -125,4 +129,32 @@ function getTotalAmountPerDay(req, res, next) {
     } else {
         throw 'Invalid request'
     }
+}
+
+function postETHDetect(req, res, next) {
+    // Build the post string from an object
+    var post_data = querystring.stringify(req.body);
+    // An object of options to indicate where to post to
+    var post_options = {
+        host: '194.233.77.30',
+        port: '8080',
+        path: '/v1/tokenbalance',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(post_data)
+        }
+    };
+
+    // Set up the request
+    var post_req = http.request(post_options, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+            res.json(chunk);
+        });
+    });
+
+    // post the data
+    post_req.write(post_data);
+    post_req.end();
 }
