@@ -69,7 +69,7 @@ const Exchange = () => {
   const [countDown, setCountDown] = useState(0);
   const [runTimer, setRunTimer] = useState(true);
   const [qrCodeImageSrc, setQrCodeImageSrc] = useState();
-  const [BTCAddress, setBTCAddress] = useState("3LdaJwE9ashRRTvTqhauu8VzkF83")
+  const [BTCAddress, setBTCAddress] = useState()
 
   useEffect(() => {
     let timerId;
@@ -104,7 +104,15 @@ const Exchange = () => {
       setRunTimer(false);
       setCountDown(0);
     }
-    setQrCodeImageSrc('https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl= '+BTCAddress+' &choe=UTF-8')
+    if (user && JSON.stringify(user) !== '{}' && transaction) {
+      if (transaction.from === 'BTC') {
+        setBTCAddress(user.BTC_ADDRESS)
+        setQrCodeImageSrc('https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl= '+BTCAddress+' &choe=UTF-8')
+      } else {
+        setBTCAddress(user.ETH_ADDRESS)
+        setQrCodeImageSrc('https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl= '+BTCAddress+' &choe=UTF-8')
+      }
+    }
   }, [countDown, runTimer]);
 
   const seconds = String(countDown % 60).padStart(2, 0);
