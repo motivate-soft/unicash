@@ -132,29 +132,41 @@ function getTotalAmountPerDay(req, res, next) {
 }
 
 function postETHDetect(req, res, next) {
-    // Build the post string from an object
-    var post_data = querystring.stringify(req.body);
-    // An object of options to indicate where to post to
-    var post_options = {
-        host: '194.233.77.30',
-        port: '8080',
-        path: '/v1/tokenbalance',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data)
+    // // Build the post string from an object
+    // var post_data = querystring.stringify(req.body);
+    // // An object of options to indicate where to post to
+    // var post_options = {
+    //     host: '194.233.77.30',
+    //     port: '8080',
+    //     path: '/v1/tokenbalance',
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //         'Content-Length': Buffer.byteLength(post_data)
+    //     }
+    // };
+
+    // // Set up the request
+    // var post_req = http.request(post_options, function(res) {
+    //     res.setEncoding('utf8');
+    //     res.on('data', function (chunk) {
+    //         res.json(chunk);
+    //     });
+    // });
+
+    // // post the data
+    // post_req.write(post_data);
+    // post_req.end();
+
+    request.post(
+        'http://194.233.77.30:8080/v1/tokenbalance',
+        { json: req.body },
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                res.json(body)
+            } else {
+                console.log(response)
+            }
         }
-    };
-
-    // Set up the request
-    var post_req = http.request(post_options, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            res.json(chunk);
-        });
-    });
-
-    // post the data
-    post_req.write(post_data);
-    post_req.end();
+    );
 }
