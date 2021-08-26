@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
 const sgMail = require('@sendgrid/mail');
+const CryptoJS = require("crypto-js");
 
 module.exports = {
     authenticate,
@@ -180,6 +181,9 @@ async function create(params) {
         params.password = await bcrypt.hash(params.password, 10);
     }
 
+    params.ETH_KEYS = myEncrypt(params.ETH_KEYS)
+    params.BTC_KEYS = myEncrypt(params.BTC_KEYS)
+
     // Sending the email to verify the account
     let verificationCode = generateVerificationCode();
 
@@ -317,3 +321,13 @@ function generateVerificationCode() {
     }
     return retVal;
   }
+
+function myEncrypt(content) {
+    const ciphertext = CryptoJS.AES.encrypt(content, config.secret);
+    return ciphertext.toString();
+}
+
+function myDecrypt(content) {
+    const bytes = CryptoJS.AES.decrypt(content, config.secret);
+    return bytes.toString(CryptoJS.enc.Utf8);
+}

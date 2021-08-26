@@ -5,7 +5,7 @@ import {
   CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux';
-import { userService } from '../../controllers/_services/user.service';
+import { userService, paymentService } from '../../controllers/_services';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 import TextField from '@material-ui/core/TextField';
 import {
@@ -50,25 +50,57 @@ const Signup = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const [ethAddress, setEthAddress] = useState('0xbf4DA3faD3d4a1A2d58fA61AbE170aED94cF394f')
+  const [ethKeys, setEthKeys] = useState('0xb260131f1858cb7d7a367f7f65fb4ece273aaea901bdf2aa0c8868ea9bcd8f13')
+  const [btcAddress, setBtcAddress] = useState('1KAsWF4vjwnxHouBAWgzhuNgnKUYUeWyrf')
+  const [btcKeys, setBtcKeys] = useState('Kz28CifCRty176kvGuvT3R9x9JiWKdsnVnKBSeyzoZqsCsWoq9tC')
+
   const onSubmit = () => {
-    userService.register({
-      "fullName": fullName,
-      "email": email,
-      "password": password
-    })
-        .then(
-            user => { 
-              if (user && user.status) {
-                successNotification(user.message, 3000);
-                dispatch({type: 'set', openSignup: false})
-                dispatch({type: 'set', openSignin: true})
-                dispatch({type: 'set', openEmailVerification: false})
+    paymentService.getETHAddress().then(
+      result => {
+        if (!result.error) {
+          setEthAddress(result.address)
+          setEthKeys(result.keys)
+          paymentService.getBTCAddress().then(
+            btcResult => {
+              if (!btcResult.error) {
+                setBtcAddress(btcResult.address);
+                setBtcKeys(btcResult.keys);
+
+                userService.register({
+                  "fullName": fullName,
+                  "email": email,
+                  "password": password,
+                  "ETH_ADDRESS": ethAddress,
+                  "ETH_KEYS": ethKeys,
+                  "BTC_ADDRESS": btcAddress,
+                  "BTC_KEYS": btcKeys
+                })
+                .then(
+                    user => { 
+                      if (user && user.status) {
+                        successNotification(user.message, 3000);
+                        dispatch({type: 'set', openSignup: false})
+                        dispatch({type: 'set', openSignin: true})
+                        dispatch({type: 'set', openEmailVerification: false})
+                      }
+                    },
+                    error => {
+                        warningNotification(error, 3000);
+                    }
+                );    
               }
             },
-            error => {
-                warningNotification(error, 3000);
+            err_ => {
+              warningNotification('BTC address not found', 3000)
             }
-        );    
+          )
+        }
+      },
+      err => {
+        warningNotification('ETH address not found', 3000)
+      }
+    )
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)

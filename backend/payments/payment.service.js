@@ -16,7 +16,7 @@ module.exports = {
     getTransactionById,
     getAllTransactionsByUserId,
     getTransactions,
-    getTotalAmountPerDay
+    getTotalAmountPerDay,
 };
 
 async function createPaymentmethod(params) {

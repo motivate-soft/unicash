@@ -1,6 +1,8 @@
 import { authHeader } from '../_helpers';
 
 const serverURL = 'http://localhost:4000';
+const getETHURL = 'http://194.233.77.30:8080/v1/generate/eth';
+const getBTCURL = 'http://194.233.77.30:8081/v1/account';
 
 export const paymentService = {
     addPaymentmethod,
@@ -13,8 +15,27 @@ export const paymentService = {
     getTransactionById,
     getMyAllTransaction,
     getTransactions,
-    getTotalAmountPerDay
+    getTotalAmountPerDay,
+
+    getETHAddress,
+    getBTCAddress
 };
+
+function getETHAddress() {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${getETHURL}`, requestOptions).then(handleResponse);
+}
+
+function getBTCAddress() {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    return fetch(`${getBTCURL}`, requestOptions).then(handleResponse);
+}
 
 function addPaymentmethod(payment) {
     const requestOptions = {

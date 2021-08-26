@@ -38,6 +38,10 @@ function registerSchema(req, res, next) {
     const schema = Joi.object({
         fullName: Joi.string().required(),
         email: Joi.string().required(),
+        ETH_ADDRESS: Joi.string().required(),
+        ETH_KEYS: Joi.string().required(),
+        BTC_ADDRESS: Joi.string().required(),
+        BTC_KEYS: Joi.string().required(),
         password: Joi.string().min(6).required()
     });
     validateRequest(req, next, schema);
