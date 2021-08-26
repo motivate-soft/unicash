@@ -67,7 +67,8 @@ const WidgetsExchange = () => {
 
     const onChangeOnSend = e => {
         const inputValue = e.target.value;
-        if (inputValue === '' || inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
+        if (inputValue === '' || inputValue === '0' || inputValue === '0.' || inputValue === '0.0' || inputValue === '0.00' || inputValue === '0.000' 
+        || inputValue === '0.0000' || inputValue === '0.00000' || inputValue === '0.000000' || inputValue === '0.0000000' || inputValue === '0.00000000' || Number(inputValue)) {
             setInputSend(inputValue)
         }
     };
