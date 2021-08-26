@@ -106,6 +106,7 @@ const WidgetsDashboard = () => {
   || inputValue === '0.0000' || inputValue === '0.00000' || inputValue === '0.000000' || inputValue === '0.0000000' || inputValue === '0.00000000' || Number(inputValue)) {
       setInputSend(inputValue)
   }
+  setIsSubmitting(false);
 };
   const onChangeOnReceive = e => {
     const inputValue = e.target.value;
