@@ -12,6 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { yousendConstants, currencyConstants } from '../../controllers/_constants';
 import { paymentService } from '../../controllers/_services/payment.service';
 
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const DropdownCurrency = ({listType, passDropListData}) => {
-  
+  const history = useHistory()
+
   const classes = useStyles();
   const user = useSelector(state => state.user)
 
@@ -46,6 +48,8 @@ const DropdownCurrency = ({listType, passDropListData}) => {
   const [arrYoureceiveList, setArrYoureceiveList] = useState()
   const [selectedYousend, setSelectedYousend] = useState()
   const [selectedYoureceive, setSelectedYoureceive] = useState()
+
+  const currPath = history.location.pathname
 
   useEffect(() => {
     if (listType === 'yousend') {
@@ -81,7 +85,7 @@ const DropdownCurrency = ({listType, passDropListData}) => {
             item.desc.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
         );
         setArrYoureceiveList(youreceiveList);
-        if (youreceiveList && youreceiveList.length > 0) {
+        if (youreceiveList && youreceiveList.length > 0 && currPath !== '/dashboard') {
           setSelectedYoureceive(youreceiveList[0])
           passDropListData(youreceiveList[0])
         }
