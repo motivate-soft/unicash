@@ -67,15 +67,16 @@ async function authenticate({ email, password }) {
                     </html>`
         };
 
-        sgMail
-        .send(msg)
-        .then(() => {}, error => {
-            console.error(error);
+        await sgMail.send(msg);
+        // sgMail
+        // .send(msg)
+        // .then(() => {}, error => {
+        //     // console.error(error);
 
-            if (error.response) {
-            console.error(error.response.body)
-            }
-        });
+        //     if (error.response) {
+        //     console.error(error.response.body)
+        //     }
+        // });
 
         await user.save();
     }
