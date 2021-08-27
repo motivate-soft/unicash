@@ -240,7 +240,7 @@ async function getTotalAmountPerDay(user, currDate) {
     const month = todayD.getMonth();
     const date = todayD.getDate();
     const startTime = new Date(year, month, date, 0, 0, 0);
-    const transactions = await db.Transaction.findAll({attributes: ['amount'], where: { userId: user, status: 'Completed', createdAt: {
+    const transactions = await db.Transaction.findAll({attributes: ['amount'], where: { userId: user, status: {[Op.or]: ['Completed', 'Processing']}, createdAt: {
         [Op.gte]: startTime,
         [Op.lte]: todayD
     }}})
