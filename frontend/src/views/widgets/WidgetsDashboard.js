@@ -100,6 +100,8 @@ const WidgetsDashboard = () => {
  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState()
  const [isSubmitting, setIsSubmitting] = useState(false)
 
+ const [isLimited, setIsLimited] = useState(false)
+
  const onChangeOnSend = e => {
   const inputValue = e.target.value;
   if (inputValue === '' || inputValue === '0' || inputValue === '0.' || inputValue === '0.0' || inputValue === '0.00' || inputValue === '0.000' 
@@ -135,10 +137,11 @@ const WidgetsDashboard = () => {
                              result => {
                                const inputV = Math.floor((Number(inputSend) * priceRate * Number(price.conversionRate)) * 100) / 100;
                                if (result.data + inputV > 50000) {
-                                  warningNotification('You can exchange max 50,000PHP per day.', 3000);
-                                  setInputReceive('')
-                                  setIsSubmitting(true)
+                                  setIsLimited(true)
+                                  setInputReceive(inputV)
+                                  setIsSubmitting(false)
                                } else {
+                                  setIsLimited(false)
                                   setInputReceive(inputV)
                                   setIsSubmitting(false)
                                }
@@ -177,21 +180,26 @@ const WidgetsDashboard = () => {
   }, [youreceive]);
   
   const onSubmit = () => {
-      if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
-        const obj = {
-            userId: user.id,
-            fullName: user.fullName,
-            from: yousend.label,
-            to: youreceive.label,
-            sendAmount: inputSend,
-            pricePerUnit: pricePerUnit,
-            conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
-            amount: inputReceive,
-            image: '',
-            status: ''
+      if (isLimited) {
+        warningNotification('You can exchange max 50,000PHP per day.', 3000);
+        return;
+      } else {
+        if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
+          const obj = {
+              userId: user.id,
+              fullName: user.fullName,
+              from: yousend.label,
+              to: youreceive.label,
+              sendAmount: inputSend,
+              pricePerUnit: pricePerUnit,
+              conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
+              amount: inputReceive,
+              image: '',
+              status: ''
+          }
+          dispatch({type: 'set', transaction: obj})
+          history.push('/exchange')
         }
-        dispatch({type: 'set', transaction: obj})
-        history.push('/exchange')
       }
   }
   // render
@@ -386,7 +394,7 @@ const WidgetsDashboard = () => {
 
                     <div className="d-flex mt-0">
                         <CButton block className="button-exchange" onClick={() => onSubmit()} disabled={isSubmitting || !yousend || !youreceive || !inputSend || !inputReceive}>
-                            {isSubmitting ? 'Wait...' : 'Next'}
+                          Next
                         </CButton>
                     </div>
                 </CCardBody>
