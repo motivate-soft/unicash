@@ -36,7 +36,7 @@ async function authenticate({ email, password }) {
         sgMail.setApiKey(config.mail.sendgrid_api);
 
         const msg = {
-            to: user.email,
+            to: email,
             from: config.mail.from,
             subject: 'Welcome to Unicash',
             text: 'Sign in with the code',
@@ -69,6 +69,8 @@ async function authenticate({ email, password }) {
         };
         
         //await sgMail.send(msg);
+
+        console.log(msg);
 
         sgMail
         .send(msg)
