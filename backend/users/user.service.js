@@ -31,7 +31,6 @@ async function authenticate({ email, password }) {
     if (user.is2FA) {
         let verificationCode = generateVerificationCode();
         user['verifyCode'] = verificationCode;
-        await user.save();
 
         sgMail.setApiKey(config.mail.sendgrid_api);
 
@@ -67,10 +66,6 @@ async function authenticate({ email, password }) {
                     <h3>Unicash Team</h3>
                     </html>`
         };
-        
-        //await sgMail.send(msg);
-
-        console.log(msg);
 
         sgMail
         .send(msg)
@@ -81,6 +76,8 @@ async function authenticate({ email, password }) {
             console.error(error.response.body)
             }
         });
+
+        await user.save();
     }
     const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
     return { ...omitHash(user.get()), token };
