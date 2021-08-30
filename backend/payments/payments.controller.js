@@ -134,7 +134,7 @@ function getTotalAmountPerDay(req, res, next) {
 function postETHDetect(req, res, next) {
 
     request.post(
-        'http://194.233.77.30:8080/v1/tokenbalance',
+        'http://194.233.77.30:8080/v1/ethbalance',
         { json: req.body },
         function (error, response, body) {
             if (!error && response.statusCode == 200) { // && response.statusCode == 200
