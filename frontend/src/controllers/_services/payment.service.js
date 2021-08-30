@@ -22,6 +22,7 @@ export const paymentService = {
     getETHAddress,
     getBTCAddress,
     postETHDetect,
+    postOtherDetect,
     getBTCDetect
 };
 
@@ -49,6 +50,16 @@ function postETHDetect(content) {
     };
 
     return fetch(`${serverURL}/payment/postETHDetect`, requestOptions).then(handleResponse);
+}
+
+function postOtherDetect(content) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(content)
+    };
+
+    return fetch(`${serverURL}/payment/postOtherDetect`, requestOptions).then(handleResponse);
 }
 
 function getBTCDetect(address) {

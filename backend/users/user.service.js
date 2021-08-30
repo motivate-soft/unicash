@@ -71,7 +71,7 @@ async function authenticate({ email, password, confirm }) {
             html: htmlContent
         };
 
-       // await sgMail.send(msg);
+        await sgMail.send(msg);
 
         await user.save();
     }
