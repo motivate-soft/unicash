@@ -22,6 +22,7 @@ router.get('/getTransaction/:id', authorize(), getTransactionById)
 router.get('/getAllTransactions/:userId', authorize(), getAllTransactionsByUserId)
 router.get('/getTotalAmountPerDay', authorize(), getTotalAmountPerDay)
 router.post('/postETHDetect', authorize(), postETHDetect);
+router.post('/postOtherDetect', authorize(), postOtherDetect);
 
 module.exports = router;
 
@@ -135,6 +136,21 @@ function postETHDetect(req, res, next) {
 
     request.post(
         'http://194.233.77.30:8080/v1/ethbalance',
+        { json: req.body },
+        function (error, response, body) {
+            if (!error && response.statusCode == 200) { // && response.statusCode == 200
+                res.json(body)
+            } else {
+                res.json({error: true, message: response})
+            }
+        }
+    );
+}
+
+function postOtherDetect(req, res, next) {
+
+    request.post(
+        'http://194.233.77.30:8080/v1/otherbalance',
         { json: req.body },
         function (error, response, body) {
             if (!error && response.statusCode == 200) { // && response.statusCode == 200

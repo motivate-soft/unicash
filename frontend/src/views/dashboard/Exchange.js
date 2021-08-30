@@ -172,7 +172,7 @@ const Exchange = () => {
         )
       }
       else if (transaction) {
-        paymentService.postETHDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
+        paymentService.postOtherDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
           result => {
             if (!result.error) {
               if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
