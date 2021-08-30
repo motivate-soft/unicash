@@ -16,11 +16,11 @@ export const userService = {
     delete: _delete
 };
 
-function login(email, password) {
+function login(email, password, confirm) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, confirm })
     };
 
     return fetch(`${serverURL}/users/authenticate`, requestOptions)

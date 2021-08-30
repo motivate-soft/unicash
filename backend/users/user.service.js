@@ -19,7 +19,7 @@ module.exports = {
     getUsernameById,
 };
 
-async function authenticate({ email, password }) {
+async function authenticate({ email, password, confirm }) {
     const user = await db.User.scope('withHash').findOne({ where: { email }, attributes: [ 'id', 'password', 'emailVerified', 'is2FA', 'fullName'] });
 
     if (!user || !(await bcrypt.compare(password, user.password)))
@@ -29,7 +29,7 @@ async function authenticate({ email, password }) {
         throw 'check-email';
 
     // authentication successful
-    if (user.is2FA) {
+    if (user.is2FA && confirm) {
         let verificationCode = generateVerificationCode();
         user['verifyCode'] = verificationCode;
 
@@ -71,7 +71,7 @@ async function authenticate({ email, password }) {
             html: htmlContent
         };
 
-        await sgMail.send(msg);
+       // await sgMail.send(msg);
 
         await user.save();
     }

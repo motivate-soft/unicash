@@ -60,7 +60,7 @@ const EmailVerify = () => {
     userService.emailVerify(selectedUser.email, values.verifyCode, selectedUser.password)
       .then(
           res => {
-            userService.login(selectedUser.email, selectedUser.password)
+            userService.login(selectedUser.email, selectedUser.password, false)
                 .then(
                     result => {
                         dispatch({type: 'set', openSignin: false})

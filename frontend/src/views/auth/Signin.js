@@ -67,7 +67,7 @@ const Signin = () => {
   }, [ email, password ])
 
   const onSubmit = () => {
-    userService.login(email, password)
+    userService.login(email, password, true)
       .then(
           result => {
             if (result.is2FA) {
