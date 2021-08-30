@@ -11,7 +11,7 @@ export const currencyConstants = [
     { key: 'BDO', label: 'BDO', desc: 'Cash', kind: 1 },
     { key: 'GCash', label: 'GCash', desc: 'Cash', kind: 2 },
     { key: 'Coins.ph', label: 'Coins.ph', desc: 'Cash', kind: 2 },
-    { key: 'Palawan', label: 'Palawan', desc: 'Change', kind: 3 },
-    { key: 'Cebuana Lhuiller', label: 'Cebuana Lhuiller', desc: 'Change', kind: 3 },
-    { key: 'MLhuiller', label: 'MLhuiller', desc: 'Change', kind: 3 }
+    { key: 'Palawan', label: 'Palawan', desc: 'Cash', kind: 3 },
+    { key: 'Cebuana Lhuiller', label: 'Cebuana Lhuiller', desc: 'Cash', kind: 3 },
+    { key: 'MLhuiller', label: 'MLhuiller', desc: 'Cash', kind: 3 }
 ];

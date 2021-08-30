@@ -20,13 +20,14 @@ module.exports = {
 };
 
 async function authenticate({ email, password }) {
-    const user = await db.User.scope('withHash').findOne({ where: { email }, attributes: [ 'id', 'password', 'emailVerified', 'is2FA'] });
+    const user = await db.User.scope('withHash').findOne({ where: { email }, attributes: [ 'id', 'password', 'emailVerified', 'is2FA', 'fullName'] });
 
     if (!user || !(await bcrypt.compare(password, user.password)))
         throw 'Email or password is incorrect';
 
     if (!user.emailVerified)
         throw 'check-email';
+
     // authentication successful
     if (user.is2FA) {
         let verificationCode = generateVerificationCode();
@@ -34,49 +35,43 @@ async function authenticate({ email, password }) {
 
         sgMail.setApiKey(config.mail.sendgrid_api);
 
+        const htmlContent = '<html>'
+        +'<head>'
+        +'<title>Unicash Team</title>'
+        +'<style>'
+        +'* {'
+        +'      font-family: Arial, Helvetica, sans-serif;'
+        +'}'
+        +'</style>'
+        +'</head>'
+        +'<body aria-readonly="false">'
+        +'<h3>Dear '+user.fullName+',</h3>'
+
+        +'<h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+
+        +'<h4>This is your verification code to sign in.</h4>'
+
+        +'<h2 style="padding-left: 30px">'+verificationCode+'</h2>'
+
+        +'<h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>'
+
+        +'<h4>We welcome your feedback on how we can serve you better.</h4>'
+
+        +'<h4>Enjoy a safe and secure transaction experience!</h4>'
+
+        +'<h3>Unicash Team</h3>'
+        +'</body>'
+        +'</html>';
+
         const msg = {
             to: email,
             from: config.mail.from,
             subject: 'Welcome to Unicash',
             text: 'Sign in with the code',
-            html: `<html>
-                    <head>
-                        <title>Unicash Team</title>
-                        <style>
-                            * {
-                                font-family: Arial, Helvetica, sans-serif;
-                            }
-                        </style>
-                    </head>
-                    <body aria-readonly="false">
-                    <h3>Dear ${user.fullName},</h3>
-
-                    <h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>
-
-                    <h4>This is your verification code to sign in.</h4>
-
-                        <h2 style="padding-left: 30px">${verificationCode}</h2>
-
-                    <h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>
-
-                    <h4>We welcome your feedback on how we can serve you better.</h4>
-
-                    <h4>Enjoy a safe and secure transaction experience!</h4>
-
-                    <h3>Unicash Team</h3>
-                    </html>`
+            html: htmlContent
         };
 
         await sgMail.send(msg);
-        // sgMail
-        // .send(msg)
-        // .then(() => {}, error => {
-        //     // console.error(error);
-
-        //     if (error.response) {
-        //     console.error(error.response.body)
-        //     }
-        // });
 
         await user.save();
     }
@@ -90,36 +85,40 @@ async function forgotPasswordToConfirmEmail({ email }) {
     user['verifyCode'] = verificationCode;
 
     sgMail.setApiKey(config.mail.sendgrid_api);
+
+    const htmlContent = '<html>'
+    +'<head>'
+    +'<title>Unicash Team</title>'
+    +'<style>'
+    +'* {'
+    +'      font-family: Arial, Helvetica, sans-serif;'
+    +'}'
+    +'</style>'
+    +'</head>'
+    +'<body aria-readonly="false">'
+    +'<h3>Dear '+user.fullName+',</h3>'
+
+
+    +'<h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+
+    +'<h4>If you forgot your password, please reset the password with following code.</h4>'
+
+    +'<h2 style="padding-left: 30px">'+verificationCode+'</h2>'
+
+    +'<h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>'
+
+    +'<h4>Enjoy a safe and secure transaction experience!</h4>'
+
+    +'<h3>Unicash Team</h3>'
+    +'</body>'
+    +'</html>';
+
     const msg = {
         to: email,
         from: config.mail.from,
         subject: 'Welcome to Unicash',
         text: 'Forgot your password?',
-        html: `<html>
-                <head>
-                    <title>Unicash Team</title>
-                    <style>
-                        * {
-                            font-family: Arial, Helvetica, sans-serif;
-                        }
-                    </style>
-                </head>
-                <body aria-readonly="false">
-                <h3>Dear ${user.fullName},</h3>
-
-
-                <h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>
-
-                <h4>If you forgot your password, please reset the password with following code.</h4>
-
-                    <h2 style="padding-left: 30px">${verificationCode}</h2>
-
-                <h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>
-
-                <h4>Enjoy a safe and secure transaction experience!</h4>
-
-                <h3>Unicash Team</h3>
-                </html>`
+        html: htmlContent
       };
       
     //await sgMail.send(msg);
@@ -194,37 +193,40 @@ async function create(params) {
 
     sgMail.setApiKey(config.mail.sendgrid_api);
 
+    const htmlContent = '<html>'
+    +'<head>'
+    +'<title>Unicash Team</title>'
+    +'<style>'
+    +'* {'
+    +'      font-family: Arial, Helvetica, sans-serif;'
+    +'}'
+    +'</style>'
+    +'</head>'
+    +'<body aria-readonly="false">'
+    +'<h3>Dear '+params.fullName+',</h3>'
+
+    +'<h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+
+    +'<h4>This is your verification code to activate your account.</h4>'
+
+    +'<h2 style="padding-left: 30px">'+verificationCode+'</h2>'
+
+    +'<h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>'
+
+    +'<h4>We welcome your feedback on how we can serve you better.</h4>'
+
+    +'<h4>Enjoy a safe and secure transaction experience!</h4>'
+
+    +'<h3>Unicash Team</h3>'
+    +'</body>'
+    +'</html>';
+
     const msg = {
         to: params.email,
         from: config.mail.from,
         subject: 'Welcome to Unicash',
         text: 'Verify your account',
-        html: `<html>
-                <head>
-                    <title>Unicash Team</title>
-                    <style>
-                        * {
-                            font-family: Arial, Helvetica, sans-serif;
-                        }
-                    </style>
-                </head>
-                <body aria-readonly="false">
-                <h3>Dear ${params.fullName},</h3>
-
-                <h4>Thank you for signing up to use Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>
-
-                <h4>This is your verification code to activate your account.</h4>
-
-                    <h2 style="padding-left: 30px">${verificationCode}</h2>
-
-                <h4>Once signed in you will be able to update your payment details in order to be able to use Unicash for your transactions.</h4>
-
-                <h4>We welcome your feedback on how we can serve you better.</h4>
-
-                <h4>Enjoy a safe and secure transaction experience!</h4>
-
-                <h3>Unicash Team</h3>
-                </html>`
+        html: htmlContent
       };
       
     //await sgMail.send(msg);

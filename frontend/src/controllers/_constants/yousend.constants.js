@@ -3,6 +3,6 @@ export const yousendConstants = [
     { id: 2, label: 'ETH', desc: 'Ethereum', logo: 'img/eth.png' },
     { id: 3, label: 'BTC', desc: 'Bitcoin', logo: 'img/btc.png' },
     { id: 4, label: 'USDC', desc: 'ERC20', logo: 'img/USD_Coin_icon.png' },
-    { id: 5, label: 'BUSD', desc: 'BEP', logo: 'img/btc.png' },
-    { id: 6, label: 'BNB', desc: '20', logo: 'img/bnb.png' },
+    { id: 5, label: 'BUSD', desc: 'BEP20', logo: 'img/btc.png' },
+    { id: 6, label: 'BNB', desc: 'BEP20', logo: 'img/bnb.png' },
 ];

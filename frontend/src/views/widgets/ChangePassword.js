@@ -51,9 +51,9 @@ const useStylesReddit = makeStyles((theme) => ({
   const history = useHistory()
  
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [oldPassword, setOldPassword] = useState()
-  const [newPassword, setNewPassword] = useState()
-  const [confirmPassword, setConfirmPassword] = useState()
+  const [oldPassword, setOldPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   
   const user = useSelector(state => state.user)
   
@@ -62,26 +62,51 @@ const useStylesReddit = makeStyles((theme) => ({
   const [errMessageForConfirmPassword, setErrMessageForConfirmPassword] = useState('')
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
 
-  const handleBlur = () => {
+  const handleBlurOldPassword = () => {
       if (!oldPassword || oldPassword === '') setErrMessageForOldPassword('Old password is required.')
-      else setErrMessageForOldPassword('')
-      
-      if (!newPassword || newPassword === '') setErrMessageForNewPassword('New password is required')
-      else if (newPassword.length < 6) setErrMessageForNewPassword('Password hat to be at least 6 characters!')
-      else if (!newPassword.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/)) setErrMessageForNewPassword('Password must contain: numbers, uppercase and lowercase letters');
-      else setErrMessageForNewPassword('')
-
-      if (!confirmPassword || confirmPassword === '') setErrMessageForConfirmPassword('Password confirmation is required!')
-      else if (confirmPassword !== newPassword) setErrMessageForConfirmPassword('Passwords must match')
-      else setErrMessageForConfirmPassword('')
-
-      if (errMessageForOldPassword === '' && errMessageForNewPassword === '' && errMessageForConfirmPassword === '' && 
-      newPassword === confirmPassword && oldPassword !== '') {
-        setSubmitButtonDisabled(false);
-      } else {
-        setSubmitButtonDisabled(true);
+      else {
+        setErrMessageForOldPassword('')
+        if (errMessageForNewPassword === '' && errMessageForConfirmPassword === '' && newPassword !== '' && newPassword === confirmPassword) {
+            setSubmitButtonDisabled(false);
+          } else {
+            setSubmitButtonDisabled(true);
+          }
       }
   }
+
+  const handleBlurNewPassword = (e) => {
+        const keyV = e.target.value;
+        setNewPassword(keyV)
+        if (!keyV || keyV === '') setErrMessageForNewPassword('New password is required')
+        else if (keyV.length < 6) setErrMessageForNewPassword('Password have to be at least 6 characters!')
+        else if (!keyV.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/)) setErrMessageForNewPassword('Password must contain: numbers, uppercase and lowercase letters');
+        else {
+            setErrMessageForNewPassword('')
+            if (errMessageForOldPassword === '' && errMessageForConfirmPassword === '' && keyV === confirmPassword && oldPassword !== '') {
+                setSubmitButtonDisabled(false);
+            } else {
+                setSubmitButtonDisabled(true);
+            }
+
+            if (keyV !== confirmPassword) {
+                setErrMessageForConfirmPassword('Passwords must match')
+            }
+        }
+    }
+
+const handleBlurConfirmPassword = (e) => {
+        const keyV = e.target.value;
+        setConfirmPassword(keyV);
+        if (keyV !== newPassword) setErrMessageForConfirmPassword('Passwords must match')
+        else {
+            setErrMessageForConfirmPassword('');
+            if (errMessageForOldPassword === '' && errMessageForNewPassword === '' && newPassword !== '' && keyV === newPassword && oldPassword !== '') {
+                setSubmitButtonDisabled(false);
+            } else {
+                setSubmitButtonDisabled(true);
+            }
+        }
+    }
 
   const onSubmit = () => {
       if (user && JSON.stringify(user) !== '{}') {
@@ -127,8 +152,9 @@ const useStylesReddit = makeStyles((theme) => ({
                         type="password"
                         fullWidth
                         variant="filled"
-                        onBlur={handleBlur}
-                        onChange={(e) => { handleBlur(); setOldPassword(e.target.value); }}
+                        onBlur={handleBlurOldPassword}
+                        onFocus={handleBlurOldPassword}
+                        onChange={(e) => { setOldPassword(e.target.value); handleBlurOldPassword(); }}
                     />
                 }
             </div>
@@ -148,8 +174,7 @@ const useStylesReddit = makeStyles((theme) => ({
                         variant="filled"
                         helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
                         error={errMessageForNewPassword && errMessageForNewPassword !== ''}
-                        onBlur={handleBlur}
-                        onChange={(e) => { handleBlur(); setNewPassword(e.target.value); }}
+                        onChange={handleBlurNewPassword}
                     />
                 }
             </div>
@@ -169,8 +194,7 @@ const useStylesReddit = makeStyles((theme) => ({
                         variant="filled"
                         helperText={errMessageForConfirmPassword && errMessageForConfirmPassword !== '' ? errMessageForConfirmPassword : '' }
                         error={errMessageForConfirmPassword && errMessageForConfirmPassword !== ''}
-                        onBlur={handleBlur}
-                        onChange={(e) => { handleBlur(); setConfirmPassword(e.target.value); }}
+                        onChange={handleBlurConfirmPassword}
                     />
                 }
             </div>
