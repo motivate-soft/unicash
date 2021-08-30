@@ -198,7 +198,7 @@ const Exchange = () => {
         )
       }
     }
-  }, [seconds])
+  }, [countDown])
 
   const seconds = String(countDown % 60).padStart(2, 0);
   const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
