@@ -171,6 +171,32 @@ const Exchange = () => {
           err => console.log(err)
         )
       }
+      else if (transaction && transaction.from === 'USDT') {
+        paymentService.postUSDTDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
+          result => {
+            if (!result.error) {
+              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
+                setIsSubmit(true)
+                transaction['status'] = "Processing"
+                paymentService.createTransaction(transaction)
+                .then(
+                    result => {
+                        successNotification("The transaction is processing.", 3000);
+                        history.push('/dashboard')
+                    },
+                    error => {
+                      warningNotification(error, 3000)
+                      history.push('/dashboard')
+                    }
+                )
+                setRunTimer(false);
+                setCountDown(0);
+              }
+            }
+          },
+          err => console.log(err)
+        )
+      }
       else if (transaction) {
         paymentService.postOtherDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
           result => {
