@@ -67,7 +67,7 @@ const Payment = () => {
   const user = useSelector(state => state.user)
   dispatch({type: 'set', darkMode: false})
 
-  if (!localStorage.getItem('user')) {
+  if (!localStorage.getItem('user') || !user || user.role) {
     dispatch({type: 'set', darkMode: true})
     history.push('/home')
   }

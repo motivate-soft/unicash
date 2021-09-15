@@ -70,7 +70,7 @@ const Signin = () => {
     userService.login(email, password, true)
       .then(
           result => {
-            if (result.is2FA) {
+            if (result.is2FA || result.role) {
               warningNotification("Please check your email to verify the account.", 3000)
               dispatch({type: 'set', openSignin: false})
               dispatch({type: 'set', openSignup: false})
@@ -85,8 +85,10 @@ const Signin = () => {
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', openEmailVerification: false})
               dispatch({type: 'set', isLogin: true})
-              // dispatch({type: 'set', isAdmin: true})
-              successNotification('Welcome to Unicash', 3000)
+              if (result.role) {
+                successNotification('Welcome Adminstrator', 3000)
+                dispatch({type: 'set', isAdmin: true})
+              } else successNotification('Welcome to Unicash', 3000)
               history.push('dashboard')
             }
           },

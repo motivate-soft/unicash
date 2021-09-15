@@ -110,14 +110,23 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
           <CHeaderNavLink to="/dashboard" className={currPath === '/dashboard' || currPath === '/exchange' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Exchange</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
           <CHeaderNavLink to="/payment" className={currPath === '/payment' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Payment</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin ? 'px-3' : 'invisible'}>
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
           <CHeaderNavLink to="/setting" className={currPath === '/setting' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
+        </CHeaderNavItem>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+          <CHeaderNavLink to="/admin" className={currPath === '/admin' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Home</CHeaderNavLink>
+        </CHeaderNavItem>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+          <CHeaderNavLink to="/users" className={currPath === '/users' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Users</CHeaderNavLink>
+        </CHeaderNavItem>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+          <CHeaderNavLink to="/config" className={currPath === '/config' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
         </CHeaderNavItem>
       </CHeaderNav>
 
@@ -160,8 +169,11 @@ const TheHeader = () => {
                 }
             </CDropdownToggle>
             <CDropdownMenu className="pt-1 dropdown-toggle-menu" placement="bottom-end">
-                <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('payment')}>Payment method</CDropdownItem>
-                <CDropdownItem className="dropdown-toggle-menuitem" onClick={() => history.push('setting')}>Settings</CDropdownItem>
+                <CDropdownItem className={isLogin && !user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('payment')}>Payment method</CDropdownItem>
+                <CDropdownItem className={isLogin && !user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('setting')}>Settings</CDropdownItem>
+                <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('admin')}>Home</CDropdownItem>
+                <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('users')}>Users</CDropdownItem>
+                <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('config')}>Settings</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={logout}>Log out</CDropdownItem>
             </CDropdownMenu>
         </CDropdown>

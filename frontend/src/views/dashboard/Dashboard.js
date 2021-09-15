@@ -19,7 +19,7 @@ const Dashboard = () => {
 
   const user = useSelector(state => state.user)
 
-  if (!localStorage.getItem('user') || !user) {
+  if (!localStorage.getItem('user') || !user || user.role) {
     dispatch({type: 'set', darkMode: true})
     history.push('/home')
   }

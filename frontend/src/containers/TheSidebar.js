@@ -18,11 +18,10 @@ import navigation from './_nav'
 const TheSidebar = () => {
   const dispatch = useDispatch()
   const show = useSelector(state => state.sidebarShow)
-  const isAdmin = useSelector(state => state.isAdmin)
 
   return (
     <CSidebar
-      show={show && isAdmin}
+      show={show}
       unfoldable
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >

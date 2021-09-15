@@ -59,7 +59,7 @@ const Exchange = () => {
   const user = useSelector(state => state.user)
   const transaction = useSelector(state => state.transaction)
 
-  if (!localStorage.getItem('user') || !user) {
+  if (!localStorage.getItem('user') || !user || user.role) {
     dispatch({type: 'set', darkMode: true})
     history.push('/home')
   }
