@@ -118,109 +118,74 @@ const Exchange = () => {
 
   useEffect(() => {
     if (Number(seconds) === 0) { // per min
-      if (transaction && transaction.from === 'BTC') {
+      if (transaction && transaction.from === 'BTC' && !isSubmit) {
+        setIsSubmit(true);
         paymentService.getBTCDetect(user.BTC_ADDRESS).then(
           result => {
+            setIsSubmit(false);
             const valanceJSON = result[user.BTC_ADDRESS];
-            if (!isSubmit && valanceJSON.final_balance / 100000000 >= Number(transaction.sendAmount)) {
-              transaction['status'] = "Processing"
-              setIsSubmit(true)
-              paymentService.createTransaction(transaction)
-              .then(
-                  result => {
-                      successNotification("The transaction is processing.", 3000);
-                      history.push('/dashboard')
-                  },
-                  error => {
-                    warningNotification(error, 3000)
-                    history.push('/dashboard')
-                  }
-              )
+            if (valanceJSON.final_balance / 100000000 >= Number(transaction.sendAmount) && runTimer) {
               setRunTimer(false);
-              setCountDown(0);
+              setTimeout(() => {
+                saveTransactionForProgress()
+              }, 1500);
             }
           },
           err => {
+            setIsSubmit(false);
             console.log(err)
           }
         )
       }
-      else if (transaction && transaction.from === 'ETH') {
+      else if (transaction && transaction.from === 'ETH' && !isSubmit) {
+        setIsSubmit(true);
         paymentService.postETHDetect({address: user.ETH_ADDRESS}).then(
           result => {
+            setIsSubmit(false);
             if (!result.error) {
-              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
-                setIsSubmit(true)
-                transaction['status'] = "Processing"
-                paymentService.createTransaction(transaction)
-                .then(
-                    result => {
-                        successNotification("The transaction is processing.", 3000);
-                        history.push('/dashboard')
-                    },
-                    error => {
-                      warningNotification(error, 3000)
-                      history.push('/dashboard')
-                    }
-                )
+              if (result.balance >= Number(transaction.sendAmount) && runTimer) {
                 setRunTimer(false);
-                setCountDown(0);
+                setTimeout(() => {
+                  saveTransactionForProgress()
+                }, 1500);
               }
             }
           },
-          err => console.log(err)
+          err => setIsSubmit(false)
         )
       }
-      else if (transaction && transaction.from === 'USDT') {
+      else if (transaction && transaction.from === 'USDT' && !isSubmit) {
+        setIsSubmit(true);
         paymentService.postUSDTDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
           result => {
+            setIsSubmit(false);
             if (!result.error) {
-              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
-                setIsSubmit(true)
-                transaction['status'] = "Processing"
-                paymentService.createTransaction(transaction)
-                .then(
-                    result => {
-                        successNotification("The transaction is processing.", 3000);
-                        history.push('/dashboard')
-                    },
-                    error => {
-                      warningNotification(error, 3000)
-                      history.push('/dashboard')
-                    }
-                )
+              if (result.balance >= Number(transaction.sendAmount) && runTimer) {
                 setRunTimer(false);
-                setCountDown(0);
+                setTimeout(() => {
+                  saveTransactionForProgress()
+                }, 1500);
               }
             }
           },
-          err => console.log(err)
+          err => setIsSubmit(false)
         )
       }
-      else if (transaction) {
+      else if (transaction && !isSubmit) {
+        setIsSubmit(true);
         paymentService.postOtherDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
           result => {
+            setIsSubmit(false);
             if (!result.error) {
-              if (!isSubmit && result.balance >= Number(transaction.sendAmount)) {
-                setIsSubmit(true)
-                transaction['status'] = "Processing"
-                paymentService.createTransaction(transaction)
-                .then(
-                    result => {
-                        successNotification("The transaction is processing.", 3000);
-                        history.push('/dashboard')
-                    },
-                    error => {
-                      warningNotification(error, 3000)
-                      history.push('/dashboard')
-                    }
-                )
+              if (result.balance >= Number(transaction.sendAmount) && runTimer) {
                 setRunTimer(false);
-                setCountDown(0);
+                setTimeout(() => {
+                  saveTransactionForProgress()
+                }, 1500);
               }
             }
           },
-          err => console.log(err)
+          err => setIsSubmit(false)
         )
       }
     }
@@ -237,6 +202,21 @@ const Exchange = () => {
 //   if (!queryString.parse(location.search) || !queryString.parse(location.search).id || isNaN(Number(queryString.parse(location.search).id))) {
 //     history.push('/dashboard')
 //   }
+
+  const saveTransactionForProgress = () => {
+    transaction['status'] = "Processing"
+    paymentService.createTransaction(transaction)
+    .then(
+        r => {
+            successNotification("The transaction is processing.", 3000);
+            history.push('/dashboard')
+        },
+        error => {
+          warningNotification(error, 3000)
+          history.push('/dashboard')
+        }
+    )
+  }
 
   return (
     <>
