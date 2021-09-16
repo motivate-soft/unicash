@@ -230,7 +230,7 @@ async function getTransactions() { // Limited 5
     return result;
 }
 async function getAllTransactions() {
-    const transactions = await db.Transaction.findAll({ order: [['id', 'DESC']]});
+    const transactions = await db.Transaction.findAll({ order: [['id', 'DESC']]}); // where: { status: 'Processing' },
     if (!transactions) throw 'NO TRANSACTION';
 
     let result = [];

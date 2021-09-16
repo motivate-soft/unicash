@@ -85,10 +85,7 @@ const Signin = () => {
               dispatch({type: 'set', openSignup: false})
               dispatch({type: 'set', openEmailVerification: false})
               dispatch({type: 'set', isLogin: true})
-              if (result.role) {
-                successNotification('Welcome Adminstrator', 3000)
-                dispatch({type: 'set', isAdmin: true})
-              } else successNotification('Welcome to Unicash', 3000)
+              successNotification('Welcome to Unicash', 3000)
               history.push('dashboard')
             }
           },

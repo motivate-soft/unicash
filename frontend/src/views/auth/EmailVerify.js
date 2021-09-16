@@ -67,12 +67,15 @@ const EmailVerify = () => {
                         dispatch({type: 'set', openSignup: false})
                         dispatch({type: 'set', openEmailVerification: false})
                         dispatch({type: 'set', isLogin: true})
+                        setSubmitting(false)
                         if (result.role) {
                           successNotification('Welcome Adminstrator', 3000)
                           dispatch({type: 'set', isAdmin: true})
-                        } else successNotification('Welcome to Unicash', 3000)
-                        setSubmitting(false)
-                        history.push('dashboard')
+                          history.push('admin')
+                        } else {
+                          successNotification('Welcome to Unicash', 3000)
+                          history.push('dashboard')
+                        }
                     },
                     error => {
                         warningNotification(error, 3000)
