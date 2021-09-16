@@ -17,6 +17,7 @@ export const paymentService = {
     getTransactionById,
     getMyAllTransaction,
     getTransactions,
+    getAllTransactions,
     getTotalAmountPerDay,
 
     getETHAddress,
@@ -158,6 +159,15 @@ function getMyAllTransaction(userId) {
     };
 
     return fetch(`${serverURL}/payment/getAllTransactions/${userId}`, requestOptions).then(handleResponse);
+}
+
+function getAllTransactions() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getAllTransactionsForAdmin`, requestOptions).then(handleResponse);
 }
 
 function getTransactions() {

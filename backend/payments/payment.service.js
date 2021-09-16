@@ -16,6 +16,7 @@ module.exports = {
     getTransactionById,
     getAllTransactionsByUserId,
     getTransactions,
+    getAllTransactions,
     getTotalAmountPerDay,
 };
 
@@ -217,6 +218,19 @@ async function getAllTransactionsByUserId(id) {
 }
 async function getTransactions() { // Limited 5
     const transactions = await db.Transaction.findAll({ limit: 5, order: [['id', 'DESC']]});
+    if (!transactions) throw 'NO TRANSACTION';
+
+    let result = [];
+    transactions.forEach((transaction, index) => {
+        result.push({
+            ...transaction.dataValues,
+            userName: "unknown"
+        })
+    });
+    return result;
+}
+async function getAllTransactions() {
+    const transactions = await db.Transaction.findAll({ order: [['id', 'DESC']]});
     if (!transactions) throw 'NO TRANSACTION';
 
     let result = [];

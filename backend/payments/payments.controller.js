@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
-const authorize = require('_middleware/authorize')
+const authorize = require('_middleware/authorize');
+const admin = require('_middleware/admin');
 const paymentService = require('./payment.service');
 const request = require('request');
 const userService = require('../users/user.service');
@@ -11,7 +12,7 @@ const querystring = require('querystring');
 const http = require('http');
 
 router.get('/getConversionPrice', getConversionPrice);
-router.get('/getTransactions', getTransactions)
+router.get('/getTransactions', getTransactions);
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
@@ -24,6 +25,9 @@ router.get('/getTotalAmountPerDay', authorize(), getTotalAmountPerDay)
 router.post('/postETHDetect', authorize(), postETHDetect);
 router.post('/postOtherDetect', authorize(), postOtherDetect);
 router.post('/postUSDTDetect', authorize(), postUSDTDetect);
+
+// Admin
+router.get('/getAllTransactionsForAdmin', admin(), getAllTransactionsForAdmin);
 
 module.exports = router;
 
@@ -113,6 +117,20 @@ function getTransactions(req, res, next) {
             transactions.forEach(async (transaction, index) => {
                 const userName = await userService.getUsernameById(transaction.userId);
                 transaction['userName'] = userName.slice(0, 5) + '***';
+                if (index === transactions.length - 1) {
+                    res.json(transactions)
+                }
+            });
+        })
+        .catch(next);
+}
+
+function getAllTransactionsForAdmin(req, res, next) {
+    paymentService.getAllTransactions()
+        .then(transactions => {
+            transactions.forEach(async (transaction, index) => {
+                const userName = await userService.getUsernameById(transaction.userId);
+                transaction['userName'] = userName;
                 if (index === transactions.length - 1) {
                     res.json(transactions)
                 }
