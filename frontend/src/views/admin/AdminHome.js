@@ -7,7 +7,11 @@ import {
     CRow,
     CButton,
     CWidgetSimple,
-    CImg
+    CInputGroup,
+    CInputGroupPrepend,
+    CInputGroupAppend,
+    CInputGroupText,
+    CInput
 } from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -27,6 +31,7 @@ const AdminHome = () => {
     history.push('/home')
   }
 
+  const [totalTransactions, setTotalTransactions] = useState([]);
   const [mytransactions, setMytransactions] = useState();
 
   const [numberOfProcessing, setNumberOfProcessing] = useState(0);
@@ -38,6 +43,24 @@ const AdminHome = () => {
   const [amountOfUSDC, setAmountOfUSDC] = useState(0);
   const [amountOfBUSD, setAmountOfBUSD] = useState(0);
   const [amountOfBNB, setAmountOfBNB] = useState(0);
+
+  const [searchOrderIDOrName, setSearchOrderIdOrName] = useState()
+
+  const onSearch = (e) => {
+    const keyV = e.target.value;
+    setSearchOrderIdOrName(keyV);
+
+    if (keyV == '') setMytransactions(totalTransactions);
+    else {
+        let tmpTransactions = [];
+        totalTransactions.forEach(element => {
+           if (element.orderId.toLowerCase().indexOf(keyV.toLowerCase()) > -1 || element.userName.toLowerCase().indexOf(keyV.toLowerCase()) > -1) {
+               tmpTransactions.push(element);
+           } 
+        });
+        setMytransactions(tmpTransactions);
+    }
+  }
 
   useEffect(() => {
     paymentService.getAllTransactions()
@@ -74,6 +97,7 @@ const AdminHome = () => {
         setAmountOfUSDC(Math.round(tempUSDC * 100) / 100)
         setAmountOfBUSD(Math.round(tempBUSD * 100) / 100)
         setAmountOfBNB(Math.round(tempBNB * 100) / 100)
+        setTotalTransactions(processingTransaction);
         setMytransactions(processingTransaction);
       },
       error => {}
@@ -164,8 +188,20 @@ const AdminHome = () => {
       <CRow>
         <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border" sm="12" lg="12" md="12">
           <CCard color="transparent" className="transaction-table d-box-shadow1 d-border mt-3">
-            <CCardHeader color="transparent d-border pl-0" className="header-title">
-              Pending Transaction
+            <CCardHeader color="transparent d-border pl-0 pr-0" className="header-title">
+                <CRow>
+                    <CCol sm="12" md="7" lg="7">Pending Transaction</CCol>
+                    <CCol sm="12" md="5" lg="5">
+                        <CInputGroup className="admin-search pr-0 mr-0">
+                            <CInput value={searchOrderIDOrName} onChange={onSearch} placeholder="Order id or Name" />
+                            <CInputGroupAppend className="mr-0 pr-0">
+                                <CInputGroupText className="admin-search-button">
+                                    Search
+                                </CInputGroupText>
+                            </CInputGroupAppend>
+                        </CInputGroup>
+                    </CCol>
+                </CRow>
             </CCardHeader>
             <CCardBody className="p-0" color="default">
             { mytransactions && 

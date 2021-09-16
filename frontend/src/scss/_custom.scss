@@ -516,6 +516,7 @@
     margin: auto;
     text-align: center;
     padding-top: 38px;
+    font-family: 'PoppinsM' !important;
     span {
       font-size: 52px;
       color: green;
@@ -533,4 +534,17 @@
 
 .admin-home-widget-dive {
   overflow-y: auto;
+}
+
+.admin-search {
+  width: 100%;
+  input {
+    font-size: 16px;
+  }
+  .admin-search-button {
+    font-size: 16px;
+    color: white;
+    background-color: red;
+    // cursor: pointer;
+  }
 }
