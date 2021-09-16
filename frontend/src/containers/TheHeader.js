@@ -109,23 +109,23 @@ const TheHeader = () => {
         </CHeaderNavItem>
       </CHeaderNav>
 
-      <CHeaderNav className="d-md-down-none mr-auto">
-        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
+      <CHeaderNav className="mr-auto">
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/dashboard" className={currPath === '/dashboard' || currPath === '/exchange' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Exchange</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/payment" className={currPath === '/payment' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Payment</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin && !user.role ? 'px-3' : 'd-none'}>
+        <CHeaderNavItem className={isLogin && !user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/setting" className={currPath === '/setting' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/admin" className={currPath === '/admin' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Home</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/users" className={currPath === '/users' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Users</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem className={isLogin && user.role ? 'px-3' : 'd-none'}>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/config" className={currPath === '/config' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
         </CHeaderNavItem>
       </CHeaderNav>

@@ -47,7 +47,7 @@ const Dashboard = () => {
         </CCardHeader>
         <CCardBody className="p-0" color="default">
           { mytransactions && 
-            <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+            <table className="table table-hover table-outline mb-0">
               <thead className="thead-light">
                 <tr>
                   <th className="text-center">ID</th>
