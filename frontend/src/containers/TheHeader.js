@@ -85,7 +85,7 @@ const TheHeader = () => {
   return (
     <>
     <CHeader colorScheme="dark" className="header">
-      <CToggler
+      {/* <CToggler
         inHeader
         className={isAdmin && isLogin ? 'ml-md-3 d-lg-none' : 'ml-md-3 d-none'}
         onClick={toggleSidebarMobile}
@@ -94,7 +94,7 @@ const TheHeader = () => {
         inHeader
         className={isAdmin && isLogin ? 'ml-3 d-md-down-none' : 'ml-3 d-none'}
         onClick={toggleSidebar}
-      />
+      /> */}
 
       <CHeaderNav >
         <CHeaderNavItem >
