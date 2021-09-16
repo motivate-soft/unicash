@@ -154,6 +154,23 @@ const Exchange = () => {
           err => setIsSubmit(false)
         )
       }
+      else if (transaction && transaction.from === 'BNB' && !isSubmit) {
+        setIsSubmit(true);
+        paymentService.postETHDetect({address: user.ETH_ADDRESS}).then(
+          result => {
+            setIsSubmit(false);
+            if (!result.error) {
+              if (result.balance >= Number(transaction.sendAmount) && runTimer) {
+                setRunTimer(false);
+                setTimeout(() => {
+                  saveTransactionForProgress()
+                }, 1500);
+              }
+            }
+          },
+          err => setIsSubmit(false)
+        )
+      }
       else if (transaction && transaction.from === 'USDT' && !isSubmit) {
         setIsSubmit(true);
         paymentService.postUSDTDetect({address: user.ETH_ADDRESS, contract: '0xdac17f958d2ee523a2206206994597c13d831ec7'}).then(
