@@ -9,7 +9,6 @@ const postBTC = 'https://blockchain.info/balance?active=';
 export const paymentService = {
     addPaymentmethod,
     getPaymentMethodsById,
-    getPaymentMethodsByIdAndName,
     updatePaymentmethod,
     deletePaymentmethod,
     getConversionPrice,
@@ -18,7 +17,6 @@ export const paymentService = {
     getTransactionById,
     getMyAllTransaction,
     getTransactions,
-    getAllTransactions,
     getTotalAmountPerDay,
 
     getETHAddress,
@@ -26,7 +24,14 @@ export const paymentService = {
     postETHDetect,
     postUSDTDetect,
     postOtherDetect,
-    getBTCDetect
+    getBTCDetect,
+    /*
+    * API for ADMIN
+    */
+    getAllTransactions,
+    getPaymentMethodsByIdAndName,
+    updateTransaction,
+    fileUpload
 };
 
 function getETHAddress() {
@@ -162,6 +167,17 @@ function createTransaction(transaction) {
 
     return fetch(`${serverURL}/payment/createTransaction`, requestOptions).then(handleResponse);
 }
+
+function updateTransaction(id, transaction) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(transaction)
+    };
+
+    return fetch(`${serverURL}/payment/updateTransaction/${id}`, requestOptions).then(handleResponse);
+}
+
 function getMyAllTransaction(userId) {
     const requestOptions = {
         method: 'GET',
@@ -196,6 +212,20 @@ function getTransactionById(id) {
     };
 
     return fetch(`${serverURL}/payment/getTransaction/${id}`, requestOptions).then(handleResponse);
+}
+
+function fileUpload(file) {
+    const formData = new FormData();
+    formData.append('transactionFile', file);
+
+    const requestOptions = {
+        method: 'POST',
+        // headers: { ...authHeader(), 'Content-Type': 'multipart/form-data' },
+        headers: {  },
+        body: formData
+    };
+
+    return fetch(`${serverURL}/payment/fileUpload`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

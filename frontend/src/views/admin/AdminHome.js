@@ -28,6 +28,7 @@ const AdminHome = () => {
   dispatch({type: 'set', darkMode: false})
 
   const user = useSelector(state => state.user)
+  const editTransaction = useSelector(state => state.editTransaction)
 
   if (!localStorage.getItem('user') || !user || !user.role) {
     dispatch({type: 'set', darkMode: true})
@@ -105,11 +106,10 @@ const AdminHome = () => {
       },
       error => {}
     )
-  }, []);
+  }, [editTransaction]);
 
 
   const onClickProcess = (transaction) => {
-    console.log(transaction);
     paymentService.getPaymentMethodsByIdAndName(transaction.userId, transaction.to).then(
       result => {
         dispatch({type: 'set', editTransaction: true})

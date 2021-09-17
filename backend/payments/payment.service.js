@@ -19,6 +19,7 @@ module.exports = {
     getTransactions,
     getAllTransactions,
     getTotalAmountPerDay,
+    updateTransaction
 };
 
 async function createPaymentmethod(params) {
@@ -215,6 +216,127 @@ async function createTransaction(params) {
 
     return newTransaction;
 }
+
+async function updateTransaction(id, params) {
+    const transaction = await getTransaction(id);
+    Object.assign(transaction, params);
+    await transaction.save();
+
+    const customerName = await userService.getUsernameById(params.userId);
+    const customerEmail = await userService.getEmailById(params.userId);
+
+    let htmlContent = '<html>'
+                        +'<head>'
+                        +'<title>Unicash Team</title>'
+                        +'<style>'
+                        +'  * {'
+                            +'      font-family: Arial, Helvetica, sans-serif;'
+                            +'}'
+                            +'</style>'
+                            +'</head>'
+                        +'<body aria-readonly="false">'
+                        +'<h3>Dear '+customerName+',</h3>'
+                        
+                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+                        
+                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
+                        
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        
+                        +'<h4>Your transaction was canceled</h4>'
+
+                        +'Click <a href="'+params.image+'">here</a> to check more.'
+                        
+                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+                        
+                        +'<h3>Unicash Team</h3>'
+                        +'</body>'
+                        +'</html>'
+
+    if (params.status === 'Completed') 
+            htmlContent = '<html>'
+                        +'<head>'
+                        +'<title>Unicash Team</title>'
+                        +'<style>'
+                        +'  * {'
+                            +'      font-family: Arial, Helvetica, sans-serif;'
+                            +'}'
+                            +'</style>'
+                            +'</head>'
+                        +'<body aria-readonly="false">'
+                        +'<h3>Dear '+customerName+',</h3>'
+                        
+                        
+                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+                        
+                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
+                        
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">'+params.status+'</h3></div>'
+                        
+                        +'Click <a href="'+params.image+'">here</a> to check more.'
+
+                        +'<h4>Please give us a feedback <a href="https://www.unicash.ph/feedback">https://www.unicash.ph/feedback</a></h4>'
+                        
+                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+                        
+                        +'<h3>Unicash Team</h3>'
+                        +'</body>'
+                        +'</html>'
+        if (params.status === 'Refunded') 
+            htmlContent = '<html>'
+                        +'<head>'
+                        +'<title>Unicash Team</title>'
+                        +'<style>'
+                        +'  * {'
+                            +'      font-family: Arial, Helvetica, sans-serif;'
+                            +'}'
+                            +'</style>'
+                            +'</head>'
+                        +'<body aria-readonly="false">'
+                        +'<h3>Dear '+customerName+',</h3>'
+                        
+                        
+                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
+                        
+                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
+                        
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        
+                        +'<h4>Your transaction was refunded.</h4>'
+                        +'Click <a href="'+params.image+'">here</a> to check more.'
+
+                        +'<h4>Please give us a feedback <a href="https://www.unicash.ph/feedback">https://www.unicash.ph/feedback</a></h4>'
+                        
+                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+                        
+                        +'<h3>Unicash Team</h3>'
+                        +'</body>'
+                        +'</html>'
+        
+    const msg = {
+        to: customerEmail,
+        from: config.mail.from,
+        subject: 'Welcome to Unicash',
+        text: 'Transaction',
+        html: htmlContent
+      };
+
+    sgMail
+        .send(msg)
+        .then(() => {}, error => {
+            if (error.response) {}
+        });
+
+    return transaction.get();
+}
+
 async function getTransactionById(id) {
     return await getTransaction(id);
 }

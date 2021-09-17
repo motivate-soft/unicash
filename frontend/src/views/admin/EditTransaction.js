@@ -107,10 +107,21 @@ const EditTransaction = () => {
   }, [selectedPaymentMethod]);
 
   const onSubmit = () => {
-      //
+      if (selectedTransaction) {
+          paymentService.updateTransaction(selectedTransaction.id, selectedTransaction).then(
+              result => {
+                  successNotification("Successfully processed", 3000);
+                  dispatch({type: 'set', editTransaction: false})
+              },
+              err => {
+                  console.log(err)
+              }
+          )
+      }
   }
 
   const [filePath, setFilePath] = useState('');
+  const [selectedFile, setSelectedFile] = useState();
 
   const inputFile = useRef() 
 
@@ -122,8 +133,32 @@ const EditTransaction = () => {
     const file = event.target.files[0];
     if (file) {
         setFilePath(file.name);
+        setSelectedFile(file);
     }
   };
+
+  const [isSubmiting, setIsSubmiting] = useState(false);
+
+  const fileUpload = () => {
+      if (selectedFile && !isSubmiting) {
+          setIsSubmiting(true)
+          paymentService.fileUpload(selectedFile).then(
+              result => {
+                  if (!result.error) {
+                      setIsSubmiting(false)
+                      setFilePath(result.path);
+                      if (selectedTransaction) selectedTransaction.image = result.path
+                  } else {
+                      setIsSubmiting(false)
+                      warningNotification("Failed, please try again", 3);
+                  }
+              },
+              err => {
+                  warningNotification(err, 3000);
+              }
+          )
+      }
+  }
 
   return (
     <CModal 
@@ -319,8 +354,8 @@ const EditTransaction = () => {
                         <CInputGroup className="pr-0 mr-0">
                             <CInput className="file-input-box" placeholder="Browse File" onClick={showOpenFileDialog} value={filePath} />
                             <CInputGroupAppend className="mr-0 pr-0">
-                                <CInputGroupText className="file-input-box-button">
-                                    Upload
+                                <CInputGroupText className="file-input-box-button" onClick={fileUpload} disabled={selectedFile}>
+                                    { !isSubmiting ? 'Upload' : 'Uploading' }
                                 </CInputGroupText>
                             </CInputGroupAppend>
                         </CInputGroup>
@@ -329,7 +364,7 @@ const EditTransaction = () => {
             </div>
 
             <div className="d-flex mx-3 px-3">
-                <CButton block className="button-exchange p-1 pt-2" onClick={onSubmit}>
+                <CButton block className="button-exchange p-1 pt-2" onClick={onSubmit} disabled={selectedStatus === 'Processing'}>
                     <h3>Save</h3>
                 </CButton>
             </div>

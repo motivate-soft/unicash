@@ -6,10 +6,12 @@ const authorize = require('_middleware/authorize');
 const admin = require('_middleware/admin');
 const paymentService = require('./payment.service');
 const request = require('request');
+const path = require("path");
 const userService = require('../users/user.service');
 
-const querystring = require('querystring');
-const http = require('http');
+// const querystring = require('querystring');
+// const http = require('http');
+const multer = require("multer");
 
 router.get('/getConversionPrice', getConversionPrice);
 router.get('/getTransactions', getTransactions);
@@ -29,6 +31,8 @@ router.post('/postUSDTDetect', authorize(), postUSDTDetect);
 
 // Admin
 router.get('/getAllTransactionsForAdmin', admin(), getAllTransactionsForAdmin);
+router.post('/fileUpload', fileUpload);
+router.put('/updateTransaction/:id', admin(), updateTransaction);
 
 module.exports = router;
 
@@ -79,6 +83,12 @@ function createPaymentMethod(req, res, next) {
 function updatePaymentMethod(req, res, next) {
     paymentService.updatePaymentmethod(req.params.id, req.body)
         .then(paymentMethod => res.json(paymentMethod))
+        .catch(next);
+}
+
+function updateTransaction(req, res, next) {
+    paymentService.updateTransaction(req.params.id, req.body)
+        .then(transaction => res.json(transaction))
         .catch(next);
 }
 
@@ -202,4 +212,27 @@ function postOtherDetect(req, res, next) {
             }
         }
     );
+}
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/receipts');
+    },
+    filename: function(req, file, cb){
+       cb(null, "" + Date.now() + path.extname(file.originalname));
+    }
+});
+ 
+const upload = multer({
+    storage: storage,
+    limits:{fileSize: 1000000},
+}).single("transactionFile");
+
+function fileUpload(req, res, next) {
+    upload(req, res, () => {
+        if (req.file)
+            res.send({ error: false, path: 'http://localhost:4000/receipts/' + req.file.filename })
+        else res.send({ error: true, message: 'failed' })
+     });
 }
