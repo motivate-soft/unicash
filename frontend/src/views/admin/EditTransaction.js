@@ -15,10 +15,8 @@ import {
   } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
 import {
-    alpha,
     makeStyles,
     } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
 import { currencyConstants } from '../../controllers/_constants';
 import { paymentService } from '../../controllers/_services/payment.service';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
@@ -56,9 +54,6 @@ function RedditTextField(props) {
 
 const EditTransaction = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
-
-  const user = useSelector(state => state.user)
   const editTransaction = useSelector(state => state.editTransaction)
   const selectedPaymentMethod = useSelector(state => state.selectedPaymentMethod)
   const selectedTransaction = useSelector(state => state.selectedTransaction)

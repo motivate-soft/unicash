@@ -38,7 +38,8 @@ const TheHeader = () => {
       userService.getById(JSON.parse(localUser).id)
         .then(
           result => {
-            if (result.id && result.id === JSON.parse(localUser).id) {
+            if (result.status !== 'Active') logout()
+            else if (result.id && result.id === JSON.parse(localUser).id) {
               dispatch({type: 'set', isLogin: true})
               dispatch({type: 'set', user: result})
               // if (result.role === 1) dispatch({type: 'set', isAdmin: true})

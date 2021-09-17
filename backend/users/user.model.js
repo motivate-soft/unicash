@@ -16,6 +16,7 @@ function model(sequelize) {
         emailVerified: { type: DataTypes.BOOLEAN, default: false },
         role: { type: DataTypes.INTEGER, default: 0, allowNull: false },
         verifyCode: { type: DataTypes.STRING, allowNull: true },
+        status: { type: DataTypes.ENUM('Block', 'Suspend', 'Active'), allowNull: false  },
         is2FA: { type: DataTypes.BOOLEAN }
     };
 

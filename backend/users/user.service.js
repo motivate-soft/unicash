@@ -21,10 +21,16 @@ module.exports = {
 };
 
 async function authenticate({ email, password, confirm }) {
-    const user = await db.User.scope('withHash').findOne({ where: { email }, attributes: [ 'id', 'password', 'emailVerified', 'is2FA', 'fullName', 'role'] });
+    const user = await db.User.scope('withHash').findOne({ where: { email }, attributes: [ 'id', 'password', 'emailVerified', 'is2FA', 'fullName', 'role', 'status'] });
 
     if (!user || !(await bcrypt.compare(password, user.password)))
         throw 'Email or password is incorrect';
+
+    if (user.status == 'Block')
+        throw 'Your account was blocked by admin.';
+
+    if (user.status == 'Suspend')
+        throw 'Your account was suspended by admin.';
 
     if (!user.emailVerified)
         throw 'check-email';
@@ -191,6 +197,7 @@ async function create(params) {
     params['emailVerified'] = 0;
     params['role'] = 0;
     params['is2FA'] = 0;
+    params['status'] = 'Active';
 
     sgMail.setApiKey(config.mail.sendgrid_api);
 
