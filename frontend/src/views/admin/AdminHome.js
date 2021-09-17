@@ -77,12 +77,12 @@ const AdminHome = () => {
         transactions.forEach(element => {
             if (element.status === 'Processing') {
                 processingTransaction.push(element);
-                if (element.from === 'USDT') tempUSDT = tempUSDT + Number(element.amount);
-                if (element.from === 'ETH') tempETH = tempETH + Number(element.amount);
-                if (element.from === 'BTC') tempBTC = tempBTC + Number(element.amount);
-                if (element.from === 'USDC') tempUSDC = tempUSDC + Number(element.amount);
-                if (element.from === 'BUSD') tempBUSD = tempBUSD + Number(element.amount);
-                if (element.from === 'BNB') tempBNB = tempBNB + Number(element.amount);
+                // if (element.from === 'USDT') tempUSDT = tempUSDT + Number(element.amount);
+                // if (element.from === 'ETH') tempETH = tempETH + Number(element.amount);
+                // if (element.from === 'BTC') tempBTC = tempBTC + Number(element.amount);
+                // if (element.from === 'USDC') tempUSDC = tempUSDC + Number(element.amount);
+                // if (element.from === 'BUSD') tempBUSD = tempBUSD + Number(element.amount);
+                // if (element.from === 'BNB') tempBNB = tempBNB + Number(element.amount);
             }
             if (element.status === 'Completed') {
                 completedTransaction.push(element);
@@ -208,8 +208,9 @@ const AdminHome = () => {
               <table className="table table-hover table-outline mb-0">
                 <thead className="thead-light">
                   <tr>
-                    <th>Username</th>
-                    <th className="text-center">Order ID</th>
+                    <th>Order ID</th>
+                    <th className="text-center">Username</th>
+                    <th className="text-center">Email</th>
                     <th className="text-center">From</th>
                     <th className="text-center">To</th>
                     <th className="text-center">Amount</th>
@@ -223,10 +224,13 @@ const AdminHome = () => {
                   mytransactions.map((transaction, index) => (
                     <tr>
                       <td>
+                        {transaction.orderId}
+                      </td>
+                      <td className="text-center">
                         { transaction.userName }
                       </td>
                       <td className="text-center">
-                        {transaction.orderId}
+                        { transaction.email }
                       </td>
                       <td className="text-center">
                         {transaction.from}

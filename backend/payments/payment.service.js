@@ -237,7 +237,8 @@ async function getAllTransactions() {
     transactions.forEach((transaction, index) => {
         result.push({
             ...transaction.dataValues,
-            userName: "unknown"
+            userName: "unknown",
+            email: "unknown"
         })
     });
     return result;

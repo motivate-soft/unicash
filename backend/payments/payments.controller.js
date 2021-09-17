@@ -129,8 +129,8 @@ function getAllTransactionsForAdmin(req, res, next) {
     paymentService.getAllTransactions()
         .then(transactions => {
             transactions.forEach(async (transaction, index) => {
-                const userName = await userService.getUsernameById(transaction.userId);
-                transaction['userName'] = userName;
+                transaction['userName'] = await userService.getUsernameById(transaction.userId);
+                transaction['email'] = await userService.getEmailById(transaction.userId);
                 if (index === transactions.length - 1) {
                     res.json(transactions)
                 }
