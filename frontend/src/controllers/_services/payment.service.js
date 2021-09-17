@@ -9,6 +9,7 @@ const postBTC = 'https://blockchain.info/balance?active=';
 export const paymentService = {
     addPaymentmethod,
     getPaymentMethodsById,
+    getPaymentMethodsByIdAndName,
     updatePaymentmethod,
     deletePaymentmethod,
     getConversionPrice,
@@ -118,6 +119,15 @@ function getPaymentMethodsById(id) {
     };
 
     return fetch(`${serverURL}/payment/paymentmethod/${id}`, requestOptions).then(handleResponse);
+}
+
+function getPaymentMethodsByIdAndName(id, name) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getPaymentmethod/${id}/${name}`, requestOptions).then(handleResponse);
 }
 
 function getConversionPrice(symbol) {

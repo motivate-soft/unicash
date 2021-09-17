@@ -17,6 +17,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { paymentService } from '../../controllers/_services/payment.service';
+import { warningNotification } from '../../controllers/_helpers';
+
+const EditTransaction = lazy(() => import('./EditTransaction'));
 
 const AdminHome = () => {
   const dispatch = useDispatch()
@@ -103,6 +106,19 @@ const AdminHome = () => {
       error => {}
     )
   }, []);
+
+
+  const onClickProcess = (transaction) => {
+    console.log(transaction);
+    paymentService.getPaymentMethodsByIdAndName(transaction.userId, transaction.to).then(
+      result => {
+        dispatch({type: 'set', editTransaction: true})
+        dispatch({type: 'set', selectedPaymentMethod: result})
+        dispatch({type: 'set', selectedTransaction: transaction})
+      },
+      error => { warningNotification(error, 3000); }
+    )
+  }
 
   return (
     <>
@@ -248,7 +264,7 @@ const AdminHome = () => {
                         {transaction.status}
                       </td>
                       <td className="text-center">
-                          <CButton color="success">Process</CButton>
+                          <CButton color="success" onClick={() => onClickProcess(transaction)}>Process</CButton>
                       </td>
                     </tr>
                   ))
@@ -263,6 +279,8 @@ const AdminHome = () => {
           </CCard>
         </CCol>
       </CRow>
+      
+      <EditTransaction />
     </>
   )
 }

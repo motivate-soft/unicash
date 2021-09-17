@@ -9,6 +9,7 @@ module.exports = {
     createPaymentmethod,
     updatePaymentmethod,
     getPaymentMethods,
+    getPaymentMethodsByUserIdAndName,
     deletePaymentMethod,
     getConversionBetweenUSDPHP,
     
@@ -39,6 +40,12 @@ async function updatePaymentmethod(id, params) {
 
 async function getPaymentMethods(userId) {
     return await getPaymentMethodsByUserId(userId);
+}
+
+async function getPaymentMethodsByUserIdAndName(userId, name) {
+    const paymentmethod = await db.Paymentmethod.findOne({ where: { userId: userId, name: name }});
+    if (!paymentmethod) throw 'Payment method doesn\'t exist.';
+    return paymentmethod;
 }
 
 async function getPaymentMethod(id) {

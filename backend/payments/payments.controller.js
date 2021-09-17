@@ -16,6 +16,7 @@ router.get('/getTransactions', getTransactions);
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
+router.get('/getPaymentmethod/:id/:name', authorize(), getPaymentMethodsByIdAndName);
 router.delete('/paymentmethod/:id', authorize(), deletePaymentmethod);
 // Transction
 router.post('/createTransaction', authorize(), createTransaction);
@@ -83,6 +84,13 @@ function updatePaymentMethod(req, res, next) {
 
 function getPaymentMethodsById(req, res, next) {
     paymentService.getPaymentMethods(req.params.id)
+        .then(paymentMethods => res.json(paymentMethods))
+        .catch(next);
+}
+
+function getPaymentMethodsByIdAndName(req, res, next) {
+    console.log(req.params.id, req.params.name);
+    paymentService.getPaymentMethodsByUserIdAndName(req.params.id, req.params.name)
         .then(paymentMethods => res.json(paymentMethods))
         .catch(next);
 }

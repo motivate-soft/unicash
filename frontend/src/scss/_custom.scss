@@ -548,3 +548,20 @@
     // cursor: pointer;
   }
 }
+
+.edit-transaction-checkbox {
+  font-size: 19px;
+  width: 100% !important;
+  display: flex;
+  font-family: 'PoppinsH' !important;
+}
+
+.file-input-box-group { width: 100%; }
+.file-input-box {
+  font-size: 18px !important;
+}
+.file-input-box-button {
+  font-size: 18px !important;
+  background: red;
+  color: white;
+}
