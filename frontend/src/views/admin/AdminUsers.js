@@ -13,6 +13,7 @@ import {
 } from '@coreui/react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 import { userService } from '../../controllers/_services';
 
 const EditUsers = lazy(() => import('./EditUsers'));
@@ -104,6 +105,7 @@ const AdminUsers = () => {
                     <th className="text-center">Email</th>
                     <th className="text-center">Name</th>
                     <th className="text-center">Address</th>
+                    <th className="text-center">Date time</th>
                     <th className="text-center">Status</th>
                     <th className="text-center">Action</th>
                   </tr>
@@ -123,6 +125,9 @@ const AdminUsers = () => {
                       </td>
                       <td className="text-center">
                         {userItem.address}
+                      </td>
+                      <td className="text-center">
+                        { format(new Date(userItem.createdAt), 'yyyy-MM-dd kk:mm') }
                       </td>
                       <td className="text-center">
                         {userItem.status}
