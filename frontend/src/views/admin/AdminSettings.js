@@ -130,7 +130,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="usdt"
-                    label="usdt"
+                    label="USDT ADDRESS"
                     placeholder="USDT ADDRESS"
                     fullWidth
                     value={usdtAddress}
@@ -144,7 +144,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="eth"
-                    label="eth"
+                    label="ETH ADDRESS"
                     placeholder="ETH ADDRESS"
                     fullWidth
                     value={ethAddress}
@@ -158,7 +158,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="btc"
-                    label="btc"
+                    label="BTC ADDRESS"
                     placeholder="BTC ADDRESS"
                     fullWidth
                     value={btcAddress}
@@ -172,7 +172,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="usdc"
-                    label="usdc"
+                    label="USDC ADDRESS"
                     placeholder="USDC ADDRESS"
                     fullWidth
                     value={usdcAddress}
@@ -186,7 +186,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="bnb"
-                    label="bnb"
+                    label="BNB ADDRESS"
                     placeholder="BNB ADDRESS"
                     fullWidth
                     value={bnbAddress}
@@ -200,7 +200,7 @@ const AdminSetting = () => {
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
               <RedditTextField
                     id="busd"
-                    label="busd"
+                    label="BUSD ADDRESS"
                     placeholder="BUSD ADDRESS"
                     fullWidth
                     value={busdAddress}

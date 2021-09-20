@@ -20,6 +20,7 @@ async function initialize() {
     db.Paymentmethod = require('../payments/paymentmethod.model')(sequelize);
     db.Conversion = require('../payments/conversion.model')(sequelize);
     db.Transaction = require('../payments/transaction.model')(sequelize);
+    db.Adminsetting = require('../payments/adminsetting.model')(sequelize);
 
     // sync all models with database
     await sequelize.sync();
