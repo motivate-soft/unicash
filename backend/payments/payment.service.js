@@ -85,6 +85,14 @@ async function createTransaction(params) {
     sgMail.setApiKey(config.mail.sendgrid_api);
     const user = await userService.getById(params.userId)
 
+    let adminEmail = config.admin
+    const adminSetting = await db.Adminsetting.findAll();
+    if (adminSetting) {
+        adminEmail = adminSetting[0].email;
+    }
+
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", adminEmail)
+
     const todayD = new Date();
 
     let htmlContentForAdmin = '<html>'
@@ -191,7 +199,7 @@ async function createTransaction(params) {
     if (params.status === 'Processing') // to Admin
     {
         const msgForAdmin = {
-            to: config.admin,
+            to: adminEmail,
             from: config.mail.from,
             subject: 'Welcome to Unicash',
             text: 'Transaction',

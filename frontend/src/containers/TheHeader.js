@@ -21,8 +21,7 @@ const TheHeader = () => {
   const history = useHistory()
 
   // const darkMode = useSelector(state => state.darkMode)
-  const sidebarShow = useSelector(state => state.sidebarShow)
-  const isAdmin = useSelector(state => state.isAdmin)
+  // const sidebarShow = useSelector(state => state.sidebarShow)
   const isLogin = useSelector(state => state.isLogin)
   const currPath = history.location.pathname
 
@@ -73,15 +72,20 @@ const TheHeader = () => {
     dispatch({type: 'set', openSignin: true})
   };
 
-  const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
+  const onClickLogo = () => {
+    if (user && user.role) history.push('/admin')
+    else history.push('/home')
   }
 
-  const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
-  }
+  // const toggleSidebar = () => {
+  //   const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
+  //   dispatch({type: 'set', sidebarShow: val})
+  // }
+
+  // const toggleSidebarMobile = () => {
+  //   const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
+  //   dispatch({type: 'set', sidebarShow: val})
+  // }
 
   return (
     <>
@@ -99,7 +103,7 @@ const TheHeader = () => {
 
       <CHeaderNav >
         <CHeaderNavItem >
-          <CHeaderNavLink to="/home">
+          <CHeaderNavLink onClick={onClickLogo}>
             <CImg
               src={'img/Unicash.png'}
               alt="Unicash"

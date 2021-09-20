@@ -41,7 +41,7 @@ const AdminUsers = () => {
     const keyV = e.target.value;
     setSearchUsernameOrEmail(keyV);
 
-    if (keyV == '') setUserList(totalUserList);
+    if (keyV === '') setUserList(totalUserList);
     else {
         let tmpTransactions = [];
         totalUserList.forEach(element => {
@@ -111,8 +111,8 @@ const AdminUsers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {
-                  userList.map((userItem, index) => (
+                { userList &&
+                  userList.map(userItem => (
                     <tr>
                       <td>
                         {userItem.id}

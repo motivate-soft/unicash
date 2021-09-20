@@ -236,8 +236,8 @@ const AdminHome = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {
-                  mytransactions.map((transaction, index) => (
+                { mytransactions && 
+                  mytransactions.map(transaction => (
                     <tr>
                       <td>
                         {transaction.orderId}

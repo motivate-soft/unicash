@@ -5,7 +5,7 @@ import {
   CImg
 } from '@coreui/react'
 import { useDispatch } from 'react-redux';
-import { userService, paymentService } from '../../controllers/_services';
+import { userService } from '../../controllers/_services';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 import TextField from '@material-ui/core/TextField';
 import {
