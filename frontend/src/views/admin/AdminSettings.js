@@ -1,15 +1,13 @@
 import React, { lazy, useEffect, useState } from 'react'
 import {
     CCard,
-    CCardBody,
-    CCardHeader,
     CCol,
     CRow,
     CButton,
-    CInputGroup,
-    CInputGroupAppend,
-    CInputGroupText,
-    CInput
+    CFormGroup,
+    CInputRadio,
+    CLabel,
+    CInputCheckbox
 } from '@coreui/react';
 import TextField from '@material-ui/core/TextField';
 import {
@@ -83,6 +81,14 @@ const AdminSetting = () => {
 
   const [gcashMobNo, setGcashMobNo] = useState('');
   const [coinsphMobNo, setCoinsphMobNo] = useState('');
+
+  const [smtpHostName, setSmtpHostName] = useState('');
+  const [smtpUsername, setSmtpUsername] = useState('');
+  const [smtpPassword, setSmtpPassword] = useState('');
+  const [smtpPort, setSmtpPort] = useState(587);
+  const [smtpSSL, setSmtpSSL] = useState(false);
+
+  const [transactionFee, setTransactionFee] = useState('');
 
   return (
     <>
@@ -300,14 +306,107 @@ const AdminSetting = () => {
         </CRow>
       </CCard>
 
+      <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
+        <h3>EMAIL PROVIDER</h3>
+        <CRow>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+              <RedditTextField
+                    id="smtp-host-name"
+                    label="SMTP HOST NAME"
+                    placeholder="SMTP Host Name"
+                    fullWidth
+                    value={smtpHostName}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => setSmtpHostName(e.target.value)}
+                    variant="filled"
+                />
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+              <RedditTextField
+                    id="smtp-username"
+                    label="SMTP USERNAME"
+                    placeholder="SMTP USERNAME"
+                    fullWidth
+                    value={smtpUsername}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => setSmtpUsername(e.target.value)}
+                    variant="filled"
+                />
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+              <RedditTextField
+                    id="smtp-password"
+                    label="SMTP PASSWORD"
+                    placeholder="SMTP PASSWORD"
+                    fullWidth
+                    value={smtpPassword}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => setSmtpPassword(e.target.value)}
+                    variant="filled"
+                />
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+              <RedditTextField
+                    id="smtp-port"
+                    label="SMTP PORT"
+                    placeholder="SMTP PORT"
+                    fullWidth
+                    value={smtpPort}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => setSmtpPort(e.target.value)}
+                    variant="filled"
+                />
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+                <CFormGroup variant="custom-checkbox" className="smtp-ssl">
+                  <CInputCheckbox custom id="inline-checkbox3" name="inline-checkbox" color="danger" value="SSL" checked={!smtpSSL}
+                    onChange={(e) => {
+                      setSmtpSSL(!smtpSSL);
+                    }}
+                  />
+                  <CLabel variant="custom-checkbox" htmlFor="inline-checkbox3">SSL</CLabel>
+                </CFormGroup>
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4"></CCol>
+        </CRow>
+      </CCard>
+
+      <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
+        <CRow>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="4" md="4">
+              <RedditTextField
+                    id="transaction-fee"
+                    label="TRANSACTION FEE"
+                    placeholder="Transaction Fee"
+                    fullWidth
+                    value={transactionFee}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => setTransactionFee(e.target.value)}
+                    variant="filled"
+                />
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
+        </CRow>
+      </CCard>
+
       <CRow>
-        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="6" md="6"></CCol>
-        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="6" md="6">
-          <div className="d-flex mt-0 float-right">
+        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
+        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
+        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="4" md="4">
             <CButton block className="button-exchange">
               Save
             </CButton>
-          </div>
         </CCol>
       </CRow>
     </>
