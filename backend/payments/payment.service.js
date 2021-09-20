@@ -225,7 +225,7 @@ async function updateTransaction(id, params) {
     const customerName = await userService.getUsernameById(params.userId);
     const customerEmail = await userService.getEmailById(params.userId);
 
-    let htmlContent = '<html>'
+    let headerIntemplate = '<html>'
                         +'<head>'
                         +'<title>Unicash Team</title>'
                         +'<style>'
@@ -238,87 +238,74 @@ async function updateTransaction(id, params) {
                         +'<h3>Dear '+customerName+',</h3>'
                         
                         +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
-                        
-                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
-                        
-                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
-                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
-                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
-                        
-                        +'<h4>Your transaction was canceled</h4>'
-
-                        +'Click <a href="'+params.image+'">here</a> to check more.'
-                        
-                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+    let footerIntemplate = '<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
                         
                         +'<h3>Unicash Team</h3>'
                         +'</body>'
                         +'</html>'
 
-    if (params.status === 'Completed') 
-            htmlContent = '<html>'
-                        +'<head>'
-                        +'<title>Unicash Team</title>'
-                        +'<style>'
-                        +'  * {'
-                            +'      font-family: Arial, Helvetica, sans-serif;'
-                            +'}'
-                            +'</style>'
-                            +'</head>'
-                        +'<body aria-readonly="false">'
-                        +'<h3>Dear '+customerName+',</h3>'
+    let htmlContent = headerIntemplate
                         
-                        
-                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
-                        
-                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
+                        +'<h4>Here is your exchange transaction information, and it is canceled.</h4>'
                         
                         +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
                         +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
                         +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
-                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">'+params.status+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">Canceled</h3></div>'
                         
-                        +'Click <a href="'+params.image+'">here</a> to check more.'
-
-                        +'<h4>Please give us a feedback <a href="https://www.unicash.ph/feedback">https://www.unicash.ph/feedback</a></h4>'
+                        + footerIntemplate;
+    if (params.image) {
+        htmlContent = headerIntemplate
                         
-                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
-                        
-                        +'<h3>Unicash Team</h3>'
-                        +'</body>'
-                        +'</html>'
-        if (params.status === 'Refunded') 
-            htmlContent = '<html>'
-                        +'<head>'
-                        +'<title>Unicash Team</title>'
-                        +'<style>'
-                        +'  * {'
-                            +'      font-family: Arial, Helvetica, sans-serif;'
-                            +'}'
-                            +'</style>'
-                            +'</head>'
-                        +'<body aria-readonly="false">'
-                        +'<h3>Dear '+customerName+',</h3>'
-                        
-                        
-                        +'<h4>Thank you for using Unicash. A secure and trusted exchange service that will serve your transaction needs.</h4>'
-                        
-                        +'<h4>Here is your exchange transaction information, and it is currently processing.</h4>'
+                        +'<h4>Here is your exchange transaction information, and it is canceled.</h4>'
                         
                         +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
                         +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
                         +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">Canceled</h3></div>'
                         
-                        +'<h4>Your transaction was refunded.</h4>'
-                        +'Click <a href="'+params.image+'">here</a> to check more.'
+                        +'<a href="'+params.image+'">Please see the attached receipt.</a>'
+                        
+                        + footerIntemplate;
+    }
 
-                        +'<h4>Please give us a feedback <a href="https://www.unicash.ph/feedback">https://www.unicash.ph/feedback</a></h4>'
+    if (params.status === 'Completed') {
+        htmlContent = headerIntemplate
                         
-                        +'<h4>Having trouble in your transaction? Please send us email support at <a href="email:'+config.mail.from+'">'+config.mail.from+'</a></h4>'
+                        +'<h4>Here is your exchange transaction information, and it is completed.</h4>'
                         
-                        +'<h3>Unicash Team</h3>'
-                        +'</body>'
-                        +'</html>'
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">Completed</h3></div>'
+                        
+                        + footerIntemplate;
+        if (params.image) {
+            htmlContent = headerIntemplate
+                            
+                        +'<h4>Here is your exchange transaction information, and it is completed.</h4>'
+                                    
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">Completed</h3></div>'
+                        
+                        +'<a href="'+params.image+'">Please see the attached receipt.</a>'
+                        
+                        + footerIntemplate;
+        }
+    }
+    if (params.status === 'Refunded') 
+        htmlContent = headerIntemplate
+                        
+                        +'<h4>Here is your exchange transaction information, and it is refunded.</h4>'
+                        
+                        +'<div style="display: flex;"><h4 style="width: 140px;">You send:</h4> <h3 style="font-weight: 800;">'+params.sendAmount + ' ' + params.from +'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">You received:</h4> <h3 style="font-weight: 800;">'+params.amount+' PHP '+params.to+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Order Id:</h4> <h3 style="font-weight: 800;">'+params.orderId+'</h3></div>'
+                        +'<div style="display: flex;margin-top: -35px"><h4 style="width: 140px;">Status:</h4> <h3 style="font-weight: 800;">Refunded</h3></div>'
+                        
+                        + footerIntemplate;
         
     const msg = {
         to: customerEmail,
