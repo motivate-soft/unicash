@@ -19,7 +19,11 @@ module.exports = {
     getTransactions,
     getAllTransactions,
     getTotalAmountPerDay,
-    updateTransaction
+    updateTransaction,
+
+    getAdminsetting,
+    updateAdminsetting,
+    createAdminsetting
 };
 
 async function createPaymentmethod(params) {
@@ -387,3 +391,28 @@ async function getTotalAmountPerDay(user, currDate) {
 function randomOrderId() {
     return Math.floor(Math.random() * 1000000);
   }
+
+async function getAdminsetting() {
+    const adminSetting = await db.Adminsetting.findAll();
+    if (!adminSetting) throw 'NO Configuration';
+    return adminSetting;
+}
+
+async function updateAdminsetting(id, params) {
+    const adminsetting = await getAdminsettingById(id);
+    Object.assign(adminsetting, params);
+    await adminsetting.save();
+
+    return adminsetting.get();
+}
+
+async function getAdminsettingById(id) {
+    const adminsetting = await db.Adminsetting.findByPk(id);
+    if (!adminsetting) throw 'Transaction not found';
+    return adminsetting;
+}
+
+async function createAdminsetting(params) {
+    const adminsetting = await db.Adminsetting.create(params);
+    return adminsetting;
+}

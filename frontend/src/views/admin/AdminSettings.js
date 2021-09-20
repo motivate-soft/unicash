@@ -1,11 +1,10 @@
-import React, { lazy, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     CCard,
     CCol,
     CRow,
     CButton,
     CFormGroup,
-    CInputRadio,
     CLabel,
     CInputCheckbox
 } from '@coreui/react';
@@ -16,7 +15,8 @@ import {
     } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { userService } from '../../controllers/_services';
+import { paymentService } from '../../controllers/_services';
+import { warningNotification, successNotification } from '../../controllers/_helpers';
 
 const useStylesReddit = makeStyles((theme) => ({
   root: {
@@ -61,10 +61,6 @@ const AdminSetting = () => {
     history.push('/home')
   }
 
-  useEffect(() => {
-    
-  }, []);
-
   const [adminEmail, setAdminEmail] = useState('');
   const [usdtReserve, setUsdtReserve] = useState('');
   const [usdtAddress, setUsdtAddress] = useState('');
@@ -89,6 +85,87 @@ const AdminSetting = () => {
   const [smtpSSL, setSmtpSSL] = useState(false);
 
   const [transactionFee, setTransactionFee] = useState('');
+
+  const [isWillCreate, setIsWillCreate] = useState(true);
+  const [selectedId, setSelectedId] = useState();
+
+  useEffect(() => {
+    paymentService.getAdminsetting()
+    .then(result => {
+      if (result.length === 0 ) {
+        setIsWillCreate(true);
+      } else {
+        setIsWillCreate(false); // If exist...
+        setSelectedId(result[0].id);
+        setAdminEmail(result[0].email);
+        setUsdtReserve(result[0].usdtReserve);
+        setUsdtAddress(result[0].usdtAddress);
+        setEthAddress(result[0].ethAddress);
+        setBtcAddress(result[0].btcAddress);
+        setUsdcAddress(result[0].usdcAddress);
+        setBnbAddress(result[0].bnbAddress);
+        setBusdAddress(result[0].busdAddress);
+        setUnionbankAccntName(result[0].unionbankAccountName);
+        setUnionbankAccntNo(result[0].unionbankAccountNo);
+        setUnionbankBranchAddress(result[0].unionbankBranchAdress);
+        setUnionbankMobNo(result[0].unionbankMobileNo);
+        setGcashMobNo(result[0].gcashMobileNo);
+        setCoinsphMobNo(result[0].coinsphMobileNo);
+        setSmtpHostName(result[0].smtpHostName);
+        setSmtpUsername(result[0].smtpUsername);
+        setSmtpPassword(result[0].smtpPassword);
+        setSmtpPort(result[0].smtpPort);
+        setSmtpSSL(result[0].smtpSSL);
+        setTransactionFee(result[0].transactionFee);
+      }
+    }, err => {
+      console.log(err);
+    })
+  }, []);
+
+  const onSubmit = () => {
+    let adminsettingObj = {
+      email: adminEmail,
+      usdtReserve: usdtReserve,
+      usdtAddress: usdtAddress,
+      ethAddress: ethAddress,
+      btcAddress: btcAddress,
+      usdcAddress: usdcAddress,
+      bnbAddress: bnbAddress,
+      busdAddress: busdAddress,
+      unionbankAccountName: unionbankAccntName,
+      unionbankAccountNo: unionbankAccntNo,
+      unionbankBranchAdress: unionbankBranchAddress,
+      unionbankMobileNo: unionbankMobNo,
+      gcashMobileNo: gcashMobNo,
+      coinsphMobileNo: coinsphMobNo,
+      smtpHostName: smtpHostName,
+      smtpUsername: smtpUsername,
+      smtpPassword: smtpPassword,
+      smtpPort: smtpPort,
+      smtpSSL: smtpSSL,
+      transactionFee: transactionFee
+    }
+    if (isWillCreate) {
+      paymentService.createAdminsetting(adminsettingObj).then(
+        result => {
+          successNotification("Successfully created", 3000);
+        },
+        err => {
+          warningNotification(err, 3000);
+        }
+      )
+    } else {
+      paymentService.updateAdminsetting(selectedId, adminsettingObj).then(
+        result => {
+          successNotification("Successfully updated", 3000);
+        },
+        err => {
+          warningNotification(err, 3000);
+        }
+      )
+    }
+  }
 
   return (
     <>
@@ -267,7 +344,7 @@ const AdminSetting = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(e) => setUnionbankMobNo(e.target.value)}
+                    onChange={(e) => { if (Number(e.target.value)) setUnionbankMobNo(e.target.value) }}
                     variant="filled"
                 />
           </CCol>
@@ -285,7 +362,7 @@ const AdminSetting = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(e) => setGcashMobNo(e.target.value)}
+                    onChange={(e) => { if (Number(e.target.value)) setGcashMobNo(e.target.value) }}
                     variant="filled"
                 />
           </CCol>
@@ -299,7 +376,7 @@ const AdminSetting = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(e) => setCoinsphMobNo(e.target.value)}
+                    onChange={(e) => { if (Number(e.target.value)) setCoinsphMobNo(e.target.value) }}
                     variant="filled"
                 />
           </CCol>
@@ -361,13 +438,15 @@ const AdminSetting = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(e) => setSmtpPort(e.target.value)}
+                    onChange={(e) => {
+                      if (Number(e.target.value)) setSmtpPort(e.target.value)
+                    }}
                     variant="filled"
                 />
           </CCol>
           <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
                 <CFormGroup variant="custom-checkbox" className="smtp-ssl">
-                  <CInputCheckbox custom id="inline-checkbox3" name="inline-checkbox" color="danger" value="SSL" checked={!smtpSSL}
+                  <CInputCheckbox custom id="inline-checkbox3" name="inline-checkbox" color="danger" value="SSL" checked={smtpSSL}
                     onChange={(e) => {
                       setSmtpSSL(!smtpSSL);
                     }}
@@ -391,7 +470,7 @@ const AdminSetting = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
-                    onChange={(e) => setTransactionFee(e.target.value)}
+                    onChange={(e) => { if (Number(e.target.value)) setTransactionFee(e.target.value) }}
                     variant="filled"
                 />
           </CCol>
@@ -404,7 +483,7 @@ const AdminSetting = () => {
         <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
         <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="0" lg="4" md="4"></CCol>
         <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="4" md="4">
-            <CButton block className="button-exchange">
+            <CButton block className="button-exchange" onClick={onSubmit}>
               Save
             </CButton>
         </CCol>

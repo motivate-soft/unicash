@@ -33,6 +33,9 @@ router.post('/postUSDTDetect', authorize(), postUSDTDetect);
 router.get('/getAllTransactionsForAdmin', admin(), getAllTransactionsForAdmin);
 router.post('/fileUpload', fileUpload);
 router.put('/updateTransaction/:id', admin(), updateTransaction);
+router.get('/getAdminsetting', admin(), getAdminsetting);
+router.put('/updateAdminsetting/:id', admin(), updateAdminsetting);
+router.post('/createAdminsetting', admin(), createAdminsetting);
 
 module.exports = router;
 
@@ -235,4 +238,24 @@ function fileUpload(req, res, next) {
             res.send({ error: false, path: 'http://localhost:4000/receipts/' + req.file.filename })
         else res.send({ error: true, message: 'failed' })
      });
+}
+
+function getAdminsetting(req, res, next) {
+    paymentService.getAdminsetting()
+        .then(setting => {
+            res.json(setting)
+        })
+        .catch(next);
+}
+
+function updateAdminsetting(req, res, next) {
+    paymentService.updateAdminsetting(req.params.id, req.body)
+        .then(adminsetting => res.json(adminsetting))
+        .catch(next);
+}
+
+function createAdminsetting(req, res, next) {
+    paymentService.createAdminsetting(req.body)
+        .then(adminsetting => res.json(adminsetting))
+        .catch(next);
 }

@@ -31,7 +31,10 @@ export const paymentService = {
     getAllTransactions,
     getPaymentMethodsByIdAndName,
     updateTransaction,
-    fileUpload
+    fileUpload,
+    getAdminsetting,
+    updateAdminsetting,
+    createAdminsetting
 };
 
 function getETHAddress() {
@@ -243,4 +246,33 @@ function handleResponse(response) {
 
         return data;
     });
+}
+
+function getAdminsetting() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getAdminsetting`, requestOptions).then(handleResponse);
+}
+
+function updateAdminsetting(id, adminSetting) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(adminSetting)
+    };
+
+    return fetch(`${serverURL}/payment/updateAdminsetting/${id}`, requestOptions).then(handleResponse);
+}
+
+function createAdminsetting(adminSetting) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(adminSetting)
+    };
+
+    return fetch(`${serverURL}/payment/createAdminsetting`, requestOptions).then(handleResponse);
 }
