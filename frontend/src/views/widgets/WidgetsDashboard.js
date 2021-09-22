@@ -447,16 +447,13 @@ const WidgetsDashboard = () => {
                       className="p-0 auth-modal"
                       size="sm"
                     >
-                    <CModalHeader closeButton>
-                      <CModalTitle></CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
-                      <h5 className="text-center">{limitMessageContent}</h5>
-                    </CModalBody>
-                    <CModalFooter>
-                      <CButton block color="danger" onClick={() => setLaunchModal(false)}>Ok</CButton>
-                    </CModalFooter>
-                  </CModal>
+                      <CModalHeader closeButton className="d-border" style={{height: '30px', paddingBottom: '0px'}}>
+                      </CModalHeader>
+                      <CModalBody>
+                        <h5 className="text-center mb-2">{limitMessageContent}</h5>
+                        <CButton block color="danger" className="mt-3" onClick={() => setLaunchModal(false)}>Ok</CButton>
+                      </CModalBody>
+                    </CModal>
                 </CCardBody>
             </CCard>
         </CCol>
