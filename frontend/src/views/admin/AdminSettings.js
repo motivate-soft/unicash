@@ -65,6 +65,7 @@ const AdminSetting = () => {
   const [usdtReserve, setUsdtReserve] = useState('');
   const [profit, setProfit] = useState('');
   const [exchangeLimit, setExchangeLimit] = useState(false);
+  const [exchangeLimitMessage, setExchangeLimitMessage] = useState('');
   const [usdtAddress, setUsdtAddress] = useState('');
   const [ethAddress, setEthAddress] = useState('');
   const [btcAddress, setBtcAddress] = useState('');
@@ -103,6 +104,7 @@ const AdminSetting = () => {
         setUsdtReserve(result[0].usdtReserve);
         setProfit(result[0].profit);
         setExchangeLimit(result[0].exchangeLimit);
+        setExchangeLimitMessage(result[0].exchangeLimitMessage);
         setUsdtAddress(result[0].usdtAddress);
         setEthAddress(result[0].ethAddress);
         setBtcAddress(result[0].btcAddress);
@@ -133,6 +135,7 @@ const AdminSetting = () => {
       usdtReserve: usdtReserve,
       profit: profit,
       exchangeLimit: exchangeLimit,
+      exchangeLimitMessage: exchangeLimitMessage,
       usdtAddress: usdtAddress,
       ethAddress: ethAddress,
       btcAddress: btcAddress,
@@ -223,16 +226,32 @@ const AdminSetting = () => {
       </CCard>
       <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
         <h3>EXCHANGE BUTTON</h3>
-        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="12" md="12">
-          <CFormGroup variant="custom-checkbox" className="smtp-ssl">
-            <CInputCheckbox custom id="inline-checkbox1" name="inline-checkbox1" color="danger" value="limit" checked={exchangeLimit}
-              onChange={(e) => {
-                setExchangeLimit(!exchangeLimit);
-              }}
-            />
-            <CLabel variant="custom-checkbox" htmlFor="inline-checkbox1">LIMIT (8AM to 5PM, MONDAY to SATURDAY)</CLabel>
-          </CFormGroup>
-        </CCol>
+        <CRow>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="6" md="6">
+            <CFormGroup variant="custom-checkbox" className="smtp-ssl">
+              <CInputCheckbox custom id="inline-checkbox1" name="inline-checkbox1" color="danger" value="limit" checked={exchangeLimit}
+                onChange={(e) => {
+                  setExchangeLimit(!exchangeLimit);
+                }}
+              />
+              <CLabel variant="custom-checkbox" htmlFor="inline-checkbox1">LIMIT (8AM to 5PM, MONDAY to SATURDAY)</CLabel>
+            </CFormGroup>
+          </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="6" md="6">
+            <RedditTextField
+                  id="exchange-message"
+                  label="MESSAGE CONTENT"
+                  placeholder="MESSAGE.."
+                  fullWidth
+                  value={exchangeLimitMessage}
+                  InputLabelProps={{
+                      shrink: true,
+                  }}
+                  onChange={(e) => setExchangeLimitMessage(e.target.value)}
+                  variant="filled"
+              />
+          </CCol>
+        </CRow>
       </CCard>
       <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
         <h3>PAYMENTS MODE</h3>

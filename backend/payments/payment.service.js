@@ -457,7 +457,7 @@ async function getProfit() {
 async function getExchangeLimit() {
     const adminSetting = await db.Adminsetting.findAll();
     if (adminSetting) {
-        return adminSetting[0].exchangeLimit;
+        return { data: adminSetting[0].exchangeLimit, content: adminSetting[0].exchangeLimitMessage };
     }
-    return false;
+    return { data: false, content: '' };
 }

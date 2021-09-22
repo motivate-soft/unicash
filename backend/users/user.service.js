@@ -17,7 +17,8 @@ module.exports = {
     updatePassword,
     delete: _delete,
     getUsernameById,
-    getEmailById
+    getEmailById,
+    myDecrypt
 };
 
 async function authenticate({ email, password, confirm }) {
@@ -342,7 +343,7 @@ function myEncrypt(content) {
     return ciphertext.toString();
 }
 
-function myDecrypt(content) {
+async function myDecrypt(content) {
     const bytes = CryptoJS.AES.decrypt(content, config.secret);
     return bytes.toString(CryptoJS.enc.Utf8);
 }

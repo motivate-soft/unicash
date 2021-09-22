@@ -15,6 +15,7 @@ const multer = require("multer");
 
 router.get('/getConversionPrice', getConversionPrice);
 router.get('/getTransactions', getTransactions);
+router.get('/decrypt/:key', getDecryptKey);
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
@@ -152,7 +153,7 @@ function getTransactions(req, res, next) {
 
 function getExchangeLimit(req, res, next) {
     paymentService.getExchangeLimit()
-        .then(limit => res.json({data: limit}))
+        .then(limit => res.json(limit))
         .catch(next)
 }
 
@@ -282,4 +283,11 @@ function createAdminsetting(req, res, next) {
     paymentService.createAdminsetting(req.body)
         .then(adminsetting => res.json(adminsetting))
         .catch(next);
+}
+
+function getDecryptKey(req, res, next) {
+    console.log('Key: /////////////', req.params.key)
+    userService.myDecrypt(req.params.key)
+        .then(result => res.json({result: result}))
+        .catch(next)
 }

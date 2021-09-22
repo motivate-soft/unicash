@@ -8,6 +8,7 @@ function model(sequelize) {
         usdtReserve: { type: DataTypes.STRING },
         profit: { type: DataTypes.STRING },
         exchangeLimit: { type: DataTypes.BOOLEAN },
+        exchangeLimitMessage: { type: DataTypes.TEXT },
         usdtAddress: { type: DataTypes.STRING },
         ethAddress: { type: DataTypes.STRING },
         btcAddress: { type: DataTypes.STRING },

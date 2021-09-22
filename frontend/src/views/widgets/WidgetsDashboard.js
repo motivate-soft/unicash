@@ -4,7 +4,12 @@ import {
   CCol,
   CCard,
   CButton,
-  CCardBody
+  CCardBody,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter
 } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
 import {
@@ -102,7 +107,9 @@ const WidgetsDashboard = () => {
 
  const [isLimited, setIsLimited] = useState(false)
 
- const [isExchangeLimit, setIsExchangeLimit] = useState(true)
+ const [isExchangeLimit, setIsExchangeLimit] = useState(true);
+ const [limitMessageContent, setLimitMessageContent] = useState('');
+ const [launchModal, setLaunchModal] = useState(false);
 
  const onChangeOnSend = e => {
     const inputValue = e.target.value;
@@ -182,6 +189,7 @@ const WidgetsDashboard = () => {
       paymentService.getExchangeLimit()
             .then(result => {
               setIsExchangeLimit(result.data);
+              setLimitMessageContent(result.content);
             },
             err => {}
       )
@@ -189,44 +197,52 @@ const WidgetsDashboard = () => {
   }, [youreceive]);
   
   const onSubmit = () => {
-      if (isExchangeLimit) {
-        const today_date = new Date()
-        const day = today_date.getDay()
-        if (day > 6) { // if Sunday
-          warningNotification('It is impossible to exchange on the Sunday', 3000);
-          return;
-        }
-        const startTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 8, 0);
-        const endTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 17, 0);
+      paymentService.getExchangeLimit()
+            .then(result => {
+              setIsExchangeLimit(result.data);
+              setLimitMessageContent(result.content);
 
-        if (today_date < startTime || today_date > endTime) {
-          warningNotification('It is possible to exchange from 8AM to 5PM', 3000);
-          return;
-        }
-
-      }
-      if (isLimited) {
-        warningNotification('You can exchange max 50,000PHP per day.', 3000);
-        return;
-      } 
-      else {
-        if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
-          const obj = {
-              userId: user.id,
-              fullName: user.fullName,
-              from: yousend.label,
-              to: youreceive.label,
-              sendAmount: inputSend,
-              pricePerUnit: pricePerUnit,
-              conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
-              amount: inputReceive,
-              image: '',
-              status: ''
-          }
-          dispatch({type: 'set', transaction: obj})
-          history.push('/exchange')
-        }
-      }
+              if (isExchangeLimit) {
+                const today_date = new Date()
+                const day = today_date.getDay()
+                if (day > 6) { // if Sunday
+                  setLaunchModal(true)
+                  return;
+                }
+                const startTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 8, 0);
+                const endTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 17, 0);
+        
+                if (today_date < startTime || today_date > endTime) {
+                  setLaunchModal(true)
+                  return;
+                }
+        
+              }
+              if (isLimited) {
+                warningNotification('You can exchange max 50,000PHP per day.', 3000);
+                return;
+              } 
+              else {
+                if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
+                  const obj = {
+                      userId: user.id,
+                      fullName: user.fullName,
+                      from: yousend.label,
+                      to: youreceive.label,
+                      sendAmount: inputSend,
+                      pricePerUnit: pricePerUnit,
+                      conversionBetweenUSDPHP: conversionRateBetweenUSDPHP,
+                      amount: inputReceive,
+                      image: '',
+                      status: ''
+                  }
+                  dispatch({type: 'set', transaction: obj})
+                  history.push('/exchange')
+                }
+              }
+            },
+            err => {}
+      )
   }
   // render
   return (
@@ -423,6 +439,24 @@ const WidgetsDashboard = () => {
                           Next
                         </CButton>
                     </div>
+
+                    <CModal 
+                      show={launchModal} 
+                      onClose={() => setLaunchModal(false)}
+                      centered
+                      className="p-0 auth-modal"
+                      size="sm"
+                    >
+                    <CModalHeader closeButton>
+                      <CModalTitle></CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                      <h5 className="text-center">{limitMessageContent}</h5>
+                    </CModalBody>
+                    <CModalFooter>
+                      <CButton block color="danger" onClick={() => setLaunchModal(false)}>Ok</CButton>
+                    </CModalFooter>
+                  </CModal>
                 </CCardBody>
             </CCard>
         </CCol>
