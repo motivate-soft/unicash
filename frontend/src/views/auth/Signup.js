@@ -55,6 +55,12 @@ const Signup = () => {
   const [btcAddress, setBtcAddress] = useState('1KAsWF4vjwnxHouBAWgzhuNgnKUYUeWyrf')
   const [btcKeys, setBtcKeys] = useState('Kz28CifCRty176kvGuvT3R9x9JiWKdsnVnKBSeyzoZqsCsWoq9tC')
 
+  const handleEnterKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  }
+
   const onSubmit = () => {
     setIsSubmitting(true);
     userService.register({
@@ -127,6 +133,7 @@ const Signup = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         fullWidth
                         variant="filled"
                         onBlur={() => {
@@ -153,6 +160,7 @@ const Signup = () => {
                         }}
                         fullWidth
                         variant="filled"
+                        onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
                           const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                           if (!email || email === '') setErrMessageForEmail('Email is required')
@@ -180,6 +188,7 @@ const Signup = () => {
                         variant="filled"
                         helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
                         error={errMessageForNewPassword && errMessageForNewPassword !== ''}
+                        onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
                           if (!password || password === '') setErrMessageForNewPassword('Password is required')
                           else if (password.length < 6) setErrMessageForNewPassword('Password hat to be at least 6 characters!')
@@ -206,6 +215,7 @@ const Signup = () => {
                         variant="filled"
                         helperText={errMessageForConfirmPassword && errMessageForConfirmPassword !== '' ? errMessageForConfirmPassword : '' }
                         error={errMessageForConfirmPassword && errMessageForConfirmPassword !== ''}
+                        onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
                           if (!confirmPassword || confirmPassword === '') setErrMessageForConfirmPassword('Password confirmation is required!')
                           else if (confirmPassword !== password) setErrMessageForConfirmPassword('Passwords must match')

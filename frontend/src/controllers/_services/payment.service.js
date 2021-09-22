@@ -25,10 +25,12 @@ export const paymentService = {
     postUSDTDetect,
     postOtherDetect,
     getBTCDetect,
+    getExchangeLimit,
     /*
     * API for ADMIN
     */
     getAllTransactions,
+    getAllTransactionsByDate,
     getPaymentMethodsByIdAndName,
     updateTransaction,
     fileUpload,
@@ -197,6 +199,25 @@ function getAllTransactions() {
     };
 
     return fetch(`${serverURL}/payment/getAllTransactionsForAdmin`, requestOptions).then(handleResponse);
+}
+
+function getExchangeLimit() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${serverURL}/payment/getExchangeLimit`, requestOptions).then(handleResponse);
+}
+
+function getAllTransactionsByDate(dateObj) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(dateObj)
+    };
+
+    return fetch(`${serverURL}/payment/getAllTransactionsByDate`, requestOptions).then(handleResponse);
 }
 
 function getTransactions() {

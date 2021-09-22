@@ -286,7 +286,7 @@ const Exchange = () => {
                         <div className="flex-grow-1">
                             <RedditTextField
                                 id="btc-address"
-                                label="BTC ADDRESS"
+                                label={transaction.from + ' ADDRESS'}
                                 placeholder="..."
                                 value={BTCAddress}
                                 InputLabelProps={{

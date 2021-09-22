@@ -102,14 +102,16 @@ const WidgetsDashboard = () => {
 
  const [isLimited, setIsLimited] = useState(false)
 
+ const [isExchangeLimit, setIsExchangeLimit] = useState(true)
+
  const onChangeOnSend = e => {
-  const inputValue = e.target.value;
-  if (inputValue === '' || inputValue === '0' || inputValue === '0.' || inputValue === '0.0' || inputValue === '0.00' || inputValue === '0.000' 
-  || inputValue === '0.0000' || inputValue === '0.00000' || inputValue === '0.000000' || inputValue === '0.0000000' || inputValue === '0.00000000' || Number(inputValue)) {
-      setInputSend(inputValue)
-  }
-  setIsSubmitting(false);
-};
+    const inputValue = e.target.value;
+    if (inputValue === '' || inputValue === '0' || inputValue === '0.' || inputValue === '0.0' || inputValue === '0.00' || inputValue === '0.000' 
+    || inputValue === '0.0000' || inputValue === '0.00000' || inputValue === '0.000000' || inputValue === '0.0000000' || inputValue === '0.00000000' || Number(inputValue)) {
+        setInputSend(inputValue)
+    }
+    setIsSubmitting(false);
+  };
   const onChangeOnReceive = e => {
     const inputValue = e.target.value;
     if (inputValue === '' ||inputValue === '0' || inputValue === '0.' || Number(inputValue)) {
@@ -165,8 +167,8 @@ const WidgetsDashboard = () => {
     }, [yousend, inputSend]);
 
   useEffect(() => {
-    if (user && youreceive)
-        paymentService.getPaymentMethodsById(user.id)
+    if (user && youreceive) {
+      paymentService.getPaymentMethodsById(user.id)
         .then(
             paymentMethods => {
                 const arr = Object.assign([], paymentMethods).filter(
@@ -177,13 +179,37 @@ const WidgetsDashboard = () => {
             },
             error => {}
         )
+      paymentService.getExchangeLimit()
+            .then(result => {
+              setIsExchangeLimit(result.data);
+            },
+            err => {}
+      )
+    }
   }, [youreceive]);
   
   const onSubmit = () => {
+      if (isExchangeLimit) {
+        const today_date = new Date()
+        const day = today_date.getDay()
+        if (day > 6) { // if Sunday
+          warningNotification('It is impossible to exchange on the Sunday', 3000);
+          return;
+        }
+        const startTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 8, 0);
+        const endTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 17, 0);
+
+        if (today_date < startTime || today_date > endTime) {
+          warningNotification('It is possible to exchange from 8AM to 5PM', 3000);
+          return;
+        }
+
+      }
       if (isLimited) {
         warningNotification('You can exchange max 50,000PHP per day.', 3000);
         return;
-      } else {
+      } 
+      else {
         if ( user && yousend && youreceive && pricePerUnit && conversionRateBetweenUSDPHP && inputSend && inputReceive) {
           const obj = {
               userId: user.id,

@@ -16,9 +16,7 @@ import {
 //   } from '@material-ui/pickers';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { format } from 'date-fns';
 import { userService } from '../../controllers/_services';
-import InputMask from 'react-input-mask';
 import { successNotification, warningNotification } from '../../controllers/_helpers';
 
 const useStylesReddit = makeStyles((theme) => ({

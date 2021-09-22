@@ -63,6 +63,8 @@ const AdminSetting = () => {
 
   const [adminEmail, setAdminEmail] = useState('');
   const [usdtReserve, setUsdtReserve] = useState('');
+  const [profit, setProfit] = useState('');
+  const [exchangeLimit, setExchangeLimit] = useState(false);
   const [usdtAddress, setUsdtAddress] = useState('');
   const [ethAddress, setEthAddress] = useState('');
   const [btcAddress, setBtcAddress] = useState('');
@@ -99,6 +101,8 @@ const AdminSetting = () => {
         setSelectedId(result[0].id);
         setAdminEmail(result[0].email);
         setUsdtReserve(result[0].usdtReserve);
+        setProfit(result[0].profit);
+        setExchangeLimit(result[0].exchangeLimit);
         setUsdtAddress(result[0].usdtAddress);
         setEthAddress(result[0].ethAddress);
         setBtcAddress(result[0].btcAddress);
@@ -127,6 +131,8 @@ const AdminSetting = () => {
     let adminsettingObj = {
       email: adminEmail,
       usdtReserve: usdtReserve,
+      profit: profit,
+      exchangeLimit: exchangeLimit,
       usdtAddress: usdtAddress,
       ethAddress: ethAddress,
       btcAddress: btcAddress,
@@ -199,7 +205,34 @@ const AdminSetting = () => {
                     variant="filled"
                 />
           </CCol>
+          <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="6" lg="4" md="4">
+              <RedditTextField
+                    id="profit"
+                    label="Profit %"
+                    placeholder="Profit %"
+                    fullWidth
+                    value={profit}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    onChange={(e) => { if (e.target.value === '' || Number(e.target.value)) setProfit(e.target.value) }}
+                    variant="filled"
+                />
+          </CCol>
         </CRow>
+      </CCard>
+      <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
+        <h3>EXCHANGE BUTTON</h3>
+        <CCol className="pr-lg-1 pr-md-1 d-box-shadow1 d-border mt-3" sm="12" lg="12" md="12">
+          <CFormGroup variant="custom-checkbox" className="smtp-ssl">
+            <CInputCheckbox custom id="inline-checkbox1" name="inline-checkbox1" color="danger" value="limit" checked={exchangeLimit}
+              onChange={(e) => {
+                setExchangeLimit(!exchangeLimit);
+              }}
+            />
+            <CLabel variant="custom-checkbox" htmlFor="inline-checkbox1">LIMIT (8AM to 5PM, MONDAY to SATURDAY)</CLabel>
+          </CFormGroup>
+        </CCol>
       </CCard>
       <CCard color="transparent" className="transaction-table  d-box-shadow1 d-border">
         <h3>PAYMENTS MODE</h3>

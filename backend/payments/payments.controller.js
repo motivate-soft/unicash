@@ -20,6 +20,7 @@ router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
 router.get('/getPaymentmethod/:id/:name', authorize(), getPaymentMethodsByIdAndName);
 router.delete('/paymentmethod/:id', authorize(), deletePaymentmethod);
+router.get('/getExchangeLimit', authorize(), getExchangeLimit);
 // Transction
 router.post('/createTransaction', authorize(), createTransaction);
 router.get('/getTransaction/:id', authorize(), getTransactionById)
@@ -31,6 +32,7 @@ router.post('/postUSDTDetect', authorize(), postUSDTDetect);
 
 // Admin
 router.get('/getAllTransactionsForAdmin', admin(), getAllTransactionsForAdmin);
+router.post('/getAllTransactionsByDate', admin(), getAllTransactionsByDate)
 router.post('/fileUpload', fileUpload);
 router.put('/updateTransaction/:id', admin(), updateTransaction);
 router.get('/getAdminsetting', admin(), getAdminsetting);
@@ -48,13 +50,15 @@ function getConversionPrice(req, res, next) {
                 res.json({data: JSON.stringify({ symbol: symbolSigner, price: 4829.23 }), conversionRate: 50.01, status: true})
             }
             if (response && response.statusCode) {
-                request('http://apilayer.net/api/live?access_key=bfd1a4b361f51a8d1109f6fed1485c57&currencies=PHP&source=USD&format=1', function (error_, response_, body_) {
+                request('http://apilayer.net/api/live?access_key=bfd1a4b361f51a8d1109f6fed1485c57&currencies=PHP&source=USD&format=1', async (error_, response_, body_) => {
                     if (error_) {
                         res.json({data: body, conversionRate: 50.01, status: true})
                     }
                     if (response_ && response_.statusCode) {
                         try {
-                            const price = JSON.parse(body_)['quotes']['USDPHP'];
+                            let price = JSON.parse(body_)['quotes']['USDPHP'];
+                            const profit = await paymentService.getProfit();
+                            price = Number(price) - Number(profit) * Number(price) / 100;
                             res.json({data: body, conversionRate: price, status: true})   
                         } catch (error) {
                             res.json({data: body, conversionRate: 50.01, status: true})
@@ -146,8 +150,28 @@ function getTransactions(req, res, next) {
         .catch(next);
 }
 
+function getExchangeLimit(req, res, next) {
+    paymentService.getExchangeLimit()
+        .then(limit => res.json({data: limit}))
+        .catch(next)
+}
+
 function getAllTransactionsForAdmin(req, res, next) {
     paymentService.getAllTransactions()
+        .then(transactions => {
+            transactions.forEach(async (transaction, index) => {
+                transaction['userName'] = await userService.getUsernameById(transaction.userId);
+                transaction['email'] = await userService.getEmailById(transaction.userId);
+                if (index === transactions.length - 1) {
+                    res.json(transactions)
+                }
+            });
+        })
+        .catch(next);
+}
+
+function getAllTransactionsByDate(req, res, next) {
+    paymentService.getAllTransactionsByDate(req.body)
         .then(transactions => {
             transactions.forEach(async (transaction, index) => {
                 transaction['userName'] = await userService.getUsernameById(transaction.userId);

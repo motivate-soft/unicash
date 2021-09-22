@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
-  CToggler,
   CHeaderNav,
   CHeaderNavItem,
   CHeaderNavLink,
@@ -133,6 +132,9 @@ const TheHeader = () => {
         <CHeaderNavItem className={isLogin && user.role ? 'px-3 d-md-down-none' : 'd-none'}>
           <CHeaderNavLink to="/config" className={currPath === '/config' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Settings</CHeaderNavLink>
         </CHeaderNavItem>
+        <CHeaderNavItem className={isLogin && user.role ? 'px-3 d-md-down-none' : 'd-none'}>
+          <CHeaderNavLink to="/transaction" className={currPath === '/transaction' ? 'menu-item-active' : 'dropdown-toggle-exchange'}>Transaction</CHeaderNavLink>
+        </CHeaderNavItem>
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
@@ -179,6 +181,7 @@ const TheHeader = () => {
                 <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('admin')}>Home</CDropdownItem>
                 <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('users')}>Users</CDropdownItem>
                 <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('config')}>Settings</CDropdownItem>
+                <CDropdownItem className={isLogin && user.role ? 'dropdown-toggle-menuitem' : 'd-none'} onClick={() => history.push('transaction')}>Transaction</CDropdownItem>
                 <CDropdownItem className="dropdown-toggle-menuitem" onClick={logout}>Log out</CDropdownItem>
             </CDropdownMenu>
         </CDropdown>

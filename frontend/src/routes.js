@@ -13,6 +13,7 @@ const PersionalSetting = lazy(() => import('./views/setting/PersionalSetting'))
 const AdminHome = lazy(() => import('./views/admin/AdminHome'));
 const AdminUsers = lazy(() => import('./views/admin/AdminUsers'));
 const AdminSettings = lazy(() => import('./views/admin/AdminSettings'));
+const Transaction = lazy(() => import('./views/admin/Transaction'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -28,6 +29,7 @@ const routes = [
   { path: '/admin', name: 'Admin', component: AdminHome },
   { path: '/users', name: 'Users', component: AdminUsers },
   { path: '/config', name: 'Config', component: AdminSettings },
+  { path: '/transaction', name: 'Config', component: Transaction },
 ];
 
 export default routes;

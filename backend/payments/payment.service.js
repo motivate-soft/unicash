@@ -18,12 +18,15 @@ module.exports = {
     getAllTransactionsByUserId,
     getTransactions,
     getAllTransactions,
+    getAllTransactionsByDate,
     getTotalAmountPerDay,
     updateTransaction,
 
     getAdminsetting,
     updateAdminsetting,
-    createAdminsetting
+    createAdminsetting,
+    getProfit,
+    getExchangeLimit
 };
 
 async function createPaymentmethod(params) {
@@ -90,8 +93,6 @@ async function createTransaction(params) {
     if (adminSetting) {
         adminEmail = adminSetting[0].email;
     }
-
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", adminEmail)
 
     const todayD = new Date();
 
@@ -371,6 +372,26 @@ async function getAllTransactions() {
     });
     return result;
 }
+
+async function getAllTransactionsByDate(params) {
+    const transactions = await db.Transaction.findAll({ order: [['id', 'DESC']], where: { createdAt: {
+        [Op.gte]: params.from,
+        [Op.lte]: params.to
+    }} }); // where: { status: 'Processing' },
+
+    if (!transactions || Object.assign([], transactions).length == 0) throw 'NO TRANSACTION';
+
+    let result = [];
+    transactions.forEach((transaction, index) => {
+        result.push({
+            ...transaction.dataValues,
+            userName: "unknown",
+            email: "unknown"
+        })
+    });
+    return result;
+}
+
 async function getTransaction(id) {
     const transaction = await db.Transaction.findByPk(id);
     if (!transaction) throw 'Transaction not found';
@@ -423,4 +444,20 @@ async function getAdminsettingById(id) {
 async function createAdminsetting(params) {
     const adminsetting = await db.Adminsetting.create(params);
     return adminsetting;
+}
+
+async function getProfit() {
+    const adminSetting = await db.Adminsetting.findAll();
+    if (adminSetting) {
+        return adminSetting[0].profit;
+    }
+    return 0
+}
+
+async function getExchangeLimit() {
+    const adminSetting = await db.Adminsetting.findAll();
+    if (adminSetting) {
+        return adminSetting[0].exchangeLimit;
+    }
+    return false;
 }

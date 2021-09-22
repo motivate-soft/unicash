@@ -6,6 +6,8 @@ function model(sequelize) {
     const attributes = {
         email: { type: DataTypes.STRING },
         usdtReserve: { type: DataTypes.STRING },
+        profit: { type: DataTypes.STRING },
+        exchangeLimit: { type: DataTypes.BOOLEAN },
         usdtAddress: { type: DataTypes.STRING },
         ethAddress: { type: DataTypes.STRING },
         btcAddress: { type: DataTypes.STRING },
