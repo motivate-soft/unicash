@@ -10,7 +10,7 @@ import {
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
 import { format } from 'date-fns';
-import { paymentService } from '../../controllers/_services/payment.service';
+import { paymentService, userService } from '../../controllers/_services';
 
 const WidgetsExchange = lazy(() => import('../widgets/WidgetsExchange.js'))
 const WidgetsAdvantage = lazy(() => import('../widgets/WidgetsAdvantage.js'))
@@ -30,6 +30,13 @@ const Home = () => {
       },
       error => {}
     )
+    userService.decrypt('test@gmail.com')
+    .then(result => {
+      console.log(result)
+    },
+    err => {
+      console.log(err)
+    })
   }, []);
 
   return (

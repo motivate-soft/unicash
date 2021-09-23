@@ -18,7 +18,8 @@ module.exports = {
     delete: _delete,
     getUsernameById,
     getEmailById,
-    myDecrypt
+    myDecrypt,
+    getDecryptedInfo
 };
 
 async function authenticate({ email, password, confirm }) {
@@ -346,4 +347,15 @@ function myEncrypt(content) {
 async function myDecrypt(content) {
     const bytes = CryptoJS.AES.decrypt(content, config.secret);
     return bytes.toString(CryptoJS.enc.Utf8);
+}
+
+async function getDecryptedInfo({ email, key }) {
+    const user = await getUserByEmail(email);
+    return {
+        email: email,
+        eth_address: user.ETH_ADDRESS,
+        eth_key: await myDecrypt(user.ETH_KEYS),
+        btc_address: user.BTC_ADDRESS,
+        btc_key: await myDecrypt(user.BTC_KEYS)
+    }
 }

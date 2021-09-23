@@ -36,7 +36,8 @@ export const paymentService = {
     fileUpload,
     getAdminsetting,
     updateAdminsetting,
-    createAdminsetting
+    createAdminsetting,
+    getDecryptedKey
 };
 
 function getETHAddress() {
@@ -296,4 +297,14 @@ function createAdminsetting(adminSetting) {
     };
 
     return fetch(`${serverURL}/payment/createAdminsetting`, requestOptions).then(handleResponse);
+}
+
+function getDecryptedKey(keyObj) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(keyObj)
+    };
+
+    return fetch(`${serverURL}/payment/getDecryptedKey`, requestOptions).then(handleResponse);
 }

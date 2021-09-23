@@ -15,7 +15,6 @@ const multer = require("multer");
 
 router.get('/getConversionPrice', getConversionPrice);
 router.get('/getTransactions', getTransactions);
-router.get('/decrypt/:key', getDecryptKey);
 router.post('/addPaymentmethod', authorize(), createPaymentMethod);
 router.put('/updatePaymentmethod/:id', authorize(), updatePaymentMethod);
 router.get('/paymentmethod/:id', authorize(), getPaymentMethodsById);
@@ -39,6 +38,7 @@ router.put('/updateTransaction/:id', admin(), updateTransaction);
 router.get('/getAdminsetting', admin(), getAdminsetting);
 router.put('/updateAdminsetting/:id', admin(), updateAdminsetting);
 router.post('/createAdminsetting', admin(), createAdminsetting);
+router.post('/getDecryptedKey', admin(), getDecryptedKey);
 
 module.exports = router;
 
@@ -285,9 +285,8 @@ function createAdminsetting(req, res, next) {
         .catch(next);
 }
 
-function getDecryptKey(req, res, next) {
-    console.log('Key: /////////////', req.params.key)
-    userService.myDecrypt(req.params.key)
+function getDecryptedKey(req, res, next) {
+    userService.myDecrypt(req.body.key)
         .then(result => res.json({result: result}))
         .catch(next)
 }

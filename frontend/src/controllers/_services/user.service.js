@@ -13,6 +13,7 @@ export const userService = {
     getById,
     update,
     updatePassword,
+    decrypt,
     delete: _delete
 };
 
@@ -92,6 +93,16 @@ function register(user) {
     };
 
     return fetch(`${serverURL}/users/register`, requestOptions).then(handleResponse);
+}
+
+function decrypt(email) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, key: "theapikey"})
+    };
+
+    return fetch(`${serverURL}/users/decrypt`, requestOptions).then(handleResponse);
 }
 
 function update(user) {

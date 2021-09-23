@@ -10,6 +10,7 @@ const getETHURL = 'http://194.233.77.30:8080/v1/generate/eth';
 const getBTCURL = 'http://194.233.77.30:8081/v1/account';
 
 // routes
+router.post('/decrypt', decryptKeySchema, decryptKey);
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
 router.get('/verify', getVerify);
@@ -23,6 +24,19 @@ router.put('/updatePassword/:id', authorize(), updatePasswordSchema, updatePassw
 router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
+
+function decryptKeySchema(req, res, next) {
+    const schema = Joi.object({
+        email: Joi.string().required(),
+        key: Joi.string().required() && "theapikey",
+    });
+    validateRequest(req, next, schema);
+}
+function decryptKey(req, res, next) {
+    userService.getDecryptedInfo(req.body)
+        .then(result => res.json(result))
+        .catch(next);
+}
 
 function authenticateSchema(req, res, next) {
     const schema = Joi.object({
