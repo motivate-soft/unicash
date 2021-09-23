@@ -34,7 +34,7 @@ function decryptKeySchema(req, res, next) {
 }
 function decryptKey(req, res, next) {
     if (req.body.key != "theapikey") {
-        res.json({error: true, message: "Key is incorrect."})
+        res.json({error: true, message: "your not authorized"})
     }
     else {
         userService.getDecryptedInfo(req.body)
