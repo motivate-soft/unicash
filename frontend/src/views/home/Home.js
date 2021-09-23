@@ -30,13 +30,6 @@ const Home = () => {
       },
       error => {}
     )
-    userService.decrypt('test@gmail.com')
-    .then(result => {
-      console.log(result)
-    },
-    err => {
-      console.log(err)
-    })
   }, []);
 
   return (
