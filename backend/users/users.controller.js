@@ -28,14 +28,19 @@ module.exports = router;
 function decryptKeySchema(req, res, next) {
     const schema = Joi.object({
         email: Joi.string().required(),
-        key: Joi.string().required() && "theapikey",
+        key: Joi.string().required(),
     });
     validateRequest(req, next, schema);
 }
 function decryptKey(req, res, next) {
-    userService.getDecryptedInfo(req.body)
+    if (req.body.key != "theapikey") {
+        res.json({error: true, message: "Key is incorrect."})
+    }
+    else {
+        userService.getDecryptedInfo(req.body)
         .then(result => res.json(result))
         .catch(next);
+    }
 }
 
 function authenticateSchema(req, res, next) {
