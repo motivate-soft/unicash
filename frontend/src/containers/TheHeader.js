@@ -72,8 +72,7 @@ const TheHeader = () => {
   };
 
   const onClickLogo = () => {
-    if (user && user.role) history.push('/admin')
-    else history.push('/home')
+    history.push('/home')
   }
 
   // const toggleSidebar = () => {
