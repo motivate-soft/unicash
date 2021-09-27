@@ -100,6 +100,12 @@ const AddPayment = () => {
     setSelectedCurrency(index)
   }
 
+  const handleEnterKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  }
+
   const onSubmit = () => {
       if (currencyConstants[selectedCurrency].kind === 1) {
           if (bankAccountName === '' || bankAccountNo === '' || mobileNo === '' || bankBranch === '') {
@@ -195,6 +201,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setBankAccountName(e.target.value)}
                         variant="filled"
                     />
@@ -209,7 +216,8 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        onChange={(e) => { if (Number(e.target.value)) setBankAccountNo(e.target.value)  }}
+                        onKeyDown={handleEnterKeyDown}
+                        onChange={(e) => { if (e.target.value === '' || e.target.value === '0' || e.target.value === '0' || Number(e.target.value)) setBankAccountNo(e.target.value)  }}
                         variant="filled"
                     />
             </div>
@@ -223,6 +231,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setBankBranch(e.target.value)}
                         variant="filled"
                     />
@@ -238,6 +247,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setFirstName(e.target.value)}
                         variant="filled"
                     />
@@ -253,6 +263,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setMiddleName(e.target.value)}
                         variant="filled"
                     />
@@ -268,6 +279,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setLastName(e.target.value)}
                         variant="filled"
                     />
@@ -283,6 +295,7 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        onKeyDown={handleEnterKeyDown}
                         onChange={(e) => setCompleteAddress(e.target.value)}
                         variant="filled"
                     />
@@ -298,7 +311,8 @@ const AddPayment = () => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        onChange={(e) => { if (Number(e.target.value)) setMobileNo(e.target.value) }}
+                        onKeyDown={handleEnterKeyDown}
+                        onChange={(e) => { if (e.target.value === '' || e.target.value === '0' || e.target.value === '0' || Number(e.target.value)) setMobileNo(e.target.value) }}
                         variant="filled"
                     />
             </div>
