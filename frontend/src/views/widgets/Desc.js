@@ -119,7 +119,8 @@ const Desc = () => {
                 </div>
                 <div className="pl-2 align-self-end pb-0">
                     <CButton className="ml-5 mt-1 float-right" color="secondary">
-                      <CIcon name="cil-circle" alt="online status" color="success" className={isOnline ? 'online-status' : 'offline-status'}></CIcon> &nbsp; Chat with us
+                      <CIcon name="cil-circle" alt="online status" color="success" className={isOnline ? 'online-status' : 'offline-status'}></CIcon> &nbsp; 
+                      {isOnline ? 'Online' : 'Offline'}
                     </CButton>
                 </div>
               </div>
