@@ -346,7 +346,7 @@ async function getAllTransactionsByUserId(id) {
     return transactions;
 }
 async function getTransactions() { // Limited 5
-    const transactions = await db.Transaction.findAll({ limit: 5, order: [['id', 'DESC']]});
+    const transactions = await db.Transaction.findAll({ limit: 5, where: { status: 'Completed' }, order: [['id', 'DESC']]});
     if (!transactions) throw 'NO TRANSACTION';
 
     let result = [];

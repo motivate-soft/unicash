@@ -10,7 +10,7 @@ import {
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
 import { format } from 'date-fns';
-import { paymentService, userService } from '../../controllers/_services';
+import { paymentService } from '../../controllers/_services';
 
 const WidgetsExchange = lazy(() => import('../widgets/WidgetsExchange.js'))
 const WidgetsAdvantage = lazy(() => import('../widgets/WidgetsAdvantage.js'))

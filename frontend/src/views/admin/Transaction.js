@@ -81,7 +81,7 @@ const AdminTransaction = () => {
     const keyV = e.target.value;
     setSearchOrderIdOrName(keyV);
 
-    if (keyV == '') setMytransactions(totalTransactions);
+    if (keyV === '') setMytransactions(totalTransactions);
     else {
         let tmpTransactions = [];
         totalTransactions.forEach(element => {

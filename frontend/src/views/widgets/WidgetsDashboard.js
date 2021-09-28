@@ -7,9 +7,7 @@ import {
   CCardBody,
   CModal,
   CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter
+  CModalBody
 } from '@coreui/react'
 import TextField from '@material-ui/core/TextField';
 import {

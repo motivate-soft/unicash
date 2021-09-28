@@ -315,6 +315,15 @@
     text-align: center;
     margin: auto;
   }
+  .offline-status {
+    background-color: gray;
+    color: gray;
+    border-radius: 50%;
+    width: 10px !important;
+    height: 10px !important;
+    text-align: center;
+    margin: auto;
+  }
 }
 
 .transaction-table {

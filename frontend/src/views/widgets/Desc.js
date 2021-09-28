@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CRow,
   CCol,
@@ -9,8 +9,30 @@ import {
   CLink
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { paymentService } from '../../controllers/_services/payment.service';
 
 const Desc = () => {
+  const [isOnline, setIsOnline] = useState(false);
+
+  useEffect(() => {
+    paymentService.getExchangeLimit()
+        .then(result => {
+          console.log(result)
+            if (result.data) {
+              const today_date = new Date()
+              const day = today_date.getDay()
+              const startTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 8, 0);
+              const endTime = new Date(today_date.getFullYear(), today_date.getMonth(), today_date.getDate(), 17, 0);
+ 
+              if (day > 6 || today_date < startTime || today_date > endTime) { // if Sunday
+                setIsOnline(false);
+              } else setIsOnline(true);
+            } else setIsOnline(true);
+        },
+        err => {}
+      )
+  }, []);
+
   return (
     <CCard color="transparent" className="d-box-shadow1 d-border pr-0">
       <CCardBody color="transparent" className="pt-4 pr-0 card-desc">
@@ -97,7 +119,7 @@ const Desc = () => {
                 </div>
                 <div className="pl-2 align-self-end pb-0">
                     <CButton className="ml-5 mt-1 float-right" color="secondary">
-                      <CIcon name="cil-circle" alt="online status" color="success" className="online-status"></CIcon> &nbsp; Chat with us
+                      <CIcon name="cil-circle" alt="online status" color="success" className={isOnline ? 'online-status' : 'offline-status'}></CIcon> &nbsp; Chat with us
                     </CButton>
                 </div>
               </div>
