@@ -69,6 +69,12 @@ const Signup = () => {
     return;
   }
 
+  const handleEnterKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  }
+
   const onSubmit = () => {
     if (selectedUser && JSON.stringify(selectedUser) !== '{}')
     userService.forgotPassword({
@@ -127,6 +133,7 @@ const Signup = () => {
                         }}
                         fullWidth
                         variant="filled"
+                        onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
                           if (!confirmationCode || confirmationCode === '') setErrMessageForConfirmationCode('Full name is required')
                           else setErrMessageForConfirmationCode('')
@@ -150,6 +157,7 @@ const Signup = () => {
                         type="password"
                         fullWidth
                         variant="filled"
+                        onKeyDown={handleEnterKeyDown}
                         helperText={errMessageForNewPassword && errMessageForNewPassword !== '' ? errMessageForNewPassword : '' }
                         error={errMessageForNewPassword && errMessageForNewPassword !== ''}
                         onBlur={() => {
@@ -176,6 +184,7 @@ const Signup = () => {
                         type="password"
                         fullWidth
                         variant="filled"
+                        onKeyDown={handleEnterKeyDown}
                         helperText={errMessageForConfirmPassword && errMessageForConfirmPassword !== '' ? errMessageForConfirmPassword : '' }
                         error={errMessageForConfirmPassword && errMessageForConfirmPassword !== ''}
                         onBlur={() => {

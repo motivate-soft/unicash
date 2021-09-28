@@ -69,6 +69,12 @@ const ForgotPassword = () => {
     }
   }, [ email ])
 
+  const handleEnterKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  }
+
   const onSubmit = () => {
     userService.forgotPasswordToConfirmEmail(email)
       .then(
@@ -106,6 +112,7 @@ const ForgotPassword = () => {
                         }}
                         fullWidth
                         variant="filled"
+                        onKeyDown={handleEnterKeyDown}
                         onBlur={() => {
                           const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                           if (!email || email === '') setErrMessageForEmail('Email is required')
